@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from "react";
+import Auth from "./Auth.jsx";
 
 const BRAND = "#237a82";
 const C={h:"#333",body:"#444",sec:"#666",help:"#777"};
@@ -444,7 +445,7 @@ function MonthlySummarySection({ feeds, nightSleep, naps, growthEntries, profile
 
 export default function BabyTracker(){
   const[theme,setTheme]=useState("pink");
-  const[profile,setProfile]=useState({name:"Erin",birthDate:"2024-11-05",gender:"girl",setupDone:false});
+  const[profile,setProfile]=useState({name:"",birthDate:new Date().toISOString().slice(0,10),gender:"girl",setupDone:false});
   const[feeds,setFeeds]=useState([]);
   const[nightSleep,setNightSleep]=useState([]);
   const[naps,setNaps]=useState([]);
@@ -454,6 +455,7 @@ export default function BabyTracker(){
   const[settingsOpen,setSettingsOpen]=useState(false);
   const[drawerOpen,setDrawerOpen]=useState(false);
   const[chatOpen,setChatOpen]=useState(false);
+  const[loginOpen,setLoginOpen]=useState(false);
   const[loaded,setLoaded]=useState(false);
   const[feedOz,setFeedOz]=useState("");
   const[feedBrand,setFeedBrand]=useState("");
@@ -482,7 +484,7 @@ export default function BabyTracker(){
   const pr=pronounSets[gender]||pronounSets.girl;
 
   useEffect(function(){
-    const p=sGet(KEYS.profile);if(p){setProfile(p);if(p.theme)setTheme(p.theme);}
+    const p=sGet(KEYS.profile);if(p){var yr=parseInt((p.birthDate||"").split("-")[0],10);if(yr<1900||yr>2100)p.birthDate=new Date().toISOString().slice(0,10);setProfile(p);if(p.theme)setTheme(p.theme);}
     const f=sGet(KEYS.feeds);if(f)setFeeds(f);
     const ns=sGet(KEYS.nightSleep);if(ns)setNightSleep(ns);
     const np=sGet(KEYS.naps);if(np)setNaps(np);
@@ -491,6 +493,7 @@ export default function BabyTracker(){
     setLoaded(true);
   },[]);
 
+  useEffect(function(){if(loaded)sSet(KEYS.profile,Object.assign({},profile,{theme:theme}));},[profile,theme,loaded]);
   useEffect(function(){if(loaded)sSet(KEYS.feeds,feeds);},[feeds,loaded]);
   useEffect(function(){if(loaded)sSet(KEYS.nightSleep,nightSleep);},[nightSleep,loaded]);
   useEffect(function(){if(loaded)sSet(KEYS.naps,naps);},[naps,loaded]);
@@ -559,7 +562,7 @@ export default function BabyTracker(){
             );})}
           </div>
           <div style={{fontSize:".78rem",fontWeight:600,color:C.sec,textTransform:"uppercase",letterSpacing:".06em",marginBottom:6}}>Birth Date</div>
-          <input type="date" value={profile.birthDate} onChange={function(e){setProfile(function(pv){return Object.assign({},pv,{birthDate:e.target.value});});}} style={{width:"100%",padding:"10px 14px",border:"1.5px solid #ddd",borderRadius:8,fontSize:".92rem",marginBottom:6,outline:"none",boxSizing:"border-box"}}/>
+          <input type="date" value={profile.birthDate} onChange={function(e){var v=e.target.value;var yr=parseInt(v.split("-")[0],10);if(yr<1900||yr>2100)return;setProfile(function(pv){return Object.assign({},pv,{birthDate:v});});}} style={{width:"100%",padding:"10px 14px",border:"1.5px solid #ddd",borderRadius:8,fontSize:".92rem",marginBottom:6,outline:"none",boxSizing:"border-box"}}/>
           {profile.birthDate&&<div style={{fontSize:".8rem",color:themes[theme].pri,fontWeight:600,marginBottom:16}}>{calcAge(profile.birthDate).label} old</div>}
           <div style={{fontSize:".78rem",fontWeight:600,color:C.sec,textTransform:"uppercase",letterSpacing:".06em",marginBottom:10}}>Theme Color</div>
           <div style={{display:"flex",gap:14,marginBottom:28}}>
@@ -591,13 +594,26 @@ export default function BabyTracker(){
         );})}
       </div>
       <div style={{fontSize:".72rem",fontWeight:600,color:C.sec,marginBottom:4}}>Birth Date</div>
-      <input type="date" value={profile.birthDate} onChange={function(e){var np=Object.assign({},profile,{birthDate:e.target.value});setProfile(np);sSet(KEYS.profile,Object.assign({},np,{theme:theme}));}} style={{width:"100%",padding:"7px 10px",border:"1.5px solid #ddd",borderRadius:6,fontSize:".85rem",outline:"none",boxSizing:"border-box"}}/>
+      <input type="date" value={profile.birthDate} onChange={function(e){var v=e.target.value;var yr=parseInt(v.split("-")[0],10);if(yr<1900||yr>2100)return;var np=Object.assign({},profile,{birthDate:v});setProfile(np);sSet(KEYS.profile,Object.assign({},np,{theme:theme}));}} style={{width:"100%",padding:"7px 10px",border:"1.5px solid #ddd",borderRadius:6,fontSize:".85rem",outline:"none",boxSizing:"border-box"}}/>
       <div style={{fontSize:".78rem",color:t.pri,fontWeight:600,marginTop:6,marginBottom:14}}>{age.label} old</div>
       <div style={{fontSize:".7rem",color:C.sec,fontWeight:700,textTransform:"uppercase",letterSpacing:".07em",marginBottom:10}}>Theme Color</div>
       <div style={{display:"flex",gap:12}}>
         {themeColors.map(function(k){return <div key={k} onClick={function(){setTheme(k);saveProf(Object.assign({},profile,{theme:k}));}} style={{width:28,height:28,borderRadius:"50%",background:themes[k].pri,cursor:"pointer",display:"flex",alignItems:"center",justifyContent:"center"}}>{theme===k&&<span style={{color:"#fff",fontSize:".65rem",fontWeight:800}}>&#10003;</span>}</div>;})}
       </div>
     </div>);
+  };
+
+  var LoginOverlay=function(){
+    if(!loginOpen)return null;
+    return(
+      <div style={{position:"fixed",top:0,left:0,right:0,bottom:0,zIndex:999,display:"flex",alignItems:"center",justifyContent:"center"}}>
+        <div onClick={function(){setLoginOpen(false);}} style={{position:"absolute",top:0,left:0,right:0,bottom:0,background:"rgba(0,0,0,.4)"}}/>
+        <div style={{position:"relative",zIndex:1000,width:"100%",maxWidth:420,margin:"0 16px"}}>
+          <button onClick={function(){setLoginOpen(false);}} style={{position:"absolute",top:12,right:12,zIndex:1001,width:28,height:28,borderRadius:8,background:"#fff",border:"1.5px solid #ddd",cursor:"pointer",fontSize:".8rem",fontWeight:700,color:"#666",display:"flex",alignItems:"center",justifyContent:"center"}}>&#10005;</button>
+          <Auth onLogin={function(){setLoginOpen(false);}}/>
+        </div>
+      </div>
+    );
   };
 
   var NavItems=function(props){
@@ -627,6 +643,7 @@ export default function BabyTracker(){
     <div style={{fontFamily:"'Segoe UI',system-ui,sans-serif",background:"#fff",minHeight:"100vh",color:C.body}}>
       <style>{"@keyframes spin{to{transform:rotate(360deg)}} @media(max-width:768px){.btNavD{display:none!important}.btHam{display:flex!important}} input::-webkit-outer-spin-button,input::-webkit-inner-spin-button{-webkit-appearance:none;margin:0} input[type=number]{-moz-appearance:textfield;}"}</style>
 
+      <LoginOverlay/>
       {summaryOpen && <MonthlySummaryPage feeds={feeds} nightSleep={nightSleep} naps={naps} growthEntries={growthEntries} profile={profile} age={age} onClose={function(){setSummaryOpen(false);}} t={t} />}
 
       <header style={{background:"#fff",borderBottom:"1px solid #e8eeec",padding:"12px 24px",position:"sticky",top:0,zIndex:100}}>

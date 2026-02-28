@@ -10,8 +10,7 @@ export default function Auth({ onLogin }) {
   const canSubmit = email && password.length >= 6;
 
   return (
-    <div style={{ fontFamily: "'Segoe UI',system-ui,sans-serif", background: "#fafafa", minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", padding: 20 }}>
-      <div style={{ background: "#fff", borderRadius: 16, padding: "36px 32px", maxWidth: 400, width: "100%", boxShadow: "0 4px 20px rgba(0,0,0,.08)" }}>
+      <div style={{ fontFamily: "'Segoe UI',system-ui,sans-serif", background: "#fff", borderRadius: 16, padding: "36px 32px", maxWidth: 400, width: "100%", boxShadow: "0 4px 20px rgba(0,0,0,.08)" }}>
         <div style={{ textAlign: "center", marginBottom: 32 }}>
           <div style={{ width: 48, height: 48, borderRadius: "50%", background: BRAND, display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 12px" }}>
             <svg viewBox="0 0 24 24" style={{ width: 26, height: 26, fill: "none", stroke: "#fff", strokeWidth: 1.8, strokeLinecap: "round", strokeLinejoin: "round" }}>
@@ -58,6 +57,5 @@ export default function Auth({ onLogin }) {
           </span>
         </div>
       </div>
-    </div>
   );
 }
