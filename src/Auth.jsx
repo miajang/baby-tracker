@@ -19,7 +19,7 @@ export default function Auth({ onLogin }) {
             </svg>
           </div>
           <div style={{ fontSize: "1.5rem", fontWeight: 800, color: BRAND, marginBottom: 2 }}>BabyTracker</div>
-          <div style={{ fontSize: ".82rem", color: "#666", marginBottom: 0 }}>Every Milestone Matters</div>
+          <div style={{ fontSize: ".82rem", color: "#888", marginBottom: 0, letterSpacing: ".02em" }}>Every Milestone Matters</div>
         </div>
 
         <div style={{ fontSize: ".78rem", fontWeight: 600, color: "#666", textTransform: "uppercase", letterSpacing: ".06em", marginBottom: 6 }}>Email</div>
