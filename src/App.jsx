@@ -530,7 +530,7 @@ export default function BabyTracker(){
   useEffect(function(){if(chatOpen){setChatMsgs([]);setChatInput("");setTimeout(function(){if(chatInputRef.current)chatInputRef.current.focus();},100);}},[chatOpen]);
   var sendChat=async function(){if(!chatInput.trim()||chatLoading)return;var msg=chatInput.trim();setChatInput("");setChatMsgs(function(pv){return pv.concat([{role:"user",text:msg}]);});setChatLoading(true);var ctx="Baby: "+profile.name+", "+age.label+" old ("+currentMonth+" months).";var gp=gender==="boy"?"Use he/him pronouns.":"Use she/her pronouns.";var sys=CHAT_SYS+"\n"+gp+"\n\n"+ctx;var hist=chatMsgs.slice(-6).map(function(m){return{role:m.role==="user"?"user":"assistant",content:m.text};});var r=await callAI(sys,msg,hist);setChatMsgs(function(pv){return pv.concat([{role:"assistant",text:r}]);});setChatLoading(false);};
 
-  var renderBold=function(text){var parts=text.split(/\*\*([^*]+)\*\*/g);return parts.map(function(pt,i){return i%2===1?<strong key={i} style={{color:t.pri}}>{pt}</strong>:<span key={i}>{pt}</span>;});};
+  var renderBold=function(text){var parts=text.split(/\*\*([^*]+)\*\*/g);return parts.map(function(pt,i){return i%2===1?<strong key={i} style={{color:t.pri,display:pt.endsWith(':')?'block':'inline'}}>{pt}</strong>:<span key={i}>{pt}</span>;});};
   var navClick=function(sec){setActiveNav(sec);setDrawerOpen(false);var el=sectionRefs.current[sec];if(el){var top=el.getBoundingClientRect().top+window.scrollY-HEADER_H;window.scrollTo({top:top,behavior:"smooth"});}};
 
   useEffect(function(){var timer=setTimeout(function(){var obs=new IntersectionObserver(function(entries){entries.forEach(function(e){if(e.isIntersecting)setActiveNav(e.target.dataset.sec);});},{threshold:.15,rootMargin:"-15% 0px -75% 0px"});navSections.forEach(function(s){var el=sectionRefs.current[s.id];if(el)obs.observe(el);});return function(){obs.disconnect();};},150);return function(){clearTimeout(timer);};},[]);
@@ -888,7 +888,7 @@ export default function BabyTracker(){
 
           {/* EDUCATION */}
           <div style={{height:1,background:"#e8e8e8"}}/>
-          <div ref={function(el){sectionRefs.current.education=el;}} data-sec="education" style={{marginBottom:36,scrollMarginTop:HEADER_H}}>
+          <div ref={function(el){sectionRefs.current.education=el;}} data-sec="education" style={{marginBottom:36,scrollMarginTop:HEADER_H,paddingTop:28}}>
             <div style={{fontSize:"1.05rem",fontWeight:600,color:t.pri,marginBottom:6,display:"flex",alignItems:"center",gap:8}}><NavIcon type="education" color={t.pri}/> Education</div>
             <p style={{fontSize:".84rem",color:C.sec,marginBottom:16,lineHeight:1.5}}>Evidence-based guidance from CDC, AAP, and WHO.</p>
 
@@ -936,7 +936,7 @@ export default function BabyTracker(){
 
           {/* RESOURCES */}
           <div style={{height:1,background:"#e8e8e8"}}/>
-          <div ref={function(el){sectionRefs.current.resources=el;}} data-sec="resources" style={{marginBottom:36,scrollMarginTop:HEADER_H}}>
+          <div ref={function(el){sectionRefs.current.resources=el;}} data-sec="resources" style={{marginBottom:36,scrollMarginTop:HEADER_H,paddingTop:28}}>
             <div style={{fontSize:"1.05rem",fontWeight:600,color:t.pri,marginBottom:6,display:"flex",alignItems:"center",gap:8}}><NavIcon type="resources" color={t.pri}/> Resources</div>
             <p style={{fontSize:".84rem",color:C.sec,marginBottom:16,lineHeight:1.5}}>Credible sources for learning more about your baby's development, health, and well-being.</p>
             <div style={{background:"#fff",borderRadius:12,padding:"18px 20px",boxShadow:"0 2px 6px rgba(0,0,0,.05)"}}>
