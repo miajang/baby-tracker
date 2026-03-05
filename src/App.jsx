@@ -212,7 +212,7 @@ Simple questions: 2-3 sentences. Deeper questions: brief intro, 3-4 **bold name:
 Rules: Warm, family-friendly. Evidence-based only. Never diagnose. Redirect medical concerns to pediatrician. Under 200 words. No bullet points.`;
 
 async function callAI(sys,msg,history){
-  try{const messages=history?[...history,{role:"user",content:msg}]:[{role:"user",content:msg}];const r=await fetch("https://api.anthropic.com/v1/messages",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({model:"claude-sonnet-4-20250514",max_tokens:1000,system:sys,messages})});const d=await r.json();return d.content?.map(b=>b.text||"").join("\n")||"No response.";}catch{return"Unable to connect. Please try again.";}
+  try{const ak=import.meta.env.VITE_ANTHROPIC_API_KEY;if(!ak)return"API key not configured.";const messages=history?[...history,{role:"user",content:msg}]:[{role:"user",content:msg}];const r=await fetch("https://api.anthropic.com/v1/messages",{method:"POST",headers:{"Content-Type":"application/json","x-api-key":ak,"anthropic-version":"2023-06-01","anthropic-dangerous-direct-browser-access":"true"},body:JSON.stringify({model:"claude-sonnet-4-20250514",max_tokens:1000,system:sys,messages})});const d=await r.json();return d.content?.map(b=>b.text||"").join("\n")||"No response.";}catch{return"Unable to connect. Please try again.";}
 }
 
 function calcAge(bd){
