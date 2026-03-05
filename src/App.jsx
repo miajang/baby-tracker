@@ -251,9 +251,9 @@ function TimeInput({h,m,ap,onH,onM,onAP,mid}){
   const fw=52;
   return(
     <div style={{display:"flex",alignItems:"center",gap:4}}>
-      <input placeholder="Hr" value={h} onChange={e=>{const v=e.target.value.replace(/\D/g,"");if(v===""||(/^\d{1,2}$/.test(v)&&parseInt(v)<=12))onH(v);}} style={{width:fw,padding:"8px 4px",border:"1.5px solid "+(mid),borderRadius:8,fontSize:".85rem",outline:"none",textAlign:"center"}}/>
+      <input placeholder="Hr" inputMode="numeric" value={h} onChange={e=>{const v=e.target.value.replace(/\D/g,"");if(v===""||(/^\d{1,2}$/.test(v)&&parseInt(v)<=12))onH(v);}} style={{width:fw,padding:"8px 4px",border:"1.5px solid "+(mid),borderRadius:8,fontSize:".85rem",outline:"none",textAlign:"center"}}/>
       <span style={{color:"#bbb",fontWeight:600}}>:</span>
-      <input placeholder="Min" value={m} onChange={e=>{const v=e.target.value.replace(/\D/g,"");if(v===""||(/^\d{1,2}$/.test(v)&&parseInt(v)<=59))onM(v);}} style={{width:fw,padding:"8px 4px",border:"1.5px solid "+(mid),borderRadius:8,fontSize:".85rem",outline:"none",textAlign:"center"}}/>
+      <input placeholder="Min" inputMode="numeric" value={m} onChange={e=>{const v=e.target.value.replace(/\D/g,"");if(v===""||(/^\d{1,2}$/.test(v)&&parseInt(v)<=59))onM(v);}} style={{width:fw,padding:"8px 4px",border:"1.5px solid "+(mid),borderRadius:8,fontSize:".85rem",outline:"none",textAlign:"center"}}/>
       <div style={{display:"flex",borderRadius:6,overflow:"hidden",border:"1.5px solid "+(mid)}}>
         <button onClick={()=>onAP("AM")} style={{padding:"7px 8px",fontSize:".74rem",fontWeight:600,background:ap==="AM"?"#eee":"#fff",border:"none",cursor:"pointer",color:ap==="AM"?C.h:"#bbb"}}>AM</button>
         <button onClick={()=>onAP("PM")} style={{padding:"7px 8px",fontSize:".74rem",fontWeight:600,background:ap==="PM"?"#eee":"#fff",border:"none",cursor:"pointer",color:ap==="PM"?C.h:"#bbb",borderLeft:"1px solid "+(mid)}}>PM</button>
