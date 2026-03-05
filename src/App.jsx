@@ -694,7 +694,10 @@ export default function BabyTracker(){
               {todayFeeds.length>0&&<div style={{fontSize:".82rem",color:C.body,fontWeight:600,marginTop:2,marginBottom:12}}>Total: {todayOz} oz ({todayFeeds.length} feed{todayFeeds.length!==1?"s":""})</div>}
               {todayFeeds.length===0&&<div style={{height:12}}/>}
               <div style={{display:"flex",gap:8,flexWrap:"wrap",marginBottom:8}}>
-                <input type="number" step="0.5" min="0" placeholder="Oz" value={feedOz} onChange={function(e){setFeedOz(e.target.value);}} style={{width:64,padding:"8px 10px",border:"1.5px solid "+(t.mid),borderRadius:8,fontSize:".85rem",outline:"none"}}/>
+                <div style={{display:"flex",alignItems:"center",gap:4}}>
+                  <input type="text" inputMode="decimal" placeholder="0" value={feedOz} onChange={function(e){var v=e.target.value;if(v===""||/^\d*\.?\d*$/.test(v))setFeedOz(v);}} style={{width:56,padding:"8px 10px",border:"1.5px solid "+(t.mid),borderRadius:8,fontSize:".85rem",outline:"none",textAlign:"center"}}/>
+                  <span style={{fontSize:".82rem",fontWeight:600,color:C.sec}}>oz</span>
+                </div>
                 <div style={{display:"flex",alignItems:"center",gap:6}}>
                   <TimeInput h={feedH} m={feedM} ap={feedAP} onH={setFeedH} onM={setFeedM} onAP={setFeedAP} mid={t.mid}/>
                   <button onClick={setFeedTimeNow} title="Set to now" style={{background:t.lt,border:"1px solid "+(t.mid),borderRadius:6,padding:"7px 8px",fontSize:".7rem",fontWeight:600,color:t.pri,cursor:"pointer",whiteSpace:"nowrap"}}>Now</button>
@@ -753,8 +756,14 @@ export default function BabyTracker(){
             <div style={{fontSize:"1.05rem",fontWeight:600,color:t.pri,marginBottom:12,display:"flex",alignItems:"center",gap:8}}><NavIcon type="growth" color={t.pri}/> Growth</div>
             <div style={{background:"#fff",borderRadius:12,padding:"18px 20px",boxShadow:"0 2px 6px rgba(0,0,0,.05)"}}>
               <div style={{display:"flex",gap:8,flexWrap:"wrap",marginBottom:12}}>
-                <input type="number" step="0.1" placeholder="Weight (lbs)" value={gW} onChange={function(e){setGW(e.target.value);}} style={{width:110,padding:"8px 10px",border:"1.5px solid "+(t.mid),borderRadius:8,fontSize:".85rem",outline:"none"}}/>
-                <input type="number" step="0.1" placeholder="Length (in)" value={gL} onChange={function(e){setGL(e.target.value);}} style={{width:110,padding:"8px 10px",border:"1.5px solid "+(t.mid),borderRadius:8,fontSize:".85rem",outline:"none"}}/>
+                <div style={{display:"flex",alignItems:"center",gap:4}}>
+                  <input type="text" inputMode="decimal" placeholder="Weight" value={gW} onChange={function(e){var v=e.target.value;if(v===""||/^\d*\.?\d*$/.test(v))setGW(v);}} style={{width:80,padding:"8px 10px",border:"1.5px solid "+(t.mid),borderRadius:8,fontSize:".85rem",outline:"none"}}/>
+                  <span style={{fontSize:".82rem",fontWeight:600,color:C.sec}}>lbs</span>
+                </div>
+                <div style={{display:"flex",alignItems:"center",gap:4}}>
+                  <input type="text" inputMode="decimal" placeholder="Length" value={gL} onChange={function(e){var v=e.target.value;if(v===""||/^\d*\.?\d*$/.test(v))setGL(v);}} style={{width:80,padding:"8px 10px",border:"1.5px solid "+(t.mid),borderRadius:8,fontSize:".85rem",outline:"none"}}/>
+                  <span style={{fontSize:".82rem",fontWeight:600,color:C.sec}}>in</span>
+                </div>
                 <button onClick={addGrowth} style={{background:t.pri,color:"#fff",border:"none",borderRadius:8,padding:"8px 16px",fontSize:".82rem",fontWeight:600,cursor:"pointer"}}>+ Add</button>
               </div>
               {growthEntries.length>0?growthEntries.slice(0,10).map(function(g){
