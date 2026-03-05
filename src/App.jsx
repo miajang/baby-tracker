@@ -627,7 +627,7 @@ export default function BabyTracker(){
       );})}
       <div style={{height:48}}/>
       <div onClick={function(){setChatOpen(true);if(onExtra)onExtra();}} style={{display:"flex",alignItems:"center",gap:8,padding:"9px 16px",fontSize:".82rem",color:t.learn,cursor:"pointer",fontWeight:600}}>
-        <NavIcon type="chat" color={t.learn}/> Ask BabyAdvisor
+        <NavIcon type="chat" color={t.learn}/> Ask Expert
       </div>
     </>
   );};
@@ -665,6 +665,10 @@ export default function BabyTracker(){
         <div style={{marginTop:8,display:"flex",alignItems:"center",gap:10,flexWrap:"wrap"}}>
           <span style={{background:t.badge,color:t.badgeTxt,borderRadius:20,padding:"5px 14px",fontSize:".82rem",fontWeight:700}}>{profile.name}</span>
           <span style={{fontSize:".82rem",color:t.pri,fontWeight:600}}>{age.label} old</span>
+          <button onClick={function(){setChatOpen(true);}} style={{marginLeft:"auto",display:"flex",alignItems:"center",gap:5,background:BRAND,color:"#fff",border:"none",borderRadius:20,padding:"5px 14px",fontSize:".78rem",fontWeight:600,cursor:"pointer"}}>
+            <svg viewBox="0 0 24 24" style={{width:14,height:14,stroke:"#fff",fill:"none",strokeWidth:2,strokeLinecap:"round",strokeLinejoin:"round"}}><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+            Ask Expert
+          </button>
         </div>
       </header>
 
@@ -833,7 +837,7 @@ export default function BabyTracker(){
                       })}
                       <div style={{marginTop:14}}>
                         <button onClick={function(){doDive("milestone","ms-"+md.month,"Month "+md.month+" milestones for "+profile.name+", "+age.label+" old. Checked: "+count+"/"+total+".");}} style={{background:diveResults["ms-"+md.month]?t.hover:t.badge,color:t.badgeTxt,border:"1px solid "+(t.mid),borderRadius:8,padding:"8px 14px",fontSize:".8rem",fontWeight:600,cursor:"pointer",display:"flex",alignItems:"center",gap:5}}>
-                          <span>{diveResults["ms-"+md.month]?"\u2715":"\u2728"}</span>{diveResults["ms-"+md.month]?"Close Deep Dive":"AI Deep Dive"}
+                          <span>{diveResults["ms-"+md.month]?"\u2715":"\u2728"}</span>{diveResults["ms-"+md.month]?"Close":"Ask Expert"}
                         </button>
                       </div>
                       {diveLoading===("ms-"+md.month)&&<Spinner/>}
@@ -882,7 +886,7 @@ export default function BabyTracker(){
                     );})}
                     <div style={{marginTop:16,borderTop:"1px solid #f0f0f0",paddingTop:12}}>
                       <button onClick={function(){doDive("education",topicDiveKey,"Category: "+topic.title+". Baby: "+profile.name+", "+age.label+" old.\n\n"+allContent);}} style={{background:diveResults[topicDiveKey]?t.hover:t.badge,color:t.badgeTxt,border:"1px solid "+(t.mid),borderRadius:6,padding:"6px 12px",fontSize:".76rem",fontWeight:600,cursor:"pointer",display:"inline-flex",alignItems:"center",gap:4}}>
-                        <span>{diveResults[topicDiveKey]?"\u2715":"\u2728"}</span>{diveResults[topicDiveKey]?"Close Deep Dive":"AI Deep Dive - "+topic.title}
+                        <span>{diveResults[topicDiveKey]?"\u2715":"\u2728"}</span>{diveResults[topicDiveKey]?"Close":"Ask Expert"}
                       </button>
                       {diveLoading===topicDiveKey&&<Spinner/>}
                       {diveResults[topicDiveKey]&&!diveLoading&&(
@@ -927,7 +931,7 @@ export default function BabyTracker(){
       {chatOpen&&(
         <div style={{position:"fixed",bottom:0,right:0,width:390,maxWidth:"100vw",height:"min(620px,85vh)",background:"#fff",borderTopLeftRadius:16,boxShadow:"-4px -4px 24px rgba(0,0,0,.15)",zIndex:500,display:"flex",flexDirection:"column",overflow:"hidden",border:"1px solid "+(t.mid)}}>
           <div style={{padding:"14px 18px",background:BRAND,color:"#fff",display:"flex",justifyContent:"space-between",alignItems:"center",flexShrink:0}}>
-            <div><div style={{fontWeight:700,fontSize:".92rem"}}>Ask BabyAdvisor</div><div style={{fontSize:".72rem",opacity:.8}}>{profile.name} &middot; {age.label} old</div></div>
+            <div><div style={{fontWeight:700,fontSize:".92rem"}}>Ask Expert</div><div style={{fontSize:".72rem",opacity:.8}}>{profile.name} &middot; {age.label} old</div></div>
             <button onClick={function(){setChatOpen(false);}} style={{background:"rgba(255,255,255,.2)",border:"none",color:"#fff",width:28,height:28,borderRadius:6,cursor:"pointer",fontSize:".85rem"}}>&#10005;</button>
           </div>
           <div style={{flex:1,overflowY:"auto",padding:16}}>
