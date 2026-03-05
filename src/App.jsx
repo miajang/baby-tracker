@@ -531,7 +531,7 @@ export default function BabyTracker(){
   var sendChat=async function(){if(!chatInput.trim()||chatLoading)return;var msg=chatInput.trim();setChatInput("");setChatMsgs(function(pv){return pv.concat([{role:"user",text:msg}]);});setChatLoading(true);var ctx="Baby: "+profile.name+", "+age.label+" old ("+currentMonth+" months).";var gp=gender==="boy"?"Use he/him pronouns.":"Use she/her pronouns.";var sys=CHAT_SYS+"\n"+gp+"\n\n"+ctx;var hist=chatMsgs.slice(-6).map(function(m){return{role:m.role==="user"?"user":"assistant",content:m.text};});var r=await callAI(sys,msg,hist);setChatMsgs(function(pv){return pv.concat([{role:"assistant",text:r}]);});setChatLoading(false);};
 
   var renderBold=function(text){var parts=text.split(/\*\*([^*]+)\*\*/g);return parts.map(function(pt,i){return i%2===1?<strong key={i} style={{color:t.pri,display:pt.endsWith(':')?'block':'inline'}}>{pt}</strong>:<span key={i}>{pt}</span>;});};
-  var navClick=function(sec){setActiveNav(sec);setDrawerOpen(false);var el=sectionRefs.current[sec];if(el){var top=el.getBoundingClientRect().top+window.scrollY-HEADER_H+12;window.scrollTo({top:top,behavior:"smooth"});}};
+  var navClick=function(sec){setActiveNav(sec);setDrawerOpen(false);var el=sectionRefs.current[sec];if(el){var offset=sec==="tracker"?-4:12;var top=el.getBoundingClientRect().top+window.scrollY-HEADER_H+offset;window.scrollTo({top:top,behavior:"smooth"});}};
 
   useEffect(function(){var timer=setTimeout(function(){var obs=new IntersectionObserver(function(entries){entries.forEach(function(e){if(e.isIntersecting)setActiveNav(e.target.dataset.sec);});},{threshold:.15,rootMargin:"-15% 0px -75% 0px"});navSections.forEach(function(s){var el=sectionRefs.current[s.id];if(el)obs.observe(el);});return function(){obs.disconnect();};},150);return function(){clearTimeout(timer);};},[]);
 
@@ -804,17 +804,16 @@ export default function BabyTracker(){
                     return(
                       <div key={md.month} ref={function(el){monthRefs.current[md.month]=el;}} style={{background:"#fff",borderRadius:14,overflow:"hidden",border:openMonth===md.month?"2px solid "+(t.pri):isCurrent?"2px solid "+(t.pri):"1px solid #e8e8e8",scrollMarginTop:HEADER_H+4,cursor:"pointer",transition:"box-shadow .15s",display:"flex",flexDirection:"column"}} onClick={function(){handleMonthToggle(md.month);}}>
                         <div style={{padding:"20px 20px 16px"}}>
-                          <div style={{width:40,height:40,borderRadius:10,background:isCurrent?t.pri:t.lt,display:"flex",alignItems:"center",justifyContent:"center",marginBottom:12}}>
-                            <span style={{fontSize:"1rem",fontWeight:700,color:isCurrent?"#fff":t.pri}}>{md.month}</span>
+                          <div style={{display:"flex",alignItems:"center",gap:8,marginBottom:6}}>
+                            <div style={{fontSize:".95rem",fontWeight:700,color:C.h}}>{md.label}</div>
+                            {isCurrent&&<span style={{background:t.pri,color:"#fff",borderRadius:10,padding:"2px 8px",fontSize:".64rem",fontWeight:700}}>NOW</span>}
                           </div>
-                          <div style={{fontSize:".95rem",fontWeight:700,color:C.h,marginBottom:6}}>{md.label}</div>
                           <div style={{fontSize:".8rem",color:C.sec,lineHeight:1.5,marginBottom:14,display:"-webkit-box",WebkitLineClamp:2,WebkitBoxOrient:"vertical",overflow:"hidden"}}>{genderize(md.summary,gender)}</div>
                           <div style={{display:"flex",alignItems:"center",gap:8}}>
                             <div style={{flex:1,height:5,background:"#eee",borderRadius:3,overflow:"hidden"}}>
                               <div style={{width:pct+"%",height:"100%",background:progressColor,borderRadius:3,transition:"width .3s"}}/>
                             </div>
                             <span style={{fontSize:".74rem",color:progressColor,fontWeight:600,whiteSpace:"nowrap"}}>{count}/{total}</span>
-                            {isCurrent&&<span style={{background:t.pri,color:"#fff",borderRadius:10,padding:"2px 8px",fontSize:".64rem",fontWeight:700}}>NOW</span>}
                           </div>
                         </div>
                       </div>
@@ -888,46 +887,66 @@ export default function BabyTracker(){
             <div style={{fontSize:"1.05rem",fontWeight:600,color:t.pri,marginBottom:6,display:"flex",alignItems:"center",gap:8}}><NavIcon type="education" color={t.pri}/> Education</div>
             <p style={{fontSize:".84rem",color:C.sec,marginBottom:16,lineHeight:1.5}}>Evidence-based guidance from CDC, AAP, and WHO.</p>
 
-            {educationData.map(function(topic){
-              var isOpen=openEdu===topic.id;
-              var topicDiveKey="edu-"+topic.id;
-              var allContent=topic.articles.map(function(a){return a.t+": "+a.content;}).join("\n\n");
-              return(
-              <div key={topic.id} ref={function(el){eduRefs.current[topic.id]=el;}} style={{background:"#fff",borderRadius:12,marginBottom:10,overflow:"hidden",boxShadow:"0 2px 6px rgba(0,0,0,.05)",scrollMarginTop:HEADER_H+4}}>
-                <div onClick={function(){handleEduToggle(topic.id);}} style={{padding:"16px 18px",cursor:"pointer"}}>
-                  <div style={{display:"flex",alignItems:"center",justifyContent:"space-between"}}>
-                    <span style={{fontSize:".95rem",fontWeight:700,color:C.h}}>{topic.icon} {topic.title}</span>
-                    <span style={{fontSize:".82rem",color:t.learn,fontWeight:600}}>{isOpen?"\u25B2":"\u25BC"}</span>
-                  </div>
-                  {!isOpen&&<div style={{fontSize:".82rem",color:C.sec,marginTop:6,lineHeight:1.5}}>{topic.preview}</div>}
-                </div>
-                {isOpen&&(
-                  <div style={{padding:"0 18px 18px",borderTop:"1px solid #f0f0f0"}}>
-                    {topic.articles.map(function(art,ai){return(
-                      <div key={ai} style={{marginTop:16}}>
-                        <div style={{fontSize:".88rem",fontWeight:700,color:C.body,marginBottom:4}}>{art.t}</div>
-                        {art.table&&<DataTable headers={art.table.headers} rows={art.table.rows}/>}
-                        <div style={{fontSize:".84rem",color:C.body,lineHeight:1.65}}>{art.content}</div>
-                      </div>
-                    );})}
-                    <div style={{marginTop:16,paddingTop:12}}>
-                      {!diveResults[topicDiveKey]&&<button onClick={function(){doDive("education",topicDiveKey,"Category: "+topic.title+". Baby: "+profile.name+", "+age.label+" old.\n\n"+allContent);}} style={{background:t.badge,color:t.badgeTxt,border:"1px solid "+(t.mid),borderRadius:6,padding:"6px 12px",fontSize:".76rem",fontWeight:600,cursor:"pointer",display:"inline-flex",alignItems:"center",gap:4}}>
-                        <svg viewBox="0 0 24 24" style={{width:13,height:13,stroke:t.badgeTxt,fill:"none",strokeWidth:2.2,strokeLinecap:"round",strokeLinejoin:"round"}}><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-                        Learn More
-                      </button>}
-                      {diveLoading===topicDiveKey&&<Spinner/>}
-                      {diveResults[topicDiveKey]&&!diveLoading&&(
-                        <div style={{marginTop:8,padding:"8px 14px",background:t.lt,borderRadius:8,fontSize:".82rem",color:C.body,lineHeight:1.7,position:"relative"}}>
-                          <button onClick={function(){doDive("education",topicDiveKey,"");}} style={{position:"absolute",top:4,right:0,background:"none",border:"none",color:C.help,cursor:"pointer",fontSize:".78rem",fontWeight:600}}>&#10005;</button>
-                          <div style={{fontSize:".64rem",fontWeight:700,textTransform:"uppercase",letterSpacing:".08em",color:t.pri,marginBottom:4}}>Personalized for {profile.name}</div>
-                          {diveResults[topicDiveKey].split("\n").filter(Boolean).map(function(pt,i){return <p key={i} style={{marginBottom:6}}>{renderBold(pt)}</p>;})}
+            {(function(){
+              var ECOLS=3;
+              var eRows=[];
+              for(var i=0;i<educationData.length;i+=ECOLS){eRows.push(educationData.slice(i,i+ECOLS));}
+              var openTopic=openEdu?educationData.find(function(t2){return t2.id===openEdu;}):null;
+              return eRows.map(function(row,ri){
+                var rowHasOpen=row.some(function(t2){return t2.id===openEdu;});
+                return(
+                  <React.Fragment key={ri}>
+                  <div style={{display:"grid",gridTemplateColumns:"repeat("+ECOLS+",1fr)",gap:14,marginBottom:rowHasOpen?0:14}}>
+                  {row.map(function(topic){
+                    return(
+                      <div key={topic.id} ref={function(el){eduRefs.current[topic.id]=el;}} onClick={function(){handleEduToggle(topic.id);}} style={{background:"#fff",borderRadius:14,overflow:"hidden",border:openEdu===topic.id?"2px solid "+(t.pri):"1px solid #e8e8e8",scrollMarginTop:HEADER_H+4,cursor:"pointer",transition:"box-shadow .15s",display:"flex",flexDirection:"column"}}>
+                        <div style={{padding:"20px 20px 16px"}}>
+                          <div style={{fontSize:"1.1rem",marginBottom:8}}>{topic.icon}</div>
+                          <div style={{fontSize:".95rem",fontWeight:700,color:C.h,marginBottom:6}}>{topic.title}</div>
+                          <div style={{fontSize:".8rem",color:C.sec,lineHeight:1.5,display:"-webkit-box",WebkitLineClamp:2,WebkitBoxOrient:"vertical",overflow:"hidden"}}>{topic.preview}</div>
                         </div>
-                      )}
-                    </div>
+                      </div>
+                    );
+                  })}
                   </div>
-                )}
-              </div>
-            );})}
+                  {rowHasOpen&&openTopic&&(function(){
+                    var topic=openTopic;
+                    var topicDiveKey="edu-"+topic.id;
+                    var allContent=topic.articles.map(function(a){return a.t+": "+a.content;}).join("\n\n");
+                    return(
+                      <div style={{background:"#fff",borderRadius:14,padding:"20px 22px",border:"1px solid #e8e8e8",marginTop:14,marginBottom:14,scrollMarginTop:HEADER_H+4}}>
+                        <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:12}}>
+                          <div style={{fontSize:"1rem",fontWeight:700,color:C.h}}>{topic.icon} {topic.title}</div>
+                          <button onClick={function(e){e.stopPropagation();setOpenEdu(null);}} style={{width:28,height:28,borderRadius:6,background:"#f5f5f5",border:"1px solid #e8e8e8",cursor:"pointer",fontSize:".8rem",color:C.sec,display:"flex",alignItems:"center",justifyContent:"center"}}>&#10005;</button>
+                        </div>
+                        {topic.articles.map(function(art,ai){return(
+                          <div key={ai} style={{marginTop:16}}>
+                            <div style={{fontSize:".88rem",fontWeight:700,color:C.body,marginBottom:4}}>{art.t}</div>
+                            {art.table&&<DataTable headers={art.table.headers} rows={art.table.rows}/>}
+                            <div style={{fontSize:".84rem",color:C.body,lineHeight:1.65}}>{art.content}</div>
+                          </div>
+                        );})}
+                        <div style={{marginTop:16,paddingTop:12}}>
+                          {!diveResults[topicDiveKey]&&<button onClick={function(){doDive("education",topicDiveKey,"Category: "+topic.title+". Baby: "+profile.name+", "+age.label+" old.\n\n"+allContent);}} style={{background:t.badge,color:t.badgeTxt,border:"1px solid "+(t.mid),borderRadius:6,padding:"6px 12px",fontSize:".76rem",fontWeight:600,cursor:"pointer",display:"inline-flex",alignItems:"center",gap:4}}>
+                            <svg viewBox="0 0 24 24" style={{width:13,height:13,stroke:t.badgeTxt,fill:"none",strokeWidth:2.2,strokeLinecap:"round",strokeLinejoin:"round"}}><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                            Learn More
+                          </button>}
+                          {diveLoading===topicDiveKey&&<Spinner/>}
+                          {diveResults[topicDiveKey]&&!diveLoading&&(
+                            <div style={{marginTop:8,padding:"8px 14px",background:t.lt,borderRadius:8,fontSize:".82rem",color:C.body,lineHeight:1.7,position:"relative"}}>
+                              <button onClick={function(){doDive("education",topicDiveKey,"");}} style={{position:"absolute",top:4,right:0,background:"none",border:"none",color:C.help,cursor:"pointer",fontSize:".78rem",fontWeight:600}}>&#10005;</button>
+                              <div style={{fontSize:".64rem",fontWeight:700,textTransform:"uppercase",letterSpacing:".08em",color:t.pri,marginBottom:4}}>Personalized for {profile.name}</div>
+                              {diveResults[topicDiveKey].split("\n").filter(Boolean).map(function(pt,i){return <p key={i} style={{marginBottom:6}}>{renderBold(pt)}</p>;})}
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                    );
+                  })()}
+                  </React.Fragment>
+                );
+              });
+            })()}
           </div>
 
           {/* RESOURCES */}
