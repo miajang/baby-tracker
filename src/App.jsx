@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Auth from "./Auth.jsx";
 
 const BRAND = "#237a82";
@@ -785,84 +785,99 @@ export default function BabyTracker(){
             <div style={{fontSize:"1.05rem",fontWeight:600,color:t.pri,marginBottom:6,display:"flex",alignItems:"center",gap:8}}><NavIcon type="milestones" color={t.pri}/> Milestones</div>
             <p style={{fontSize:".84rem",color:C.sec,marginBottom:16,lineHeight:1.5}}>Month-by-month developmental milestones based on CDC and AAP guidelines. Check all that apply as {profile.name} achieves them.</p>
 
-            <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fill,minmax(260px,1fr))",gap:14}}>
-            {milestoneData.map(function(md){
-              var isOpen=openMonth===md.month;
-              var count=getMonthCount(md.month);
-              var total=getMonthTotal(md.month);
-              var pct=total>0?Math.round((count/total)*100):0;
-              var isCurrent=md.month===currentMonth;
-              var evalText=getMilestoneEval(profile.name,count,total,pr);
-              var progressColor=count===0?"#ddd":pct>=75?"#4caf50":pct>=50?"#f59e0b":"#e57373";
-              return(
-                <React.Fragment key={md.month}>
-                <div ref={function(el){monthRefs.current[md.month]=el;}} style={{background:"#fff",borderRadius:14,overflow:"hidden",border:isCurrent?"2px solid "+(t.pri):"1px solid #e8e8e8",scrollMarginTop:HEADER_H+4,cursor:"pointer",transition:"box-shadow .15s",display:"flex",flexDirection:"column"}} onClick={function(){handleMonthToggle(md.month);}}>
-                  <div style={{padding:"20px 20px 16px"}}>
-                    <div style={{width:40,height:40,borderRadius:10,background:isCurrent?t.pri:t.lt,display:"flex",alignItems:"center",justifyContent:"center",marginBottom:12}}>
-                      <span style={{fontSize:"1rem",fontWeight:700,color:isCurrent?"#fff":t.pri}}>{md.month}</span>
-                    </div>
-                    <div style={{fontSize:".95rem",fontWeight:700,color:C.h,marginBottom:6}}>{md.label}</div>
-                    <div style={{fontSize:".8rem",color:C.sec,lineHeight:1.5,marginBottom:14,display:"-webkit-box",WebkitLineClamp:2,WebkitBoxOrient:"vertical",overflow:"hidden"}}>{genderize(md.summary,gender)}</div>
-                    <div style={{display:"flex",alignItems:"center",gap:8}}>
-                      <div style={{flex:1,height:5,background:"#eee",borderRadius:3,overflow:"hidden"}}>
-                        <div style={{width:pct+"%",height:"100%",background:progressColor,borderRadius:3,transition:"width .3s"}}/>
-                      </div>
-                      <span style={{fontSize:".74rem",color:progressColor,fontWeight:600,whiteSpace:"nowrap"}}>{count}/{total}</span>
-                      {isCurrent&&<span style={{background:t.pri,color:"#fff",borderRadius:10,padding:"2px 8px",fontSize:".64rem",fontWeight:700}}>NOW</span>}
-                    </div>
-                  </div>
-                </div>
-                {openMonth===md.month&&(
-                <div style={{gridColumn:"1 / -1",background:"#fff",borderRadius:14,padding:"20px 22px",border:"1px solid #e8e8e8",scrollMarginTop:HEADER_H+4}}>
-                  <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:12}}>
-                    <div style={{fontSize:"1rem",fontWeight:700,color:C.h}}>{md.label}</div>
-                    <button onClick={function(e){e.stopPropagation();setOpenMonth(null);}} style={{width:28,height:28,borderRadius:6,background:"#f5f5f5",border:"1px solid #e8e8e8",cursor:"pointer",fontSize:".8rem",color:C.sec,display:"flex",alignItems:"center",justifyContent:"center"}}>&#10005;</button>
-                  </div>
-                  <p style={{fontSize:".84rem",color:C.body,lineHeight:1.6,margin:"0 0 12px"}}>{genderize(md.summary,gender)}</p>
-                  <div style={{padding:"12px 16px",background:t.lt,borderRadius:10,marginBottom:14,fontSize:".84rem",color:C.body,lineHeight:1.6}}>{evalText}</div>
-                  <p style={{fontSize:".76rem",color:C.help,margin:"0 0 10px",fontStyle:"italic"}}>Check all that apply:</p>
-                  {md.categories.map(function(cat){
-                    var cc=getCatCount(md.month,cat.cat);
+            {(function(){
+              var COLS=3;
+              var rows=[];
+              for(var i=0;i<milestoneData.length;i+=COLS){rows.push(milestoneData.slice(i,i+COLS));}
+              var openMd=openMonth?milestoneData.find(function(m){return m.month===openMonth;}):null;
+              return rows.map(function(row,ri){
+                var rowHasOpen=row.some(function(md){return md.month===openMonth;});
+                return(
+                  <React.Fragment key={ri}>
+                  <div style={{display:"grid",gridTemplateColumns:"repeat("+COLS+",1fr)",gap:14,marginBottom:rowHasOpen?0:14}}>
+                  {row.map(function(md){
+                    var count=getMonthCount(md.month);
+                    var total=getMonthTotal(md.month);
+                    var pct=total>0?Math.round((count/total)*100):0;
+                    var isCurrent=md.month===currentMonth;
+                    var progressColor=count===0?"#ddd":pct>=75?"#4caf50":pct>=50?"#f59e0b":"#e57373";
                     return(
-                      <div key={cat.cat} style={{marginTop:12}}>
-                        <div style={{fontSize:".76rem",fontWeight:700,textTransform:"uppercase",letterSpacing:".06em",color:C.body,marginBottom:6,display:"flex",alignItems:"center"}}>{cat.cat}{cc>0&&<Badge count={cc}/>}</div>
-                        {cat.items.map(function(item,idx){
-                          var k=md.month+"-"+cat.cat+"-"+idx;
-                          var checked=!!milestoneChecks[k];
-                          var ds=milestoneChecks[k];
-                          return(
-                            <div key={idx} onClick={function(){toggleCheck(md.month,cat.cat,idx);}} style={{display:"flex",alignItems:"center",gap:10,padding:"7px 0",cursor:"pointer",borderBottom:"1px solid #f8f8f8"}}>
-                              <div style={{width:20,height:20,borderRadius:4,border:checked?"2px solid "+(t.pri):"2px solid #ddd",background:checked?t.pri:"transparent",display:"flex",alignItems:"center",justifyContent:"center",flexShrink:0}}>
-                                {checked&&<span style={{color:"#fff",fontSize:".7rem",fontWeight:800}}>&#10003;</span>}
-                              </div>
-                              <span style={{fontSize:".84rem",color:C.body,flex:1}}>{genderize(item,gender)}</span>
-                              {ds&&<span style={{fontSize:".66rem",color:C.help}}>{ds}</span>}
+                      <div key={md.month} ref={function(el){monthRefs.current[md.month]=el;}} style={{background:"#fff",borderRadius:14,overflow:"hidden",border:openMonth===md.month?"2px solid "+(t.pri):isCurrent?"2px solid "+(t.pri):"1px solid #e8e8e8",scrollMarginTop:HEADER_H+4,cursor:"pointer",transition:"box-shadow .15s",display:"flex",flexDirection:"column"}} onClick={function(){handleMonthToggle(md.month);}}>
+                        <div style={{padding:"20px 20px 16px"}}>
+                          <div style={{width:40,height:40,borderRadius:10,background:isCurrent?t.pri:t.lt,display:"flex",alignItems:"center",justifyContent:"center",marginBottom:12}}>
+                            <span style={{fontSize:"1rem",fontWeight:700,color:isCurrent?"#fff":t.pri}}>{md.month}</span>
+                          </div>
+                          <div style={{fontSize:".95rem",fontWeight:700,color:C.h,marginBottom:6}}>{md.label}</div>
+                          <div style={{fontSize:".8rem",color:C.sec,lineHeight:1.5,marginBottom:14,display:"-webkit-box",WebkitLineClamp:2,WebkitBoxOrient:"vertical",overflow:"hidden"}}>{genderize(md.summary,gender)}</div>
+                          <div style={{display:"flex",alignItems:"center",gap:8}}>
+                            <div style={{flex:1,height:5,background:"#eee",borderRadius:3,overflow:"hidden"}}>
+                              <div style={{width:pct+"%",height:"100%",background:progressColor,borderRadius:3,transition:"width .3s"}}/>
                             </div>
-                          );
-                        })}
+                            <span style={{fontSize:".74rem",color:progressColor,fontWeight:600,whiteSpace:"nowrap"}}>{count}/{total}</span>
+                            {isCurrent&&<span style={{background:t.pri,color:"#fff",borderRadius:10,padding:"2px 8px",fontSize:".64rem",fontWeight:700}}>NOW</span>}
+                          </div>
+                        </div>
                       </div>
                     );
                   })}
-                  {!diveResults["ms-"+md.month]&&<div style={{marginTop:14}}>
-                    <button onClick={function(){doDive("milestone","ms-"+md.month,"Month "+md.month+" milestones for "+profile.name+", "+age.label+" old. Checked: "+count+"/"+total+".");}} style={{background:t.badge,color:t.badgeTxt,border:"1px solid "+(t.mid),borderRadius:8,padding:"8px 14px",fontSize:".8rem",fontWeight:600,cursor:"pointer",display:"flex",alignItems:"center",gap:5}}>
-                      <svg viewBox="0 0 24 24" style={{width:14,height:14,stroke:t.badgeTxt,fill:"none",strokeWidth:2.2,strokeLinecap:"round",strokeLinejoin:"round"}}><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-                      Learn More
-                    </button>
-                  </div>}
-                  {diveLoading===("ms-"+md.month)&&<Spinner/>}
-                  {diveResults["ms-"+md.month]&&!diveLoading&&(
-                    <div style={{marginTop:10,padding:"8px 14px",background:t.lt,borderRadius:8,fontSize:".83rem",color:C.body,lineHeight:1.7,position:"relative"}}>
-                      <button onClick={function(){doDive("milestone","ms-"+md.month,"");}} style={{position:"absolute",top:4,right:0,background:"none",border:"none",color:C.help,cursor:"pointer",fontSize:".78rem",fontWeight:600}}>&#10005;</button>
-                      <div style={{fontSize:".66rem",fontWeight:700,textTransform:"uppercase",letterSpacing:".08em",color:t.pri,marginBottom:4}}>Personalized for {profile.name}</div>
-                      {diveResults["ms-"+md.month].split("\n").filter(Boolean).map(function(pt,i){return <p key={i} style={{marginBottom:6}}>{renderBold(pt)}</p>;})}
-                    </div>
-                  )}
-                </div>
-                )}
-                </React.Fragment>
-              );
-            })}
-            </div>
+                  </div>
+                  {rowHasOpen&&openMd&&(function(){
+                    var md=openMd;
+                    var count=getMonthCount(md.month);
+                    var total=getMonthTotal(md.month);
+                    var evalText=getMilestoneEval(profile.name,count,total,pr);
+                    return(
+                      <div style={{background:"#fff",borderRadius:14,padding:"20px 22px",border:"1px solid #e8e8e8",marginTop:14,marginBottom:14,scrollMarginTop:HEADER_H+4}}>
+                        <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:12}}>
+                          <div style={{fontSize:"1rem",fontWeight:700,color:C.h}}>{md.label}</div>
+                          <button onClick={function(e){e.stopPropagation();setOpenMonth(null);}} style={{width:28,height:28,borderRadius:6,background:"#f5f5f5",border:"1px solid #e8e8e8",cursor:"pointer",fontSize:".8rem",color:C.sec,display:"flex",alignItems:"center",justifyContent:"center"}}>&#10005;</button>
+                        </div>
+                        <p style={{fontSize:".84rem",color:C.body,lineHeight:1.6,margin:"0 0 12px"}}>{genderize(md.summary,gender)}</p>
+                        <div style={{padding:"12px 16px",background:t.lt,borderRadius:10,marginBottom:14,fontSize:".84rem",color:C.body,lineHeight:1.6}}>{evalText}</div>
+                        <p style={{fontSize:".76rem",color:C.help,margin:"0 0 10px",fontStyle:"italic"}}>Check all that apply:</p>
+                        {md.categories.map(function(cat){
+                          var cc=getCatCount(md.month,cat.cat);
+                          return(
+                            <div key={cat.cat} style={{marginTop:12}}>
+                              <div style={{fontSize:".76rem",fontWeight:700,textTransform:"uppercase",letterSpacing:".06em",color:C.body,marginBottom:6,display:"flex",alignItems:"center"}}>{cat.cat}{cc>0&&<Badge count={cc}/>}</div>
+                              {cat.items.map(function(item,idx){
+                                var k=md.month+"-"+cat.cat+"-"+idx;
+                                var checked=!!milestoneChecks[k];
+                                var ds=milestoneChecks[k];
+                                return(
+                                  <div key={idx} onClick={function(){toggleCheck(md.month,cat.cat,idx);}} style={{display:"flex",alignItems:"center",gap:10,padding:"7px 0",cursor:"pointer",borderBottom:"1px solid #f8f8f8"}}>
+                                    <div style={{width:20,height:20,borderRadius:4,border:checked?"2px solid "+(t.pri):"2px solid #ddd",background:checked?t.pri:"transparent",display:"flex",alignItems:"center",justifyContent:"center",flexShrink:0}}>
+                                      {checked&&<span style={{color:"#fff",fontSize:".7rem",fontWeight:800}}>&#10003;</span>}
+                                    </div>
+                                    <span style={{fontSize:".84rem",color:C.body,flex:1}}>{genderize(item,gender)}</span>
+                                    {ds&&<span style={{fontSize:".66rem",color:C.help}}>{ds}</span>}
+                                  </div>
+                                );
+                              })}
+                            </div>
+                          );
+                        })}
+                        {!diveResults["ms-"+md.month]&&<div style={{marginTop:14}}>
+                          <button onClick={function(){doDive("milestone","ms-"+md.month,"Month "+md.month+" milestones for "+profile.name+", "+age.label+" old. Checked: "+count+"/"+total+".");}} style={{background:t.badge,color:t.badgeTxt,border:"1px solid "+(t.mid),borderRadius:8,padding:"8px 14px",fontSize:".8rem",fontWeight:600,cursor:"pointer",display:"flex",alignItems:"center",gap:5}}>
+                            <svg viewBox="0 0 24 24" style={{width:14,height:14,stroke:t.badgeTxt,fill:"none",strokeWidth:2.2,strokeLinecap:"round",strokeLinejoin:"round"}}><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                            Learn More
+                          </button>
+                        </div>}
+                        {diveLoading===("ms-"+md.month)&&<Spinner/>}
+                        {diveResults["ms-"+md.month]&&!diveLoading&&(
+                          <div style={{marginTop:10,padding:"8px 14px",background:t.lt,borderRadius:8,fontSize:".83rem",color:C.body,lineHeight:1.7,position:"relative"}}>
+                            <button onClick={function(){doDive("milestone","ms-"+md.month,"");}} style={{position:"absolute",top:4,right:0,background:"none",border:"none",color:C.help,cursor:"pointer",fontSize:".78rem",fontWeight:600}}>&#10005;</button>
+                            <div style={{fontSize:".66rem",fontWeight:700,textTransform:"uppercase",letterSpacing:".08em",color:t.pri,marginBottom:4}}>Personalized for {profile.name}</div>
+                            {diveResults["ms-"+md.month].split("\n").filter(Boolean).map(function(pt,i){return <p key={i} style={{marginBottom:6}}>{renderBold(pt)}</p>;})}
+                          </div>
+                        )}
+                      </div>
+                    );
+                  })()}
+                  </React.Fragment>
+                );
+              });
+            })()}
           </div>
 
           {/* SUMMARY */}
