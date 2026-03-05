@@ -484,7 +484,7 @@ export default function BabyTracker(){
   const pr=pronounSets[gender]||pronounSets.girl;
 
   useEffect(function(){
-    const p=sGet(KEYS.profile);if(p){var yr=parseInt((p.birthDate||"").split("-")[0],10);if(yr<1900||yr>2100)p.birthDate=new Date().toISOString().slice(0,10);setProfile(p);if(p.theme)setTheme(p.theme);}
+    const p=sGet(KEYS.profile);if(p&&p.name){var yr=parseInt((p.birthDate||"").split("-")[0],10);if(yr<1900||yr>2100)p.birthDate="2025-11-03";setProfile(p);if(p.theme)setTheme(p.theme);}else{sSet(KEYS.profile,{name:"Erin",birthDate:"2025-11-03",gender:"girl",setupDone:false,theme:"pink"});}
     const f=sGet(KEYS.feeds);if(f)setFeeds(f);
     const ns=sGet(KEYS.nightSleep);if(ns)setNightSleep(ns);
     const np=sGet(KEYS.naps);if(np)setNaps(np);
