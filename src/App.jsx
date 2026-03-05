@@ -753,7 +753,6 @@ export default function BabyTracker(){
           </div>
 
           {/* GROWTH */}
-          <div style={{height:1,background:"#e8e8e8"}}/>
           <div ref={function(el){sectionRefs.current.growth=el;}} data-sec="growth" style={{marginBottom:36,scrollMarginTop:HEADER_H,paddingTop:28}}>
             <div style={{fontSize:"1.05rem",fontWeight:600,color:t.pri,marginBottom:12,display:"flex",alignItems:"center",gap:8}}><NavIcon type="growth" color={t.pri}/> Growth</div>
             <div style={{background:"#fff",borderRadius:12,padding:"18px 20px",boxShadow:"0 2px 6px rgba(0,0,0,.05)"}}>
@@ -782,7 +781,6 @@ export default function BabyTracker(){
           </div>
 
           {/* MILESTONES */}
-          <div style={{height:1,background:"#e8e8e8"}}/>
           <div ref={function(el){sectionRefs.current.milestones=el;}} data-sec="milestones" style={{marginBottom:36,scrollMarginTop:HEADER_H,paddingTop:28}}>
             <div style={{fontSize:"1.05rem",fontWeight:600,color:t.pri,marginBottom:6,display:"flex",alignItems:"center",gap:8}}><NavIcon type="milestones" color={t.pri}/> Milestones</div>
             <p style={{fontSize:".84rem",color:C.sec,marginBottom:16,lineHeight:1.5}}>Month-by-month developmental milestones based on CDC and AAP guidelines. Check all that apply as {profile.name} achieves them.</p>
@@ -883,11 +881,9 @@ export default function BabyTracker(){
           </div>
 
           {/* SUMMARY */}
-          <div style={{height:1,background:"#e8e8e8"}}/>
           <MonthlySummarySection feeds={feeds} nightSleep={nightSleep} naps={naps} growthEntries={growthEntries} profile={profile} age={age} t={t} sectionRef={function(el){sectionRefs.current.summary=el;}} />
 
           {/* EDUCATION */}
-          <div style={{height:1,background:"#e8e8e8"}}/>
           <div ref={function(el){sectionRefs.current.education=el;}} data-sec="education" style={{marginBottom:36,scrollMarginTop:HEADER_H,paddingTop:28}}>
             <div style={{fontSize:"1.05rem",fontWeight:600,color:t.pri,marginBottom:6,display:"flex",alignItems:"center",gap:8}}><NavIcon type="education" color={t.pri}/> Education</div>
             <p style={{fontSize:".84rem",color:C.sec,marginBottom:16,lineHeight:1.5}}>Evidence-based guidance from CDC, AAP, and WHO.</p>
@@ -935,7 +931,6 @@ export default function BabyTracker(){
           </div>
 
           {/* RESOURCES */}
-          <div style={{height:1,background:"#e8e8e8"}}/>
           <div ref={function(el){sectionRefs.current.resources=el;}} data-sec="resources" style={{marginBottom:36,scrollMarginTop:HEADER_H,paddingTop:28}}>
             <div style={{fontSize:"1.05rem",fontWeight:600,color:t.pri,marginBottom:6,display:"flex",alignItems:"center",gap:8}}><NavIcon type="resources" color={t.pri}/> Resources</div>
             <p style={{fontSize:".84rem",color:C.sec,marginBottom:16,lineHeight:1.5}}>Credible sources for learning more about your baby's development, health, and well-being.</p>
@@ -967,18 +962,18 @@ export default function BabyTracker(){
             <div><div style={{fontWeight:700,fontSize:".92rem",color:BRAND}}>Ask Expert</div><div style={{fontSize:".72rem",color:C.sec}}>{profile.name} &middot; {age.label} old</div></div>
             <button onClick={function(){setChatOpen(false);}} style={{background:"#fff",border:"1px solid #e8eeec",color:C.sec,width:28,height:28,borderRadius:6,cursor:"pointer",fontSize:".85rem"}}>&#10005;</button>
           </div>
-          <div style={{flex:1,overflowY:"auto",padding:16}}>
+          <div style={{flex:1,overflowY:"auto",padding:16,display:"flex",flexDirection:"column",justifyContent:chatMsgs.length===0?"flex-end":"flex-start"}}>
             {chatMsgs.length===0&&(
               <div>
-                <p style={{fontSize:".85rem",color:C.sec,marginBottom:12,lineHeight:1.6}}>Hi! I'm BabyAdvisor - personalized for {profile.name}. Ask me anything:</p>
-                <div style={{display:"flex",flexDirection:"column",gap:6}}>
-                  {["Is this enough formula for "+pr.pos+" age?","Sleep tips for a "+currentMonth+"-month-old","When should "+pr.sub+" start solids?"].map(function(s,i){return <button key={i} onClick={function(){setChatInput(s);}} style={{background:t.lt,border:"none",borderRadius:8,padding:"8px 12px",fontSize:".82rem",color:t.pri,cursor:"pointer",textAlign:"left",fontWeight:500}}>{s}</button>;})}
+                <p style={{fontSize:".85rem",color:C.sec,marginBottom:8,lineHeight:1.6}}>Hi! I'm BabyAdvisor - personalized for {profile.name}. Ask me anything:</p>
+                <div style={{display:"flex",flexDirection:"column",gap:5}}>
+                  {["Is this enough formula for "+pr.pos+" age?","Sleep tips for a "+currentMonth+"-month-old","When should "+pr.sub+" start solids?"].map(function(s,i){return <button key={i} onClick={function(){setChatInput(s);}} style={{background:"#f0f0f0",border:"none",borderRadius:8,padding:"8px 12px",fontSize:".82rem",color:"#555",cursor:"pointer",textAlign:"left",fontWeight:500}}>{s}</button>;})}
                 </div>
               </div>
             )}
             {chatMsgs.map(function(m,i){return(
               <div key={i} style={{marginBottom:12,display:"flex",justifyContent:m.role==="user"?"flex-end":"flex-start"}}>
-                <div style={{maxWidth:"85%",padding:"10px 14px",borderRadius:m.role==="user"?"14px 14px 4px 14px":"14px 14px 14px 4px",background:m.role==="user"?t.mid:t.lt,color:m.role==="user"?t.dk:C.body,fontSize:".84rem",lineHeight:1.7}}>
+                <div style={{maxWidth:"85%",padding:"10px 14px",borderRadius:m.role==="user"?"14px 14px 4px 14px":"14px 14px 14px 4px",background:m.role==="user"?"#f0f0f0":t.lt,color:m.role==="user"?"#444":C.body,fontSize:".84rem",lineHeight:1.7}}>
                   {m.text.split("\n").filter(Boolean).map(function(pt,j){return <p key={j} style={{marginBottom:4}}>{renderBold(pt)}</p>;})}
                 </div>
               </div>
