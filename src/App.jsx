@@ -957,12 +957,12 @@ export default function BabyTracker(){
 
       {/* CHAT */}
       {chatOpen&&(
-        <div style={{position:"fixed",bottom:0,right:0,width:390,maxWidth:"100vw",height:"min(620px,85vh)",background:"#fff",borderTopLeftRadius:16,boxShadow:"-4px -4px 24px rgba(0,0,0,.15)",zIndex:500,display:"flex",flexDirection:"column",overflow:"hidden",border:"1px solid "+(t.mid)}}>
+        <div style={{position:"fixed",bottom:0,right:0,width:390,maxWidth:"100vw",height:"min(480px,75vh)",background:"#fff",borderTopLeftRadius:16,boxShadow:"-4px -4px 24px rgba(0,0,0,.15)",zIndex:500,display:"flex",flexDirection:"column",overflow:"hidden",border:"1px solid "+(t.mid)}}>
           <div style={{padding:"14px 18px",background:"#f3f7f5",color:C.h,display:"flex",justifyContent:"space-between",alignItems:"center",flexShrink:0,borderBottom:"1px solid #e8eeec"}}>
             <div><div style={{fontWeight:700,fontSize:".92rem",color:BRAND}}>Ask Expert</div><div style={{fontSize:".72rem",color:C.sec}}>{profile.name} &middot; {age.label} old</div></div>
             <button onClick={function(){setChatOpen(false);}} style={{background:"#fff",border:"1px solid #e8eeec",color:C.sec,width:28,height:28,borderRadius:6,cursor:"pointer",fontSize:".85rem"}}>&#10005;</button>
           </div>
-          <div style={{flex:1,overflowY:"auto",padding:16,display:"flex",flexDirection:"column",justifyContent:chatMsgs.length===0?"flex-end":"flex-start"}}>
+          <div style={{flex:1,overflowY:"auto",padding:16}}>
             {chatMsgs.length===0&&(
               <div>
                 <p style={{fontSize:".85rem",color:C.sec,marginBottom:8,lineHeight:1.6}}>Hi! I'm BabyAdvisor - personalized for {profile.name}. Ask me anything:</p>
