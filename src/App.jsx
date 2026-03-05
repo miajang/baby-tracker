@@ -234,7 +234,7 @@ const KEYS={profile:"bt-profile",feeds:"bt-feeds",nightSleep:"bt-nightsleep",nap
 function sGet(k){try{const v=localStorage.getItem(k);return v?JSON.parse(v):null;}catch{return null;}}
 function sSet(k,v){try{localStorage.setItem(k,JSON.stringify(v));}catch(e){console.error(e);}}
 
-const Spinner=()=><div style={{display:"flex",alignItems:"center",gap:8,padding:"12px 0"}}><div style={{width:16,height:16,border:"2px solid #ccc",borderTopColor:"currentColor",borderRadius:"50%",animation:"spin .8s linear infinite"}}/><span style={{fontSize:".84rem",color:C.sec}}>Generating...</span></div>;
+const Spinner=()=><div style={{display:"flex",alignItems:"center",gap:8,padding:"12px 0"}}><div style={{width:16,height:16,border:"2px solid #ccc",borderTopColor:"currentColor",borderRadius:"50%",animation:"spin .8s linear infinite"}}/><span style={{fontSize:".84rem",color:C.sec}}>Looking into it...</span></div>;
 
 const navSections=[
   {id:"tracker",label:"Tracker",icon:"tracker"},
@@ -626,9 +626,6 @@ export default function BabyTracker(){
         </div>
       );})}
       <div style={{height:48}}/>
-      <div onClick={function(){setChatOpen(true);if(onExtra)onExtra();}} style={{display:"flex",alignItems:"center",gap:8,padding:"9px 16px",fontSize:".82rem",color:t.learn,cursor:"pointer",fontWeight:600}}>
-        <NavIcon type="chat" color={t.learn}/> Ask Expert
-      </div>
     </>
   );};
 
@@ -665,10 +662,10 @@ export default function BabyTracker(){
         <div style={{marginTop:8,display:"flex",alignItems:"center",gap:10,flexWrap:"wrap"}}>
           <span style={{background:t.badge,color:t.badgeTxt,borderRadius:20,padding:"5px 14px",fontSize:".82rem",fontWeight:700}}>{profile.name}</span>
           <span style={{fontSize:".82rem",color:t.pri,fontWeight:600}}>{age.label} old</span>
-          <button onClick={function(){setChatOpen(true);}} style={{marginLeft:"auto",display:"flex",alignItems:"center",gap:5,background:BRAND,color:"#fff",border:"none",borderRadius:20,padding:"5px 14px",fontSize:".78rem",fontWeight:600,cursor:"pointer"}}>
-            <svg viewBox="0 0 24 24" style={{width:14,height:14,stroke:"#fff",fill:"none",strokeWidth:2,strokeLinecap:"round",strokeLinejoin:"round"}}><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+          <span onClick={function(){setChatOpen(true);}} style={{marginLeft:"auto",display:"flex",alignItems:"center",gap:4,color:BRAND,fontSize:".8rem",fontWeight:600,cursor:"pointer"}}>
+            <svg viewBox="0 0 24 24" style={{width:15,height:15,stroke:BRAND,fill:"none",strokeWidth:2,strokeLinecap:"round",strokeLinejoin:"round"}}><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
             Ask Expert
-          </button>
+          </span>
         </div>
       </header>
 
@@ -788,6 +785,7 @@ export default function BabyTracker(){
             <div style={{fontSize:"1.05rem",fontWeight:600,color:t.pri,marginBottom:6,display:"flex",alignItems:"center",gap:8}}><NavIcon type="milestones" color={t.pri}/> Milestones</div>
             <p style={{fontSize:".84rem",color:C.sec,marginBottom:16,lineHeight:1.5}}>Month-by-month developmental milestones based on CDC and AAP guidelines. Check all that apply as {profile.name} achieves them.</p>
 
+            <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fill,minmax(260px,1fr))",gap:14}}>
             {milestoneData.map(function(md){
               var isOpen=openMonth===md.month;
               var count=getMonthCount(md.month);
@@ -795,63 +793,82 @@ export default function BabyTracker(){
               var pct=total>0?Math.round((count/total)*100):0;
               var isCurrent=md.month===currentMonth;
               var evalText=getMilestoneEval(profile.name,count,total,pr);
+              var progressColor=count===0?"#ddd":pct>=75?"#4caf50":pct>=50?"#f59e0b":"#e57373";
               return(
-                <div key={md.month} ref={function(el){monthRefs.current[md.month]=el;}} style={{background:"#fff",borderRadius:12,marginBottom:10,overflow:"hidden",boxShadow:"0 2px 6px rgba(0,0,0,.05)",border:isCurrent?"2px solid "+(t.mid):"none",scrollMarginTop:HEADER_H+4}}>
-                  <div onClick={function(){handleMonthToggle(md.month);}} style={{padding:"14px 18px",cursor:"pointer",display:"flex",alignItems:"center",justifyContent:"space-between"}}>
-                    <div style={{display:"flex",alignItems:"center",gap:10,flex:1}}>
-                      {isCurrent&&<span style={{background:t.pri,color:"#fff",borderRadius:10,padding:"2px 8px",fontSize:".68rem",fontWeight:700,flexShrink:0}}>NOW</span>}
-                      <span style={{fontSize:".92rem",fontWeight:600,color:C.h,flexShrink:0}}>{md.label}</span>
-                      <div style={{flex:1,maxWidth:120,height:6,background:"#eee",borderRadius:3,overflow:"hidden",marginLeft:4}}>
-                        <div style={{width:pct+"%",height:"100%",background:count===0?"transparent":pct>=75?"#4caf50":pct>=50?"#f59e0b":"#e57373",borderRadius:3,transition:"width .3s"}}/>
-                      </div>
-                      <span style={{fontSize:".78rem",color:count===0?"#ccc":pct>=75?"#4caf50":pct>=50?"#f59e0b":"#e57373",fontWeight:600}}>{count}/{total}</span>
+                <div key={md.month} ref={function(el){monthRefs.current[md.month]=el;}} style={{background:"#fff",borderRadius:14,overflow:"hidden",border:isCurrent?"2px solid "+(t.pri):"1px solid #e8e8e8",scrollMarginTop:HEADER_H+4,cursor:"pointer",transition:"box-shadow .15s",display:"flex",flexDirection:"column"}} onClick={function(){handleMonthToggle(md.month);}}>
+                  <div style={{padding:"20px 20px 16px"}}>
+                    <div style={{width:40,height:40,borderRadius:10,background:isCurrent?t.pri:t.lt,display:"flex",alignItems:"center",justifyContent:"center",marginBottom:12}}>
+                      <span style={{fontSize:"1rem",fontWeight:700,color:isCurrent?"#fff":t.pri}}>{md.month}</span>
                     </div>
-                    <span style={{fontSize:".82rem",color:t.learn,fontWeight:600,marginLeft:8}}>{isOpen?"\u25B2":"\u25BC"}</span>
-                  </div>
-                  {isOpen&&(
-                    <div style={{padding:"0 18px 18px",borderTop:"1px solid #f0f0f0"}}>
-                      <p style={{fontSize:".84rem",color:C.body,lineHeight:1.6,margin:"14px 0"}}>{genderize(md.summary,gender)}</p>
-                      <div style={{padding:"12px 16px",background:t.lt,borderRadius:10,marginBottom:14,fontSize:".84rem",color:C.body,lineHeight:1.6}}>{evalText}</div>
-                      <p style={{fontSize:".76rem",color:C.help,margin:"0 0 10px",fontStyle:"italic"}}>Check all that apply:</p>
-                      {md.categories.map(function(cat){
-                        var cc=getCatCount(md.month,cat.cat);
-                        return(
-                          <div key={cat.cat} style={{marginTop:12}}>
-                            <div style={{fontSize:".76rem",fontWeight:700,textTransform:"uppercase",letterSpacing:".06em",color:C.body,marginBottom:6,display:"flex",alignItems:"center"}}>{cat.cat}{cc>0&&<Badge count={cc}/>}</div>
-                            {cat.items.map(function(item,idx){
-                              var k=md.month+"-"+cat.cat+"-"+idx;
-                              var checked=!!milestoneChecks[k];
-                              var ds=milestoneChecks[k];
-                              return(
-                                <div key={idx} onClick={function(){toggleCheck(md.month,cat.cat,idx);}} style={{display:"flex",alignItems:"center",gap:10,padding:"7px 0",cursor:"pointer",borderBottom:"1px solid #f8f8f8"}}>
-                                  <div style={{width:20,height:20,borderRadius:4,border:checked?"2px solid "+(t.pri):"2px solid #ddd",background:checked?t.pri:"transparent",display:"flex",alignItems:"center",justifyContent:"center",flexShrink:0}}>
-                                    {checked&&<span style={{color:"#fff",fontSize:".7rem",fontWeight:800}}>&#10003;</span>}
-                                  </div>
-                                  <span style={{fontSize:".84rem",color:C.body,flex:1}}>{genderize(item,gender)}</span>
-                                  {ds&&<span style={{fontSize:".66rem",color:C.help}}>{ds}</span>}
-                                </div>
-                              );
-                            })}
-                          </div>
-                        );
-                      })}
-                      <div style={{marginTop:14}}>
-                        <button onClick={function(){doDive("milestone","ms-"+md.month,"Month "+md.month+" milestones for "+profile.name+", "+age.label+" old. Checked: "+count+"/"+total+".");}} style={{background:diveResults["ms-"+md.month]?t.hover:t.badge,color:t.badgeTxt,border:"1px solid "+(t.mid),borderRadius:8,padding:"8px 14px",fontSize:".8rem",fontWeight:600,cursor:"pointer",display:"flex",alignItems:"center",gap:5}}>
-                          <span>{diveResults["ms-"+md.month]?"\u2715":"\u2728"}</span>{diveResults["ms-"+md.month]?"Close":"Ask Expert"}
-                        </button>
+                    <div style={{fontSize:".95rem",fontWeight:700,color:C.h,marginBottom:6}}>{md.label}</div>
+                    <div style={{fontSize:".8rem",color:C.sec,lineHeight:1.5,marginBottom:14,display:"-webkit-box",WebkitLineClamp:2,WebkitBoxOrient:"vertical",overflow:"hidden"}}>{genderize(md.summary,gender)}</div>
+                    <div style={{display:"flex",alignItems:"center",gap:8}}>
+                      <div style={{flex:1,height:5,background:"#eee",borderRadius:3,overflow:"hidden"}}>
+                        <div style={{width:pct+"%",height:"100%",background:progressColor,borderRadius:3,transition:"width .3s"}}/>
                       </div>
-                      {diveLoading===("ms-"+md.month)&&<Spinner/>}
-                      {diveResults["ms-"+md.month]&&!diveLoading&&(
-                        <div style={{marginTop:10,padding:14,background:"linear-gradient(135deg,"+(t.lt)+",#fff)",borderRadius:10,border:"1px solid "+(t.mid),fontSize:".83rem",color:C.body,lineHeight:1.9}}>
-                          <div style={{fontSize:".66rem",fontWeight:700,textTransform:"uppercase",letterSpacing:".08em",color:t.pri,marginBottom:8}}>&#x2728; Personalized for {profile.name}</div>
-                          {diveResults["ms-"+md.month].split("\n").filter(Boolean).map(function(pt,i){return <p key={i} style={{marginBottom:10}}>{renderBold(pt)}</p>;})}
-                        </div>
-                      )}
+                      <span style={{fontSize:".74rem",color:progressColor,fontWeight:600,whiteSpace:"nowrap"}}>{count}/{total}</span>
+                      {isCurrent&&<span style={{background:t.pri,color:"#fff",borderRadius:10,padding:"2px 8px",fontSize:".64rem",fontWeight:700}}>NOW</span>}
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
+            </div>
+
+            {openMonth&&(function(){
+              var md=milestoneData.find(function(m){return m.month===openMonth;});
+              if(!md)return null;
+              var count=getMonthCount(md.month);
+              var total=getMonthTotal(md.month);
+              var evalText=getMilestoneEval(profile.name,count,total,pr);
+              return(
+                <div ref={function(el){monthRefs.current[md.month]=el;}} style={{background:"#fff",borderRadius:14,marginTop:16,padding:"20px 22px",border:"1px solid #e8e8e8",scrollMarginTop:HEADER_H+4}}>
+                  <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:12}}>
+                    <div style={{fontSize:"1rem",fontWeight:700,color:C.h}}>{md.label}</div>
+                    <button onClick={function(e){e.stopPropagation();setOpenMonth(null);}} style={{width:28,height:28,borderRadius:6,background:"#f5f5f5",border:"1px solid #e8e8e8",cursor:"pointer",fontSize:".8rem",color:C.sec,display:"flex",alignItems:"center",justifyContent:"center"}}>&#10005;</button>
+                  </div>
+                  <p style={{fontSize:".84rem",color:C.body,lineHeight:1.6,margin:"0 0 12px"}}>{genderize(md.summary,gender)}</p>
+                  <div style={{padding:"12px 16px",background:t.lt,borderRadius:10,marginBottom:14,fontSize:".84rem",color:C.body,lineHeight:1.6}}>{evalText}</div>
+                  <p style={{fontSize:".76rem",color:C.help,margin:"0 0 10px",fontStyle:"italic"}}>Check all that apply:</p>
+                  {md.categories.map(function(cat){
+                    var cc=getCatCount(md.month,cat.cat);
+                    return(
+                      <div key={cat.cat} style={{marginTop:12}}>
+                        <div style={{fontSize:".76rem",fontWeight:700,textTransform:"uppercase",letterSpacing:".06em",color:C.body,marginBottom:6,display:"flex",alignItems:"center"}}>{cat.cat}{cc>0&&<Badge count={cc}/>}</div>
+                        {cat.items.map(function(item,idx){
+                          var k=md.month+"-"+cat.cat+"-"+idx;
+                          var checked=!!milestoneChecks[k];
+                          var ds=milestoneChecks[k];
+                          return(
+                            <div key={idx} onClick={function(){toggleCheck(md.month,cat.cat,idx);}} style={{display:"flex",alignItems:"center",gap:10,padding:"7px 0",cursor:"pointer",borderBottom:"1px solid #f8f8f8"}}>
+                              <div style={{width:20,height:20,borderRadius:4,border:checked?"2px solid "+(t.pri):"2px solid #ddd",background:checked?t.pri:"transparent",display:"flex",alignItems:"center",justifyContent:"center",flexShrink:0}}>
+                                {checked&&<span style={{color:"#fff",fontSize:".7rem",fontWeight:800}}>&#10003;</span>}
+                              </div>
+                              <span style={{fontSize:".84rem",color:C.body,flex:1}}>{genderize(item,gender)}</span>
+                              {ds&&<span style={{fontSize:".66rem",color:C.help}}>{ds}</span>}
+                            </div>
+                          );
+                        })}
+                      </div>
+                    );
+                  })}
+                  {!diveResults["ms-"+md.month]&&<div style={{marginTop:14}}>
+                    <button onClick={function(){doDive("milestone","ms-"+md.month,"Month "+md.month+" milestones for "+profile.name+", "+age.label+" old. Checked: "+count+"/"+total+".");}} style={{background:t.badge,color:t.badgeTxt,border:"1px solid "+(t.mid),borderRadius:8,padding:"8px 14px",fontSize:".8rem",fontWeight:600,cursor:"pointer",display:"flex",alignItems:"center",gap:5}}>
+                      <svg viewBox="0 0 24 24" style={{width:14,height:14,stroke:t.badgeTxt,fill:"none",strokeWidth:2.2,strokeLinecap:"round",strokeLinejoin:"round"}}><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                      Learn More
+                    </button>
+                  </div>}
+                  {diveLoading===("ms-"+md.month)&&<Spinner/>}
+                  {diveResults["ms-"+md.month]&&!diveLoading&&(
+                    <div style={{marginTop:10,padding:"8px 14px",background:t.lt,borderRadius:8,fontSize:".83rem",color:C.body,lineHeight:1.7,position:"relative"}}>
+                      <button onClick={function(){doDive("milestone","ms-"+md.month,"");}} style={{position:"absolute",top:4,right:0,background:"none",border:"none",color:C.help,cursor:"pointer",fontSize:".78rem",fontWeight:600}}>&#10005;</button>
+                      <div style={{fontSize:".66rem",fontWeight:700,textTransform:"uppercase",letterSpacing:".08em",color:t.pri,marginBottom:4}}>Personalized for {profile.name}</div>
+                      {diveResults["ms-"+md.month].split("\n").filter(Boolean).map(function(pt,i){return <p key={i} style={{marginBottom:6}}>{renderBold(pt)}</p>;})}
                     </div>
                   )}
                 </div>
               );
-            })}
+            })()}
           </div>
 
           {/* SUMMARY */}
@@ -884,15 +901,17 @@ export default function BabyTracker(){
                         <div style={{fontSize:".84rem",color:C.body,lineHeight:1.65}}>{art.content}</div>
                       </div>
                     );})}
-                    <div style={{marginTop:16,borderTop:"1px solid #f0f0f0",paddingTop:12}}>
-                      <button onClick={function(){doDive("education",topicDiveKey,"Category: "+topic.title+". Baby: "+profile.name+", "+age.label+" old.\n\n"+allContent);}} style={{background:diveResults[topicDiveKey]?t.hover:t.badge,color:t.badgeTxt,border:"1px solid "+(t.mid),borderRadius:6,padding:"6px 12px",fontSize:".76rem",fontWeight:600,cursor:"pointer",display:"inline-flex",alignItems:"center",gap:4}}>
-                        <span>{diveResults[topicDiveKey]?"\u2715":"\u2728"}</span>{diveResults[topicDiveKey]?"Close":"Ask Expert"}
-                      </button>
+                    <div style={{marginTop:16,paddingTop:12}}>
+                      {!diveResults[topicDiveKey]&&<button onClick={function(){doDive("education",topicDiveKey,"Category: "+topic.title+". Baby: "+profile.name+", "+age.label+" old.\n\n"+allContent);}} style={{background:t.badge,color:t.badgeTxt,border:"1px solid "+(t.mid),borderRadius:6,padding:"6px 12px",fontSize:".76rem",fontWeight:600,cursor:"pointer",display:"inline-flex",alignItems:"center",gap:4}}>
+                        <svg viewBox="0 0 24 24" style={{width:13,height:13,stroke:t.badgeTxt,fill:"none",strokeWidth:2.2,strokeLinecap:"round",strokeLinejoin:"round"}}><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                        Learn More
+                      </button>}
                       {diveLoading===topicDiveKey&&<Spinner/>}
                       {diveResults[topicDiveKey]&&!diveLoading&&(
-                        <div style={{marginTop:8,padding:14,background:"linear-gradient(135deg,"+(t.lt)+",#fff)",borderRadius:10,border:"1px solid "+(t.mid),fontSize:".82rem",color:C.body,lineHeight:1.9}}>
-                          <div style={{fontSize:".64rem",fontWeight:700,textTransform:"uppercase",letterSpacing:".08em",color:t.pri,marginBottom:8}}>&#x2728; Personalized for {profile.name}</div>
-                          {diveResults[topicDiveKey].split("\n").filter(Boolean).map(function(pt,i){return <p key={i} style={{marginBottom:10}}>{renderBold(pt)}</p>;})}
+                        <div style={{marginTop:8,padding:"8px 14px",background:t.lt,borderRadius:8,fontSize:".82rem",color:C.body,lineHeight:1.7,position:"relative"}}>
+                          <button onClick={function(){doDive("education",topicDiveKey,"");}} style={{position:"absolute",top:4,right:0,background:"none",border:"none",color:C.help,cursor:"pointer",fontSize:".78rem",fontWeight:600}}>&#10005;</button>
+                          <div style={{fontSize:".64rem",fontWeight:700,textTransform:"uppercase",letterSpacing:".08em",color:t.pri,marginBottom:4}}>Personalized for {profile.name}</div>
+                          {diveResults[topicDiveKey].split("\n").filter(Boolean).map(function(pt,i){return <p key={i} style={{marginBottom:6}}>{renderBold(pt)}</p>;})}
                         </div>
                       )}
                     </div>
@@ -930,22 +949,22 @@ export default function BabyTracker(){
       {/* CHAT */}
       {chatOpen&&(
         <div style={{position:"fixed",bottom:0,right:0,width:390,maxWidth:"100vw",height:"min(620px,85vh)",background:"#fff",borderTopLeftRadius:16,boxShadow:"-4px -4px 24px rgba(0,0,0,.15)",zIndex:500,display:"flex",flexDirection:"column",overflow:"hidden",border:"1px solid "+(t.mid)}}>
-          <div style={{padding:"14px 18px",background:BRAND,color:"#fff",display:"flex",justifyContent:"space-between",alignItems:"center",flexShrink:0}}>
-            <div><div style={{fontWeight:700,fontSize:".92rem"}}>Ask Expert</div><div style={{fontSize:".72rem",opacity:.8}}>{profile.name} &middot; {age.label} old</div></div>
-            <button onClick={function(){setChatOpen(false);}} style={{background:"rgba(255,255,255,.2)",border:"none",color:"#fff",width:28,height:28,borderRadius:6,cursor:"pointer",fontSize:".85rem"}}>&#10005;</button>
+          <div style={{padding:"14px 18px",background:"#f3f7f5",color:C.h,display:"flex",justifyContent:"space-between",alignItems:"center",flexShrink:0,borderBottom:"1px solid #e8eeec"}}>
+            <div><div style={{fontWeight:700,fontSize:".92rem",color:BRAND}}>Ask Expert</div><div style={{fontSize:".72rem",color:C.sec}}>{profile.name} &middot; {age.label} old</div></div>
+            <button onClick={function(){setChatOpen(false);}} style={{background:"#fff",border:"1px solid #e8eeec",color:C.sec,width:28,height:28,borderRadius:6,cursor:"pointer",fontSize:".85rem"}}>&#10005;</button>
           </div>
           <div style={{flex:1,overflowY:"auto",padding:16}}>
             {chatMsgs.length===0&&(
               <div>
                 <p style={{fontSize:".85rem",color:C.sec,marginBottom:12,lineHeight:1.6}}>Hi! I'm BabyAdvisor - personalized for {profile.name}. Ask me anything:</p>
                 <div style={{display:"flex",flexDirection:"column",gap:6}}>
-                  {["Is this enough formula for "+pr.pos+" age?","Sleep tips for a "+currentMonth+"-month-old","When should "+pr.sub+" start solids?","What's changed about baby care since I was a parent?"].map(function(s,i){return <button key={i} onClick={function(){setChatInput(s);}} style={{background:t.lt,border:"1px solid "+(t.mid),borderRadius:8,padding:"8px 12px",fontSize:".82rem",color:t.pri,cursor:"pointer",textAlign:"left",fontWeight:500}}>{s}</button>;})}
+                  {["Is this enough formula for "+pr.pos+" age?","Sleep tips for a "+currentMonth+"-month-old","When should "+pr.sub+" start solids?"].map(function(s,i){return <button key={i} onClick={function(){setChatInput(s);}} style={{background:t.lt,border:"none",borderRadius:8,padding:"8px 12px",fontSize:".82rem",color:t.pri,cursor:"pointer",textAlign:"left",fontWeight:500}}>{s}</button>;})}
                 </div>
               </div>
             )}
             {chatMsgs.map(function(m,i){return(
               <div key={i} style={{marginBottom:12,display:"flex",justifyContent:m.role==="user"?"flex-end":"flex-start"}}>
-                <div style={{maxWidth:"85%",padding:"10px 14px",borderRadius:m.role==="user"?"14px 14px 4px 14px":"14px 14px 14px 4px",background:m.role==="user"?t.pri:t.lt,color:m.role==="user"?"#fff":C.body,fontSize:".84rem",lineHeight:1.7}}>
+                <div style={{maxWidth:"85%",padding:"10px 14px",borderRadius:m.role==="user"?"14px 14px 4px 14px":"14px 14px 14px 4px",background:m.role==="user"?t.pri:"#f5f7f6",color:m.role==="user"?"#fff":C.body,fontSize:".84rem",lineHeight:1.7}}>
                   {m.text.split("\n").filter(Boolean).map(function(pt,j){return <p key={j} style={{marginBottom:4}}>{renderBold(pt)}</p>;})}
                 </div>
               </div>
