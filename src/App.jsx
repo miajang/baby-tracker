@@ -212,7 +212,7 @@ Simple questions: 2-3 sentences. Deeper questions: brief intro, 3-4 **bold name:
 Rules: Warm, family-friendly. Evidence-based only. Never diagnose. Redirect medical concerns to pediatrician. Under 200 words. No bullet points.`;
 
 async function callAI(sys,msg,history){
-  try{const ak=import.meta.env.VITE_ANTHROPIC_API_KEY;if(!ak)return"API key not configured.";const messages=history?[...history,{role:"user",content:msg}]:[{role:"user",content:msg}];const r=await fetch("https://api.anthropic.com/v1/messages",{method:"POST",headers:{"Content-Type":"application/json","x-api-key":ak,"anthropic-version":"2023-06-01","anthropic-dangerous-direct-browser-access":"true"},body:JSON.stringify({model:"claude-sonnet-4-20250514",max_tokens:1000,system:sys,messages})});const d=await r.json();return d.content?.map(b=>b.text||"").join("\n")||"No response.";}catch{return"Unable to connect. Please try again.";}
+  try{const messages=history?[...history,{role:"user",content:msg}]:[{role:"user",content:msg}];const r=await fetch("/api/chat",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({system:sys,messages})});const d=await r.json();return d.text||"No response.";}catch{return"Unable to connect. Please try again.";}
 }
 
 function calcAge(bd){
@@ -347,7 +347,7 @@ function MonthlySummarySection({ feeds, nightSleep, naps, growthEntries, profile
   var arrowStyle = function(enabled){ return {width:34,height:34,borderRadius:8,border:"1.5px solid "+(enabled?t.mid:"#eee"),background:enabled?"#fff":"#fafafa",cursor:enabled?"pointer":"not-allowed",display:"flex",alignItems:"center",justifyContent:"center",opacity:enabled?1:0.35}; };
 
   return (
-    <div ref={sectionRef} data-sec="summary" style={{marginBottom:36,scrollMarginTop:HEADER_H}}>
+    <div ref={sectionRef} data-sec="summary" style={{marginBottom:36,scrollMarginTop:HEADER_H,paddingTop:28}}>
       <div style={{fontSize:"1.05rem",fontWeight:600,color:t.pri,marginBottom:14,display:"flex",alignItems:"center",gap:8}}><NavIcon type="summary" color={t.pri}/> Summary</div>
 
       <div style={{display:"flex",alignItems:"center",gap:14,marginBottom:20}}>
@@ -753,7 +753,8 @@ export default function BabyTracker(){
           </div>
 
           {/* GROWTH */}
-          <div ref={function(el){sectionRefs.current.growth=el;}} data-sec="growth" style={{marginBottom:36,scrollMarginTop:HEADER_H}}>
+          <div style={{height:1,background:"#e8e8e8"}}/>
+          <div ref={function(el){sectionRefs.current.growth=el;}} data-sec="growth" style={{marginBottom:36,scrollMarginTop:HEADER_H,paddingTop:28}}>
             <div style={{fontSize:"1.05rem",fontWeight:600,color:t.pri,marginBottom:12,display:"flex",alignItems:"center",gap:8}}><NavIcon type="growth" color={t.pri}/> Growth</div>
             <div style={{background:"#fff",borderRadius:12,padding:"18px 20px",boxShadow:"0 2px 6px rgba(0,0,0,.05)"}}>
               <div style={{display:"flex",gap:8,flexWrap:"wrap",marginBottom:12}}>
@@ -781,7 +782,8 @@ export default function BabyTracker(){
           </div>
 
           {/* MILESTONES */}
-          <div ref={function(el){sectionRefs.current.milestones=el;}} data-sec="milestones" style={{marginBottom:36,scrollMarginTop:HEADER_H}}>
+          <div style={{height:1,background:"#e8e8e8"}}/>
+          <div ref={function(el){sectionRefs.current.milestones=el;}} data-sec="milestones" style={{marginBottom:36,scrollMarginTop:HEADER_H,paddingTop:28}}>
             <div style={{fontSize:"1.05rem",fontWeight:600,color:t.pri,marginBottom:6,display:"flex",alignItems:"center",gap:8}}><NavIcon type="milestones" color={t.pri}/> Milestones</div>
             <p style={{fontSize:".84rem",color:C.sec,marginBottom:16,lineHeight:1.5}}>Month-by-month developmental milestones based on CDC and AAP guidelines. Check all that apply as {profile.name} achieves them.</p>
 
@@ -881,9 +883,11 @@ export default function BabyTracker(){
           </div>
 
           {/* SUMMARY */}
+          <div style={{height:1,background:"#e8e8e8"}}/>
           <MonthlySummarySection feeds={feeds} nightSleep={nightSleep} naps={naps} growthEntries={growthEntries} profile={profile} age={age} t={t} sectionRef={function(el){sectionRefs.current.summary=el;}} />
 
           {/* EDUCATION */}
+          <div style={{height:1,background:"#e8e8e8"}}/>
           <div ref={function(el){sectionRefs.current.education=el;}} data-sec="education" style={{marginBottom:36,scrollMarginTop:HEADER_H}}>
             <div style={{fontSize:"1.05rem",fontWeight:600,color:t.pri,marginBottom:6,display:"flex",alignItems:"center",gap:8}}><NavIcon type="education" color={t.pri}/> Education</div>
             <p style={{fontSize:".84rem",color:C.sec,marginBottom:16,lineHeight:1.5}}>Evidence-based guidance from CDC, AAP, and WHO.</p>
@@ -931,6 +935,7 @@ export default function BabyTracker(){
           </div>
 
           {/* RESOURCES */}
+          <div style={{height:1,background:"#e8e8e8"}}/>
           <div ref={function(el){sectionRefs.current.resources=el;}} data-sec="resources" style={{marginBottom:36,scrollMarginTop:HEADER_H}}>
             <div style={{fontSize:"1.05rem",fontWeight:600,color:t.pri,marginBottom:6,display:"flex",alignItems:"center",gap:8}}><NavIcon type="resources" color={t.pri}/> Resources</div>
             <p style={{fontSize:".84rem",color:C.sec,marginBottom:16,lineHeight:1.5}}>Credible sources for learning more about your baby's development, health, and well-being.</p>
