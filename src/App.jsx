@@ -795,7 +795,8 @@ export default function BabyTracker(){
               var evalText=getMilestoneEval(profile.name,count,total,pr);
               var progressColor=count===0?"#ddd":pct>=75?"#4caf50":pct>=50?"#f59e0b":"#e57373";
               return(
-                <div key={md.month} ref={function(el){monthRefs.current[md.month]=el;}} style={{background:"#fff",borderRadius:14,overflow:"hidden",border:isCurrent?"2px solid "+(t.pri):"1px solid #e8e8e8",scrollMarginTop:HEADER_H+4,cursor:"pointer",transition:"box-shadow .15s",display:"flex",flexDirection:"column"}} onClick={function(){handleMonthToggle(md.month);}}>
+                <React.Fragment key={md.month}>
+                <div ref={function(el){monthRefs.current[md.month]=el;}} style={{background:"#fff",borderRadius:14,overflow:"hidden",border:isCurrent?"2px solid "+(t.pri):"1px solid #e8e8e8",scrollMarginTop:HEADER_H+4,cursor:"pointer",transition:"box-shadow .15s",display:"flex",flexDirection:"column"}} onClick={function(){handleMonthToggle(md.month);}}>
                   <div style={{padding:"20px 20px 16px"}}>
                     <div style={{width:40,height:40,borderRadius:10,background:isCurrent?t.pri:t.lt,display:"flex",alignItems:"center",justifyContent:"center",marginBottom:12}}>
                       <span style={{fontSize:"1rem",fontWeight:700,color:isCurrent?"#fff":t.pri}}>{md.month}</span>
@@ -811,18 +812,8 @@ export default function BabyTracker(){
                     </div>
                   </div>
                 </div>
-              );
-            })}
-            </div>
-
-            {openMonth&&(function(){
-              var md=milestoneData.find(function(m){return m.month===openMonth;});
-              if(!md)return null;
-              var count=getMonthCount(md.month);
-              var total=getMonthTotal(md.month);
-              var evalText=getMilestoneEval(profile.name,count,total,pr);
-              return(
-                <div ref={function(el){monthRefs.current[md.month]=el;}} style={{background:"#fff",borderRadius:14,marginTop:16,padding:"20px 22px",border:"1px solid #e8e8e8",scrollMarginTop:HEADER_H+4}}>
+                {openMonth===md.month&&(
+                <div style={{gridColumn:"1 / -1",background:"#fff",borderRadius:14,padding:"20px 22px",border:"1px solid #e8e8e8",scrollMarginTop:HEADER_H+4}}>
                   <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:12}}>
                     <div style={{fontSize:"1rem",fontWeight:700,color:C.h}}>{md.label}</div>
                     <button onClick={function(e){e.stopPropagation();setOpenMonth(null);}} style={{width:28,height:28,borderRadius:6,background:"#f5f5f5",border:"1px solid #e8e8e8",cursor:"pointer",fontSize:".8rem",color:C.sec,display:"flex",alignItems:"center",justifyContent:"center"}}>&#10005;</button>
@@ -867,8 +858,11 @@ export default function BabyTracker(){
                     </div>
                   )}
                 </div>
+                )}
+                </React.Fragment>
               );
-            })()}
+            })}
+            </div>
           </div>
 
           {/* SUMMARY */}
