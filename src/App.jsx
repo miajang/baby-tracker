@@ -347,7 +347,7 @@ function MonthlySummarySection({ feeds, nightSleep, naps, growthEntries, profile
   var arrowStyle = function(enabled){ return {width:34,height:34,borderRadius:8,border:"1.5px solid "+(enabled?t.mid:"#eee"),background:enabled?"#fff":"#fafafa",cursor:enabled?"pointer":"not-allowed",display:"flex",alignItems:"center",justifyContent:"center",opacity:enabled?1:0.35}; };
 
   return (
-    <div ref={sectionRef} data-sec="summary" style={{marginBottom:36,scrollMarginTop:HEADER_H,paddingTop:28}}>
+    <div ref={sectionRef} data-sec="summary" style={{marginBottom:36,scrollMarginTop:HEADER_H,borderTop:"1px solid #e8eeec",paddingTop:14}}>
       <div style={{fontSize:"1.05rem",fontWeight:600,color:t.pri,marginBottom:14,display:"flex",alignItems:"center",gap:8}}><NavIcon type="summary" color={t.pri}/> Summary</div>
 
       <div style={{display:"flex",alignItems:"center",gap:14,marginBottom:20}}>
@@ -531,7 +531,7 @@ export default function BabyTracker(){
   var sendChat=async function(){if(!chatInput.trim()||chatLoading)return;var msg=chatInput.trim();setChatInput("");setChatMsgs(function(pv){return pv.concat([{role:"user",text:msg}]);});setChatLoading(true);var ctx="Baby: "+profile.name+", "+age.label+" old ("+currentMonth+" months).";var gp=gender==="boy"?"Use he/him pronouns.":"Use she/her pronouns.";var sys=CHAT_SYS+"\n"+gp+"\n\n"+ctx;var hist=chatMsgs.slice(-6).map(function(m){return{role:m.role==="user"?"user":"assistant",content:m.text};});var r=await callAI(sys,msg,hist);setChatMsgs(function(pv){return pv.concat([{role:"assistant",text:r}]);});setChatLoading(false);};
 
   var renderBold=function(text){var parts=text.split(/\*\*([^*]+)\*\*/g);return parts.map(function(pt,i){return i%2===1?<strong key={i} style={{color:t.pri,display:pt.endsWith(':')?'block':'inline'}}>{pt}</strong>:<span key={i}>{pt}</span>;});};
-  var navClick=function(sec){setActiveNav(sec);setDrawerOpen(false);var el=sectionRefs.current[sec];if(el){var top=el.getBoundingClientRect().top+window.scrollY-HEADER_H;window.scrollTo({top:top,behavior:"smooth"});}};
+  var navClick=function(sec){setActiveNav(sec);setDrawerOpen(false);var el=sectionRefs.current[sec];if(el){var top=el.getBoundingClientRect().top+window.scrollY-HEADER_H-4;window.scrollTo({top:top,behavior:"smooth"});}};
 
   useEffect(function(){var timer=setTimeout(function(){var obs=new IntersectionObserver(function(entries){entries.forEach(function(e){if(e.isIntersecting)setActiveNav(e.target.dataset.sec);});},{threshold:.15,rootMargin:"-15% 0px -75% 0px"});navSections.forEach(function(s){var el=sectionRefs.current[s.id];if(el)obs.observe(el);});return function(){obs.disconnect();};},150);return function(){clearTimeout(timer);};},[]);
 
@@ -684,7 +684,7 @@ export default function BabyTracker(){
       <div style={{display:"flex",minHeight:"calc(100vh - 105px)"}}>
         <div className="btNavD" style={{width:200,minWidth:200,background:"#fff",borderRight:"1px solid #eee",padding:"12px 0",position:"sticky",top:105,height:"calc(100vh - 105px)",overflowY:"auto",display:"flex",flexDirection:"column"}}><NavItems/></div>
 
-        <div style={{flex:1,padding:"24px 28px",overflowY:"auto",background:t.contBg}}>
+        <div style={{flex:1,padding:"24px 28px",paddingBottom:"60vh",overflowY:"auto",background:t.contBg}}>
 
           {/* TRACKER */}
           <div ref={function(el){sectionRefs.current.tracker=el;}} data-sec="tracker" style={{marginBottom:36,scrollMarginTop:HEADER_H}}>
@@ -753,7 +753,7 @@ export default function BabyTracker(){
           </div>
 
           {/* GROWTH */}
-          <div ref={function(el){sectionRefs.current.growth=el;}} data-sec="growth" style={{marginBottom:36,scrollMarginTop:HEADER_H,paddingTop:28}}>
+          <div ref={function(el){sectionRefs.current.growth=el;}} data-sec="growth" style={{marginBottom:36,scrollMarginTop:HEADER_H,borderTop:"1px solid #e8eeec",paddingTop:14}}>
             <div style={{fontSize:"1.05rem",fontWeight:600,color:t.pri,marginBottom:12,display:"flex",alignItems:"center",gap:8}}><NavIcon type="growth" color={t.pri}/> Growth</div>
             <div style={{background:"#fff",borderRadius:12,padding:"18px 20px",boxShadow:"0 2px 6px rgba(0,0,0,.05)"}}>
               <div style={{display:"flex",gap:8,flexWrap:"wrap",marginBottom:12}}>
@@ -781,7 +781,7 @@ export default function BabyTracker(){
           </div>
 
           {/* MILESTONES */}
-          <div ref={function(el){sectionRefs.current.milestones=el;}} data-sec="milestones" style={{marginBottom:36,scrollMarginTop:HEADER_H,paddingTop:28}}>
+          <div ref={function(el){sectionRefs.current.milestones=el;}} data-sec="milestones" style={{marginBottom:36,scrollMarginTop:HEADER_H,borderTop:"1px solid #e8eeec",paddingTop:14}}>
             <div style={{fontSize:"1.05rem",fontWeight:600,color:t.pri,marginBottom:6,display:"flex",alignItems:"center",gap:8}}><NavIcon type="milestones" color={t.pri}/> Milestones</div>
             <p style={{fontSize:".84rem",color:C.sec,marginBottom:16,lineHeight:1.5}}>Month-by-month developmental milestones based on CDC and AAP guidelines. Check all that apply as {profile.name} achieves them.</p>
 
@@ -884,7 +884,7 @@ export default function BabyTracker(){
           <MonthlySummarySection feeds={feeds} nightSleep={nightSleep} naps={naps} growthEntries={growthEntries} profile={profile} age={age} t={t} sectionRef={function(el){sectionRefs.current.summary=el;}} />
 
           {/* EDUCATION */}
-          <div ref={function(el){sectionRefs.current.education=el;}} data-sec="education" style={{marginBottom:36,scrollMarginTop:HEADER_H,paddingTop:28}}>
+          <div ref={function(el){sectionRefs.current.education=el;}} data-sec="education" style={{marginBottom:36,scrollMarginTop:HEADER_H,borderTop:"1px solid #e8eeec",paddingTop:14}}>
             <div style={{fontSize:"1.05rem",fontWeight:600,color:t.pri,marginBottom:6,display:"flex",alignItems:"center",gap:8}}><NavIcon type="education" color={t.pri}/> Education</div>
             <p style={{fontSize:".84rem",color:C.sec,marginBottom:16,lineHeight:1.5}}>Evidence-based guidance from CDC, AAP, and WHO.</p>
 
@@ -931,7 +931,7 @@ export default function BabyTracker(){
           </div>
 
           {/* RESOURCES */}
-          <div ref={function(el){sectionRefs.current.resources=el;}} data-sec="resources" style={{marginBottom:36,scrollMarginTop:HEADER_H,paddingTop:28}}>
+          <div ref={function(el){sectionRefs.current.resources=el;}} data-sec="resources" style={{marginBottom:36,scrollMarginTop:HEADER_H,borderTop:"1px solid #e8eeec",paddingTop:14}}>
             <div style={{fontSize:"1.05rem",fontWeight:600,color:t.pri,marginBottom:6,display:"flex",alignItems:"center",gap:8}}><NavIcon type="resources" color={t.pri}/> Resources</div>
             <p style={{fontSize:".84rem",color:C.sec,marginBottom:16,lineHeight:1.5}}>Credible sources for learning more about your baby's development, health, and well-being.</p>
             <div style={{background:"#fff",borderRadius:12,padding:"18px 20px",boxShadow:"0 2px 6px rgba(0,0,0,.05)"}}>
@@ -957,7 +957,7 @@ export default function BabyTracker(){
 
       {/* CHAT */}
       {chatOpen&&(
-        <div style={{position:"fixed",bottom:0,right:0,width:390,maxWidth:"100vw",height:"min(480px,75vh)",background:"#fff",borderTopLeftRadius:16,boxShadow:"-4px -4px 24px rgba(0,0,0,.15)",zIndex:500,display:"flex",flexDirection:"column",overflow:"hidden",border:"1px solid "+(t.mid)}}>
+        <div style={{position:"fixed",top:HEADER_H,right:0,width:390,maxWidth:"100vw",height:"min(480px,70vh)",background:"#fff",borderBottomLeftRadius:16,boxShadow:"-4px 4px 24px rgba(0,0,0,.12)",zIndex:500,display:"flex",flexDirection:"column",overflow:"hidden",border:"1px solid "+(t.mid),borderTop:"none"}}>
           <div style={{padding:"14px 18px",background:"#f3f7f5",color:C.h,display:"flex",justifyContent:"space-between",alignItems:"center",flexShrink:0,borderBottom:"1px solid #e8eeec"}}>
             <div><div style={{fontWeight:700,fontSize:".92rem",color:BRAND}}>Ask Expert</div><div style={{fontSize:".72rem",color:C.sec}}>{profile.name} &middot; {age.label} old</div></div>
             <button onClick={function(){setChatOpen(false);}} style={{background:"#fff",border:"1px solid #e8eeec",color:C.sec,width:28,height:28,borderRadius:6,cursor:"pointer",fontSize:".85rem"}}>&#10005;</button>
@@ -965,15 +965,15 @@ export default function BabyTracker(){
           <div style={{flex:1,overflowY:"auto",padding:16}}>
             {chatMsgs.length===0&&(
               <div>
-                <p style={{fontSize:".85rem",color:C.sec,marginBottom:8,lineHeight:1.6}}>Hi! I'm BabyAdvisor - personalized for {profile.name}. Ask me anything:</p>
-                <div style={{display:"flex",flexDirection:"column",gap:5}}>
-                  {["Is this enough formula for "+pr.pos+" age?","Sleep tips for a "+currentMonth+"-month-old","When should "+pr.sub+" start solids?"].map(function(s,i){return <button key={i} onClick={function(){setChatInput(s);}} style={{background:"#f0f0f0",border:"none",borderRadius:8,padding:"8px 12px",fontSize:".82rem",color:"#555",cursor:"pointer",textAlign:"left",fontWeight:500}}>{s}</button>;})}
+                <p style={{fontSize:".85rem",color:C.sec,marginBottom:6,lineHeight:1.5}}>Hi! I'm BabyAdvisor - personalized for {profile.name}. Ask me anything:</p>
+                <div style={{display:"flex",flexDirection:"column",gap:4}}>
+                  {["Is this enough formula for "+pr.pos+" age?","Sleep tips for a "+currentMonth+"-month-old","When should "+pr.sub+" start solids?"].map(function(s,i){return <button key={i} onClick={function(){setChatInput(s);}} style={{background:t.lt,border:"none",borderRadius:8,padding:"8px 12px",fontSize:".82rem",color:"#666",cursor:"pointer",textAlign:"left",fontWeight:500}}>{s}</button>;})}
                 </div>
               </div>
             )}
             {chatMsgs.map(function(m,i){return(
               <div key={i} style={{marginBottom:12,display:"flex",justifyContent:m.role==="user"?"flex-end":"flex-start"}}>
-                <div style={{maxWidth:"85%",padding:"10px 14px",borderRadius:m.role==="user"?"14px 14px 4px 14px":"14px 14px 14px 4px",background:m.role==="user"?"#f0f0f0":t.lt,color:m.role==="user"?"#444":C.body,fontSize:".84rem",lineHeight:1.7}}>
+                <div style={{maxWidth:"85%",padding:"10px 14px",borderRadius:m.role==="user"?"14px 14px 4px 14px":"14px 14px 14px 4px",background:m.role==="user"?t.badge:t.lt,color:"#666",fontSize:".84rem",lineHeight:1.7}}>
                   {m.text.split("\n").filter(Boolean).map(function(pt,j){return <p key={j} style={{marginBottom:4}}>{renderBold(pt)}</p>;})}
                 </div>
               </div>
