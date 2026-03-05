@@ -445,7 +445,7 @@ function MonthlySummarySection({ feeds, nightSleep, naps, growthEntries, profile
 
 export default function BabyTracker(){
   const[theme,setTheme]=useState("pink");
-  const[profile,setProfile]=useState({name:"",birthDate:new Date().toISOString().slice(0,10),gender:"girl",setupDone:false});
+  const[profile,setProfile]=useState({name:"Erin",birthDate:"2025-11-03",gender:"girl",setupDone:false});
   const[feeds,setFeeds]=useState([]);
   const[nightSleep,setNightSleep]=useState([]);
   const[naps,setNaps]=useState([]);
