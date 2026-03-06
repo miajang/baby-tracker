@@ -995,9 +995,14 @@ export default function BabyTracker({ session }){
           <div style={{marginTop:20}}>
             <p style={{fontSize:".72rem",color:C.help,lineHeight:1.6}}>Sources: CDC, AAP, and WHO evidence-based guidelines. Not a substitute for pediatric advice.</p>
           </div>
-          <div style={{padding:"16px 0",borderTop:"1px solid #eee",marginTop:12}}>
-            <div style={{textAlign:"center"}}><div style={{fontSize:".76rem"}}><span style={{fontWeight:500,color:"#d4899e"}}>Baby</span><span style={{fontWeight:300,color:"#d4899e"}}>Tracker</span></div><div style={{fontSize:".65rem",color:"#aaa",marginTop:3}}>Every Milestone Matters</div></div>
-            <p style={{fontSize:".68rem",color:C.sec,marginTop:4,fontStyle:"italic",textAlign:"center"}}>Powered by Grandma <span style={{color:"#e57373"}}>&hearts;</span></p>
+          <div style={{padding:"16px 0",borderTop:"1px solid #eee",marginTop:12,textAlign:"center"}}>
+            <div style={{display:"flex",alignItems:"center",justifyContent:"center",gap:6}}>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" style={{width:16,height:16,flexShrink:0}}><circle cx="24" cy="24" r="24" fill="#d4899e"/><g fill="none" stroke="#fff" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" transform="translate(12,10)"><path d="M9 12l-1.5 7H6.5a2 2 0 0 1 0-4h11a2 2 0 0 1 0 4h-1l-1.5-7"/><circle cx="12" cy="7" r="4.5"/></g></svg>
+              <span style={{fontSize:".82rem"}}><span style={{fontWeight:500,color:"#d4899e"}}>Baby</span><span style={{fontWeight:300,color:"#d4899e"}}>Tracker</span></span>
+              <span style={{fontSize:".68rem",color:"#aaa"}}>&middot;</span>
+              <span style={{fontSize:".68rem",color:"#aaa"}}>Every Milestone Matters</span>
+            </div>
+            <div style={{fontSize:".68rem",color:"#aaa",marginTop:10}}>Powered by Grandma <span style={{color:"#e0aab8"}}>&hearts;</span></div>
           </div>
         </div>
       </div>
