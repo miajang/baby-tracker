@@ -87,7 +87,7 @@ export default function Auth({ onLogin }) {
         <button
           type="submit"
           disabled={!canSubmit}
-          style={{ width: "100%", background: canSubmit ? BRAND : "#ccc", color: "#fff", border: "none", padding: "12px", borderRadius: 8, fontSize: ".95rem", fontWeight: 700, cursor: canSubmit ? "pointer" : "not-allowed", transition: "background .15s" }}
+          style={{ width: "100%", background: BRAND, color: "#fff", border: "none", padding: "12px", borderRadius: 8, fontSize: ".95rem", fontWeight: 700, cursor: canSubmit ? "pointer" : "not-allowed", opacity: canSubmit ? 1 : 0.65, transition: "opacity .15s" }}
         >
           {loading ? "Please wait..." : mode === "login" ? "Log In" : "Sign Up"}
         </button>

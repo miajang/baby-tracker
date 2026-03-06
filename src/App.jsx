@@ -614,8 +614,8 @@ export default function BabyTracker({ session }){
         {themeColors.map(function(k){return <div key={k} onClick={function(){setTheme(k);saveProf(Object.assign({},profile,{theme:k}));}} style={{width:28,height:28,borderRadius:"50%",background:themes[k].pri,cursor:"pointer",display:"flex",alignItems:"center",justifyContent:"center"}}>{theme===k&&<span style={{color:"#fff",fontSize:".65rem",fontWeight:800}}>&#10003;</span>}</div>;})}
       </div>
       {session&&<div style={{borderTop:"1px solid #eee",marginTop:16,paddingTop:12}}>
-        <div style={{fontSize:".72rem",color:C.sec,marginBottom:8}}>{session.user.email}</div>
-        <div onClick={function(){supabase.auth.signOut();}} style={{display:"flex",alignItems:"center",gap:8,cursor:"pointer",padding:"4px 0",fontSize:".82rem",color:C.sec,fontWeight:500}}><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>Log out</div>
+        <div style={{fontSize:".72rem",color:C.sec,marginBottom:8,textAlign:"center"}}>{session.user.email}</div>
+        <div onClick={function(){supabase.auth.signOut();}} style={{display:"flex",alignItems:"center",justifyContent:"center",gap:8,cursor:"pointer",padding:"4px 0",fontSize:".82rem",color:C.sec,fontWeight:500}}><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>Log out</div>
       </div>}
     </div>);
   };
@@ -661,11 +661,17 @@ export default function BabyTracker({ session }){
       {summaryOpen && <MonthlySummaryPage feeds={feeds} nightSleep={nightSleep} naps={naps} growthEntries={growthEntries} profile={profile} age={age} onClose={function(){setSummaryOpen(false);}} t={t} />}
 
       <header style={{background:"#fff",borderBottom:"1px solid #e8eeec",padding:"12px 24px",position:"sticky",top:0,zIndex:100}}>
-        <div style={{display:"flex",alignItems:"center",justifyContent:"space-between"}}>
-          <div>
-            <div style={{fontSize:"1.1rem"}}><span style={{fontWeight:500,color:"#d4899e"}}>Baby</span><span style={{fontWeight:300,color:"#d4899e"}}>Tracker</span></div><div style={{fontSize:".72rem",color:"#aaa",marginTop:2}}>Every Milestone Matters</div>
+        <div style={{display:"grid",gridTemplateColumns:"auto 1fr",gridTemplateRows:"auto auto",columnGap:16,rowGap:4}}>
+          <div style={{gridRow:"1/3",display:"flex",alignItems:"flex-end"}}>
+            <div style={{display:"flex",alignItems:"center",gap:7}}>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" style={{width:26,height:26,flexShrink:0}}><circle cx="24" cy="24" r="24" fill="#d4899e"/><g fill="none" stroke="#fff" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" transform="translate(12,10)"><path d="M9 12l-1.5 7H6.5a2 2 0 0 1 0-4h11a2 2 0 0 1 0 4h-1l-1.5-7"/><circle cx="12" cy="7" r="4.5"/></g></svg>
+              <div>
+                <div style={{fontSize:"1.1rem"}}><span style={{fontWeight:500,color:"#d4899e"}}>Baby</span><span style={{fontWeight:300,color:"#d4899e"}}>Tracker</span></div>
+                <div style={{fontSize:".72rem",color:"#aaa",marginTop:1}}>Every Milestone Matters</div>
+              </div>
+            </div>
           </div>
-          <div style={{display:"flex",alignItems:"center",gap:10}}>
+          <div style={{display:"flex",alignItems:"center",justifyContent:"flex-end",gap:10}}>
             <span style={{fontSize:".78rem",color:C.sec}}>{todayStr()}</span>
             <div style={{position:"relative"}}>
               <button onClick={function(){setSettingsOpen(!settingsOpen);}} style={{width:34,height:34,borderRadius:8,background:"transparent",border:"none",cursor:"pointer",display:"flex",alignItems:"center",justifyContent:"center"}}>
@@ -675,12 +681,12 @@ export default function BabyTracker({ session }){
             </div>
             <button className="btHam" onClick={function(){setDrawerOpen(true);}} style={{display:"none",flexDirection:"column",justifyContent:"center",gap:4,width:34,height:34,background:"#f8f8f8",border:"1.5px solid #e8e8e8",borderRadius:8,cursor:"pointer",padding:7}} aria-label="Menu"><span style={{display:"block",height:2,background:C.sec,borderRadius:2}}/><span style={{display:"block",height:2,background:C.sec,borderRadius:2}}/><span style={{display:"block",height:2,background:C.sec,borderRadius:2}}/></button>
           </div>
-        </div>
-        <div style={{display:"flex",justifyContent:"flex-end",marginTop:6}}>
-          <span onClick={function(){setChatOpen(true);}} style={{display:"flex",alignItems:"center",gap:4,color:t.pri,fontSize:".8rem",fontWeight:600,cursor:"pointer"}}>
-            <svg viewBox="0 0 24 24" style={{width:15,height:15,stroke:t.pri,fill:"none",strokeWidth:2,strokeLinecap:"round",strokeLinejoin:"round"}}><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
-            Ask Expert
-          </span>
+          <div style={{display:"flex",justifyContent:"flex-end",alignItems:"center",paddingRight:8}}>
+            <span onClick={function(){setChatOpen(true);}} style={{display:"flex",alignItems:"center",gap:4,color:t.pri,fontSize:".8rem",fontWeight:600,cursor:"pointer"}}>
+              <svg viewBox="0 0 24 24" style={{width:15,height:15,stroke:t.pri,fill:"none",strokeWidth:2,strokeLinecap:"round",strokeLinejoin:"round"}}><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+              Ask Expert
+            </span>
+          </div>
         </div>
       </header>
 
