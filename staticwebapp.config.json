@@ -1,6 +1,10 @@
 {
   "globalHeaders": {
-    "X-Frame-Options": "ALLOWALL",
-    "Content-Security-Policy": "frame-ancestors 'self' https://teams.microsoft.com https://*.teams.microsoft.com https://*.office.com"
+    "Cache-Control": "no-cache, no-store, must-revalidate",
+    "Pragma": "no-cache",
+    "Expires": "0"
+  },
+  "navigationFallback": {
+    "rewrite": "/index.html"
   }
 }
