@@ -65,7 +65,7 @@ export default function Auth({ onLogin }) {
           value={email}
           onChange={function (e) { setEmail(e.target.value); }}
           onKeyDown={function (e) { if (e.key === "Enter" && canSubmit) handleSubmit(); }}
-          style={{ width: "100%", padding: "10px 14px", border: "1.5px solid #ddd", borderRadius: 8, fontSize: ".92rem", marginBottom: 16, outline: "none", boxSizing: "border-box" }}
+          style={{ width: "100%", padding: "10px 14px", border: "1px solid #ddd", borderRadius: 8, fontSize: ".92rem", marginBottom: 16, outline: "none", boxSizing: "border-box" }}
         />
 
         <div style={{ fontSize: ".78rem", fontWeight: 600, color: "#666", textTransform: "uppercase", letterSpacing: ".06em", marginBottom: 6 }}>Password</div>
@@ -76,11 +76,11 @@ export default function Auth({ onLogin }) {
           value={password}
           onChange={function (e) { setPassword(e.target.value); }}
           onKeyDown={function (e) { if (e.key === "Enter" && canSubmit) handleSubmit(); }}
-          style={{ width: "100%", padding: "10px 14px", border: "1.5px solid #ddd", borderRadius: 8, fontSize: ".92rem", marginBottom: 16, outline: "none", boxSizing: "border-box" }}
+          style={{ width: "100%", padding: "10px 14px", border: "1px solid #ddd", borderRadius: 8, fontSize: ".92rem", marginBottom: 16, outline: "none", boxSizing: "border-box" }}
         />
 
         <label style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 20, cursor: "pointer", fontSize: ".84rem", color: "#666" }}>
-          <input type="checkbox" checked={remember} onChange={function () { setRemember(!remember); }} style={{ accentColor: BRAND, width: 16, height: 16, cursor: "pointer" }} />
+          <span onClick={function () { setRemember(!remember); }} style={{ width: 18, height: 18, borderRadius: 4, border: remember ? "none" : "1px solid #ccc", background: remember ? BRAND : "#fff", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", flexShrink: 0 }}>{remember && <svg viewBox="0 0 24 24" style={{ width: 12, height: 12, fill: "none", stroke: "#fff", strokeWidth: 3, strokeLinecap: "round", strokeLinejoin: "round" }}><polyline points="20 6 9 17 4 12"/></svg>}</span>
           Save login info
         </label>
 
