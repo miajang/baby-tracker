@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { supabase } from "./supabaseClient.js";
 
-const BRAND = "#237a82";
+const BRAND = "#d4899e";
 
 export default function Auth({ onLogin }) {
   const [mode, setMode] = useState("login");
