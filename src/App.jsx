@@ -519,7 +519,7 @@ export default function BabyTracker({ session }){
     setFeedH(ct.h); setFeedM(ct.m); setFeedAP(ct.ap);
   };
 
-  var saveProf=function(p){var np=Object.assign({},p,{theme:theme});setProfile(np);if(userId)db.saveProfile(userId,np);};
+  var saveProf=function(p){var np=Object.assign({},p);setProfile(np);if(userId)db.saveProfile(userId,Object.assign({},np,{theme:np.theme||theme}));};
   var addFeed=function(){if(!feedOz)return;var timeStr=feedH?formatTimeFields(feedH,feedM,feedAP):nowTimeStr();var entry={id:Date.now(),time:timeStr,date:new Date().toLocaleDateString(),oz:parseFloat(feedOz),brand:feedBrand,note:feedNote};setFeeds(function(pv){return[entry].concat(pv);});if(userId)db.addFeed(userId,entry);setFeedOz("");setFeedBrand("");setFeedNote("");setFeedH("");setFeedM("");};
   var delFeed=function(id){setFeeds(function(pv){return pv.filter(function(f){return f.id!==id;});});if(userId)db.deleteFeed(userId,id);};
   var addNight=function(){if(!nsH1||!nsH2)return;var st=formatTimeFields(nsH1,nsM1,nsAP1),en=formatTimeFields(nsH2,nsM2,nsAP2);var dur=calcDurFromFields(nsH1,nsM1,nsAP1,nsH2,nsM2,nsAP2);var entry={id:Date.now(),date:new Date().toLocaleDateString(),start:st,end:en,durMins:dur};setNightSleep(function(pv){return[entry].concat(pv);});if(userId)db.addNightSleep(userId,entry);setNsH1("");setNsM1("");setNsH2("");setNsM2("");};
