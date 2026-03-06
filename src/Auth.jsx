@@ -49,9 +49,11 @@ export default function Auth({ onLogin }) {
 
         {error && <div style={{ background: "#fef2f2", color: "#dc2626", padding: "10px 14px", borderRadius: 8, fontSize: ".82rem", marginBottom: 16 }}>{error}</div>}
 
+        <form onSubmit={function(e){ e.preventDefault(); if(canSubmit) handleSubmit(); }}>
         <div style={{ fontSize: ".78rem", fontWeight: 600, color: "#666", textTransform: "uppercase", letterSpacing: ".06em", marginBottom: 6 }}>Email</div>
         <input
           type="email"
+          autoComplete="email"
           placeholder="you@example.com"
           value={email}
           onChange={function (e) { setEmail(e.target.value); }}
@@ -62,6 +64,7 @@ export default function Auth({ onLogin }) {
         <div style={{ fontSize: ".78rem", fontWeight: 600, color: "#666", textTransform: "uppercase", letterSpacing: ".06em", marginBottom: 6 }}>Password</div>
         <input
           type="password"
+          autoComplete={mode === "signup" ? "new-password" : "current-password"}
           placeholder={mode === "signup" ? "At least 6 characters" : "Your password"}
           value={password}
           onChange={function (e) { setPassword(e.target.value); }}
@@ -70,12 +73,13 @@ export default function Auth({ onLogin }) {
         />
 
         <button
-          onClick={handleSubmit}
+          type="submit"
           disabled={!canSubmit}
           style={{ width: "100%", background: canSubmit ? BRAND : "#ccc", color: "#fff", border: "none", padding: "12px", borderRadius: 8, fontSize: ".95rem", fontWeight: 700, cursor: canSubmit ? "pointer" : "not-allowed", transition: "background .15s" }}
         >
           {loading ? "Please wait..." : mode === "login" ? "Log In" : "Sign Up"}
         </button>
+        </form>
 
         <div style={{ textAlign: "center", marginTop: 20 }}>
           <span
