@@ -599,15 +599,15 @@ export default function BabyTracker({ session }){
       </div>
       <div style={{fontSize:".7rem",color:C.sec,fontWeight:700,textTransform:"uppercase",letterSpacing:".07em",marginBottom:8}}>Baby Profile</div>
       <div style={{fontSize:".72rem",fontWeight:600,color:C.sec,marginBottom:4}}>Name</div>
-      <input value={profile.name} onChange={function(e){var np=Object.assign({},profile,{name:e.target.value});setProfile(np);if(userId)db.saveProfile(userId,Object.assign({},np,{theme:theme}));}} style={{width:"100%",padding:"7px 10px",border:"1.5px solid #ddd",borderRadius:6,fontSize:".85rem",outline:"none",marginBottom:10,boxSizing:"border-box"}}/>
+      <input value={profile.name} onChange={function(e){var np=Object.assign({},profile,{name:e.target.value});setProfile(np);if(userId)db.saveProfile(userId,Object.assign({},np,{theme:theme}));}} style={{width:"100%",padding:"7px 10px",border:"1px solid #ddd",borderRadius:6,fontSize:".85rem",outline:"none",marginBottom:10,boxSizing:"border-box"}}/>
       <div style={{fontSize:".72rem",fontWeight:600,color:C.sec,marginBottom:4}}>Gender</div>
       <div style={{display:"flex",gap:8,marginBottom:10}}>
         {["girl","boy"].map(function(g){var gc=g==="girl"?"#d4899e":"#6a9fd8";var glc=g==="girl"?"#fefafb":"#f5f9fd";var sel=(profile.gender||"girl")===g;return(
-          <button key={g} onClick={function(){var np=Object.assign({},profile,{gender:g});setProfile(np);if(userId)db.saveProfile(userId,Object.assign({},np,{theme:theme}));}} style={{flex:1,padding:"7px 0",borderRadius:8,border:sel?"2px solid "+gc:"2px solid #e0e0e0",background:sel?glc:"#fff",color:sel?gc:"#999",fontWeight:600,fontSize:".82rem",cursor:"pointer",transition:"all .15s",textTransform:"capitalize"}}>{g}</button>
+          <button key={g} onClick={function(){var np=Object.assign({},profile,{gender:g});setProfile(np);if(userId)db.saveProfile(userId,Object.assign({},np,{theme:theme}));}} style={{flex:1,padding:"7px 0",borderRadius:8,border:sel?"1.5px solid "+gc:"1px solid #e0e0e0",background:sel?glc:"#fff",color:sel?gc:"#999",fontWeight:600,fontSize:".82rem",cursor:"pointer",transition:"all .15s",textTransform:"capitalize"}}>{g}</button>
         );})}
       </div>
       <div style={{fontSize:".72rem",fontWeight:600,color:C.sec,marginBottom:4}}>Birth Date</div>
-      <input type="date" value={profile.birthDate} onChange={function(e){var v=e.target.value;var yr=parseInt(v.split("-")[0],10);if(yr<1900||yr>2100)return;var np=Object.assign({},profile,{birthDate:v});setProfile(np);if(userId)db.saveProfile(userId,Object.assign({},np,{theme:theme}));}} style={{width:"100%",padding:"7px 10px",border:"1.5px solid #ddd",borderRadius:6,fontSize:".85rem",outline:"none",boxSizing:"border-box"}}/>
+      <input type="date" value={profile.birthDate} onChange={function(e){var v=e.target.value;var yr=parseInt(v.split("-")[0],10);if(yr<1900||yr>2100)return;var np=Object.assign({},profile,{birthDate:v});setProfile(np);if(userId)db.saveProfile(userId,Object.assign({},np,{theme:theme}));}} style={{width:"100%",padding:"7px 10px",border:"1px solid #ddd",borderRadius:6,fontSize:".85rem",outline:"none",boxSizing:"border-box"}}/>
       <div style={{fontSize:".78rem",color:t.pri,fontWeight:600,marginTop:6,marginBottom:14}}>{age.label} old</div>
       <div style={{fontSize:".7rem",color:C.sec,fontWeight:700,textTransform:"uppercase",letterSpacing:".07em",marginBottom:10}}>Theme Color</div>
       <div style={{display:"flex",gap:12}}>
@@ -615,7 +615,7 @@ export default function BabyTracker({ session }){
       </div>
       {session&&<div style={{borderTop:"1px solid #eee",marginTop:16,paddingTop:12}}>
         <div style={{fontSize:".72rem",color:C.sec,marginBottom:8}}>{session.user.email}</div>
-        <button onClick={function(){supabase.auth.signOut();}} style={{width:"100%",padding:"8px",borderRadius:6,border:"1px solid #ddd",background:"#fff",color:C.sec,fontSize:".8rem",fontWeight:600,cursor:"pointer"}}>Log Out</button>
+        <div onClick={function(){supabase.auth.signOut();}} style={{display:"flex",alignItems:"center",gap:8,cursor:"pointer",padding:"4px 0",fontSize:".82rem",color:C.sec,fontWeight:500}}><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>Log out</div>
       </div>}
     </div>);
   };
