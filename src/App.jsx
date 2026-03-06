@@ -1,5 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import Auth from "./Auth.jsx";
+import { supabase } from "./supabaseClient.js";
+import * as db from "./useSupabase.js";
 
 const BRAND = "#237a82";
 const C={h:"#333",body:"#444",sec:"#666",help:"#777"};
@@ -442,7 +444,8 @@ function MonthlySummarySection({ feeds, nightSleep, naps, growthEntries, profile
   );
 }
 
-export default function BabyTracker(){
+export default function BabyTracker({ session }){
+  var userId = session ? session.user.id : null;
   const[theme,setTheme]=useState("pink");
   const[profile,setProfile]=useState({name:"Erin",birthDate:"2025-11-03",gender:"girl",setupDone:false});
   const[feeds,setFeeds]=useState([]);
@@ -483,21 +486,32 @@ export default function BabyTracker(){
   const pr=pronounSets[gender]||pronounSets.girl;
 
   useEffect(function(){
-    const p=sGet(KEYS.profile);if(p&&p.name){var yr=parseInt((p.birthDate||"").split("-")[0],10);if(yr<1900||yr>2100)p.birthDate="2025-11-03";setProfile(p);if(p.theme)setTheme(p.theme);}else{sSet(KEYS.profile,{name:"Erin",birthDate:"2025-11-03",gender:"girl",setupDone:false,theme:"pink"});}
-    const f=sGet(KEYS.feeds);if(f)setFeeds(f);
-    const ns=sGet(KEYS.nightSleep);if(ns)setNightSleep(ns);
-    const np=sGet(KEYS.naps);if(np)setNaps(np);
-    const g=sGet(KEYS.growth);if(g)setGrowthEntries(g);
-    const c=sGet(KEYS.checks);if(c)setMilestoneChecks(c);
-    setLoaded(true);
-  },[]);
+    if(!userId)return;
+    (async function(){
+      // Migrate localStorage data on first login
+      if(localStorage.getItem('bt-migrated')!=='true'){
+        var localProfile=sGet(KEYS.profile);
+        if(localProfile&&localProfile.name){
+          await db.migrateLocalStorage(userId);
+        }
+      }
+      var data=await db.loadAllData(userId);
+      if(data.profile){
+        var yr=parseInt((data.profile.birthDate||"").split("-")[0],10);
+        if(yr<1900||yr>2100)data.profile.birthDate="2025-11-03";
+        setProfile(data.profile);
+        if(data.profile.theme)setTheme(data.profile.theme);
+      }
+      if(data.feeds.length)setFeeds(data.feeds);
+      if(data.nightSleep.length)setNightSleep(data.nightSleep);
+      if(data.naps.length)setNaps(data.naps);
+      if(data.growthEntries.length)setGrowthEntries(data.growthEntries);
+      if(Object.keys(data.milestoneChecks).length)setMilestoneChecks(data.milestoneChecks);
+      setLoaded(true);
+    })();
+  },[userId]);
 
-  useEffect(function(){if(loaded)sSet(KEYS.profile,Object.assign({},profile,{theme:theme}));},[profile,theme,loaded]);
-  useEffect(function(){if(loaded)sSet(KEYS.feeds,feeds);},[feeds,loaded]);
-  useEffect(function(){if(loaded)sSet(KEYS.nightSleep,nightSleep);},[nightSleep,loaded]);
-  useEffect(function(){if(loaded)sSet(KEYS.naps,naps);},[naps,loaded]);
-  useEffect(function(){if(loaded)sSet(KEYS.growth,growthEntries);},[growthEntries,loaded]);
-  useEffect(function(){if(loaded)sSet(KEYS.checks,milestoneChecks);},[milestoneChecks,loaded]);
+  useEffect(function(){if(loaded&&userId)db.saveProfile(userId,Object.assign({},profile,{theme:theme}));},[profile,theme,loaded]);
   useEffect(function(){if(loaded)setOpenMonth(currentMonth);},[loaded,currentMonth]);
 
   var setFeedTimeNow = function(){
@@ -505,16 +519,16 @@ export default function BabyTracker(){
     setFeedH(ct.h); setFeedM(ct.m); setFeedAP(ct.ap);
   };
 
-  var saveProf=function(p){var np=Object.assign({},p,{theme:theme});setProfile(np);sSet(KEYS.profile,np);};
-  var addFeed=function(){if(!feedOz)return;var timeStr=feedH?formatTimeFields(feedH,feedM,feedAP):nowTimeStr();setFeeds(function(pv){return[{id:Date.now(),time:timeStr,date:new Date().toLocaleDateString(),oz:parseFloat(feedOz),brand:feedBrand,note:feedNote}].concat(pv);});setFeedOz("");setFeedBrand("");setFeedNote("");setFeedH("");setFeedM("");};
-  var delFeed=function(id){setFeeds(function(pv){return pv.filter(function(f){return f.id!==id;});});};
-  var addNight=function(){if(!nsH1||!nsH2)return;var st=formatTimeFields(nsH1,nsM1,nsAP1),en=formatTimeFields(nsH2,nsM2,nsAP2);var dur=calcDurFromFields(nsH1,nsM1,nsAP1,nsH2,nsM2,nsAP2);setNightSleep(function(pv){return[{id:Date.now(),date:new Date().toLocaleDateString(),start:st,end:en,durMins:dur}].concat(pv);});setNsH1("");setNsM1("");setNsH2("");setNsM2("");};
-  var delNight=function(id){setNightSleep(function(pv){return pv.filter(function(s){return s.id!==id;});});};
-  var addNap=function(){if(!napH1||!napH2)return;var st=formatTimeFields(napH1,napM1,napAP1),en=formatTimeFields(napH2,napM2,napAP2);var dur=calcDurFromFields(napH1,napM1,napAP1,napH2,napM2,napAP2);setNaps(function(pv){return[{id:Date.now(),date:new Date().toLocaleDateString(),start:st,end:en,durMins:dur}].concat(pv);});setNapH1("");setNapM1("");setNapH2("");setNapM2("");};
-  var delNap=function(id){setNaps(function(pv){return pv.filter(function(s){return s.id!==id;});});};
-  var addGrowth=function(){if(!gW&&!gL)return;setGrowthEntries(function(pv){return[{id:Date.now(),date:new Date().toLocaleDateString(),weight:gW?parseFloat(gW):null,length:gL?parseFloat(gL):null,ageMonths:age.months}].concat(pv);});setGW("");setGL("");};
+  var saveProf=function(p){var np=Object.assign({},p,{theme:theme});setProfile(np);if(userId)db.saveProfile(userId,np);};
+  var addFeed=function(){if(!feedOz)return;var timeStr=feedH?formatTimeFields(feedH,feedM,feedAP):nowTimeStr();var entry={id:Date.now(),time:timeStr,date:new Date().toLocaleDateString(),oz:parseFloat(feedOz),brand:feedBrand,note:feedNote};setFeeds(function(pv){return[entry].concat(pv);});if(userId)db.addFeed(userId,entry);setFeedOz("");setFeedBrand("");setFeedNote("");setFeedH("");setFeedM("");};
+  var delFeed=function(id){setFeeds(function(pv){return pv.filter(function(f){return f.id!==id;});});if(userId)db.deleteFeed(userId,id);};
+  var addNight=function(){if(!nsH1||!nsH2)return;var st=formatTimeFields(nsH1,nsM1,nsAP1),en=formatTimeFields(nsH2,nsM2,nsAP2);var dur=calcDurFromFields(nsH1,nsM1,nsAP1,nsH2,nsM2,nsAP2);var entry={id:Date.now(),date:new Date().toLocaleDateString(),start:st,end:en,durMins:dur};setNightSleep(function(pv){return[entry].concat(pv);});if(userId)db.addNightSleep(userId,entry);setNsH1("");setNsM1("");setNsH2("");setNsM2("");};
+  var delNight=function(id){setNightSleep(function(pv){return pv.filter(function(s){return s.id!==id;});});if(userId)db.deleteNightSleep(userId,id);};
+  var addNap=function(){if(!napH1||!napH2)return;var st=formatTimeFields(napH1,napM1,napAP1),en=formatTimeFields(napH2,napM2,napAP2);var dur=calcDurFromFields(napH1,napM1,napAP1,napH2,napM2,napAP2);var entry={id:Date.now(),date:new Date().toLocaleDateString(),start:st,end:en,durMins:dur};setNaps(function(pv){return[entry].concat(pv);});if(userId)db.addNap(userId,entry);setNapH1("");setNapM1("");setNapH2("");setNapM2("");};
+  var delNap=function(id){setNaps(function(pv){return pv.filter(function(s){return s.id!==id;});});if(userId)db.deleteNap(userId,id);};
+  var addGrowth=function(){if(!gW&&!gL)return;var entry={id:Date.now(),date:new Date().toLocaleDateString(),weight:gW?parseFloat(gW):null,length:gL?parseFloat(gL):null,ageMonths:age.months};setGrowthEntries(function(pv){return[entry].concat(pv);});if(userId)db.addGrowthEntry(userId,entry);setGW("");setGL("");};
 
-  var toggleCheck=function(mo,cat,idx){var k=mo+"-"+cat+"-"+idx;setMilestoneChecks(function(pv){var n=Object.assign({},pv);n[k]=n[k]?null:new Date().toLocaleDateString();return n;});};
+  var toggleCheck=function(mo,cat,idx){var k=mo+"-"+cat+"-"+idx;setMilestoneChecks(function(pv){var n=Object.assign({},pv);n[k]=n[k]?null:new Date().toLocaleDateString();if(userId)db.saveMilestoneChecks(userId,n);return n;});};
   var getMonthCount=function(mo){var c=0;var md=milestoneData.find(function(m){return m.month===mo;});if(!md)return 0;md.categories.forEach(function(cat){cat.items.forEach(function(_,i){if(milestoneChecks[mo+"-"+cat.cat+"-"+i])c++;});});return c;};
   var getMonthTotal=function(mo){var md=milestoneData.find(function(m){return m.month===mo;});if(!md)return 0;return md.categories.reduce(function(s,c){return s+c.items.length;},0);};
   var getCatCount=function(mo,cn){var c=0;var md=milestoneData.find(function(m){return m.month===mo;});if(!md)return 0;var cat=md.categories.find(function(ct){return ct.cat===cn;});if(!cat)return 0;cat.items.forEach(function(_,i){if(milestoneChecks[mo+"-"+cn+"-"+i])c++;});return c;};
@@ -585,20 +599,24 @@ export default function BabyTracker(){
       </div>
       <div style={{fontSize:".7rem",color:C.sec,fontWeight:700,textTransform:"uppercase",letterSpacing:".07em",marginBottom:8}}>Baby Profile</div>
       <div style={{fontSize:".72rem",fontWeight:600,color:C.sec,marginBottom:4}}>Name</div>
-      <input value={profile.name} onChange={function(e){var np=Object.assign({},profile,{name:e.target.value});setProfile(np);sSet(KEYS.profile,Object.assign({},np,{theme:theme}));}} style={{width:"100%",padding:"7px 10px",border:"1.5px solid #ddd",borderRadius:6,fontSize:".85rem",outline:"none",marginBottom:10,boxSizing:"border-box"}}/>
+      <input value={profile.name} onChange={function(e){var np=Object.assign({},profile,{name:e.target.value});setProfile(np);if(userId)db.saveProfile(userId,Object.assign({},np,{theme:theme}));}} style={{width:"100%",padding:"7px 10px",border:"1.5px solid #ddd",borderRadius:6,fontSize:".85rem",outline:"none",marginBottom:10,boxSizing:"border-box"}}/>
       <div style={{fontSize:".72rem",fontWeight:600,color:C.sec,marginBottom:4}}>Gender</div>
       <div style={{display:"flex",gap:8,marginBottom:10}}>
         {["girl","boy"].map(function(g){var gc=g==="girl"?"#d4899e":"#6a9fd8";var glc=g==="girl"?"#fefafb":"#f5f9fd";var sel=(profile.gender||"girl")===g;return(
-          <button key={g} onClick={function(){var np=Object.assign({},profile,{gender:g});setProfile(np);sSet(KEYS.profile,Object.assign({},np,{theme:theme}));}} style={{flex:1,padding:"7px 0",borderRadius:8,border:sel?"2px solid "+gc:"2px solid #e0e0e0",background:sel?glc:"#fff",color:sel?gc:"#999",fontWeight:600,fontSize:".82rem",cursor:"pointer",transition:"all .15s",textTransform:"capitalize"}}>{g}</button>
+          <button key={g} onClick={function(){var np=Object.assign({},profile,{gender:g});setProfile(np);if(userId)db.saveProfile(userId,Object.assign({},np,{theme:theme}));}} style={{flex:1,padding:"7px 0",borderRadius:8,border:sel?"2px solid "+gc:"2px solid #e0e0e0",background:sel?glc:"#fff",color:sel?gc:"#999",fontWeight:600,fontSize:".82rem",cursor:"pointer",transition:"all .15s",textTransform:"capitalize"}}>{g}</button>
         );})}
       </div>
       <div style={{fontSize:".72rem",fontWeight:600,color:C.sec,marginBottom:4}}>Birth Date</div>
-      <input type="date" value={profile.birthDate} onChange={function(e){var v=e.target.value;var yr=parseInt(v.split("-")[0],10);if(yr<1900||yr>2100)return;var np=Object.assign({},profile,{birthDate:v});setProfile(np);sSet(KEYS.profile,Object.assign({},np,{theme:theme}));}} style={{width:"100%",padding:"7px 10px",border:"1.5px solid #ddd",borderRadius:6,fontSize:".85rem",outline:"none",boxSizing:"border-box"}}/>
+      <input type="date" value={profile.birthDate} onChange={function(e){var v=e.target.value;var yr=parseInt(v.split("-")[0],10);if(yr<1900||yr>2100)return;var np=Object.assign({},profile,{birthDate:v});setProfile(np);if(userId)db.saveProfile(userId,Object.assign({},np,{theme:theme}));}} style={{width:"100%",padding:"7px 10px",border:"1.5px solid #ddd",borderRadius:6,fontSize:".85rem",outline:"none",boxSizing:"border-box"}}/>
       <div style={{fontSize:".78rem",color:t.pri,fontWeight:600,marginTop:6,marginBottom:14}}>{age.label} old</div>
       <div style={{fontSize:".7rem",color:C.sec,fontWeight:700,textTransform:"uppercase",letterSpacing:".07em",marginBottom:10}}>Theme Color</div>
       <div style={{display:"flex",gap:12}}>
         {themeColors.map(function(k){return <div key={k} onClick={function(){setTheme(k);saveProf(Object.assign({},profile,{theme:k}));}} style={{width:28,height:28,borderRadius:"50%",background:themes[k].pri,cursor:"pointer",display:"flex",alignItems:"center",justifyContent:"center"}}>{theme===k&&<span style={{color:"#fff",fontSize:".65rem",fontWeight:800}}>&#10003;</span>}</div>;})}
       </div>
+      {session&&<div style={{borderTop:"1px solid #eee",marginTop:16,paddingTop:12}}>
+        <div style={{fontSize:".72rem",color:C.sec,marginBottom:8}}>{session.user.email}</div>
+        <button onClick={function(){supabase.auth.signOut();}} style={{width:"100%",padding:"8px",borderRadius:6,border:"1px solid #ddd",background:"#fff",color:C.sec,fontSize:".8rem",fontWeight:600,cursor:"pointer"}}>Log Out</button>
+      </div>}
     </div>);
   };
 
