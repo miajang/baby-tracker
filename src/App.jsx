@@ -3,7 +3,7 @@ import Auth from "./Auth.jsx";
 import { supabase } from "./supabaseClient.js";
 import * as db from "./useSupabase.js";
 
-const BRAND = "#237a82";
+const BRAND = "#d4899e";
 const C={h:"#333",body:"#444",sec:"#666",help:"#777"};
 
 const themes = {
@@ -564,8 +564,8 @@ export default function BabyTracker({ session }){
       <div style={{fontFamily:"'Segoe UI',system-ui,sans-serif",background:"#fafafa",minHeight:"100vh",display:"flex",alignItems:"center",justifyContent:"center",padding:20}}>
         <style>{"@keyframes spin{to{transform:rotate(360deg)}}"}</style>
         <div style={{background:"#fff",borderRadius:16,padding:"36px 32px",maxWidth:400,width:"100%",boxShadow:"0 4px 20px rgba(0,0,0,.08)"}}>
-          <div style={{fontSize:"1.3rem",fontWeight:800,color:BRAND,marginBottom:2}}>BabyTracker</div>
-          <div style={{fontSize:".82rem",color:C.sec,marginBottom:28}}>Every Milestone Matters</div>
+          <div style={{fontSize:"1.3rem",marginBottom:2}}><span style={{fontWeight:500,color:"#d4899e"}}>Baby</span><span style={{fontWeight:300,color:"#d4899e"}}>Tracker</span></div>
+          <div style={{fontSize:".82rem",color:"#aaa",marginBottom:28}}>Every Milestone Matters</div>
           <div style={{fontSize:".78rem",fontWeight:600,color:C.sec,textTransform:"uppercase",letterSpacing:".06em",marginBottom:6}}>Name</div>
           <input value={profile.name} onChange={function(e){setProfile(function(pv){return Object.assign({},pv,{name:e.target.value});});}} style={{width:"100%",padding:"10px 14px",border:"1.5px solid #ddd",borderRadius:8,fontSize:".92rem",marginBottom:16,outline:"none",boxSizing:"border-box"}}/>
           <div style={{fontSize:".78rem",fontWeight:600,color:C.sec,textTransform:"uppercase",letterSpacing:".06em",marginBottom:6}}>Gender</div>
@@ -663,7 +663,7 @@ export default function BabyTracker({ session }){
       <header style={{background:"#fff",borderBottom:"1px solid #e8eeec",padding:"12px 24px",position:"sticky",top:0,zIndex:100}}>
         <div style={{display:"flex",alignItems:"center",justifyContent:"space-between"}}>
           <div>
-            <div style={{fontSize:"1.1rem",fontWeight:800,color:BRAND}}>BabyTracker <span style={{fontWeight:400,fontSize:".88rem",color:C.sec}}>Every Milestone Matters</span></div>
+            <div style={{fontSize:"1.1rem"}}><span style={{fontWeight:500,color:"#d4899e"}}>Baby</span><span style={{fontWeight:300,color:"#d4899e"}}>Tracker</span></div><div style={{fontSize:".72rem",color:"#aaa",marginTop:2}}>Every Milestone Matters</div>
             <div style={{fontSize:".78rem",color:C.sec,marginTop:1}}>{todayStr()}</div>
           </div>
           <div style={{display:"flex",alignItems:"center",gap:4}}>
@@ -987,7 +987,7 @@ export default function BabyTracker({ session }){
             <p style={{fontSize:".72rem",color:C.help,lineHeight:1.6}}>Sources: CDC, AAP, and WHO evidence-based guidelines. Not a substitute for pediatric advice.</p>
           </div>
           <div style={{padding:"16px 0",borderTop:"1px solid #eee",marginTop:12}}>
-            <p style={{fontSize:".76rem",color:C.help,textAlign:"center"}}>BabyTracker &middot; Every Milestone Matters</p>
+            <div style={{textAlign:"center"}}><div style={{fontSize:".76rem"}}><span style={{fontWeight:500,color:"#d4899e"}}>Baby</span><span style={{fontWeight:300,color:"#d4899e"}}>Tracker</span></div><div style={{fontSize:".65rem",color:"#aaa",marginTop:3}}>Every Milestone Matters</div></div>
             <p style={{fontSize:".68rem",color:C.sec,marginTop:4,fontStyle:"italic",textAlign:"center"}}>Powered by Grandma <span style={{color:"#e57373"}}>&hearts;</span></p>
           </div>
         </div>

@@ -50,8 +50,8 @@ export default function Auth({ onLogin }) {
               <circle cx="12" cy="7" r="4.5" />
             </svg>
           </div>
-          <div style={{ fontSize: "1.5rem", fontWeight: 800, color: BRAND, marginBottom: 2 }}>BabyTracker</div>
-          <div style={{ fontSize: ".82rem", color: "#888", marginBottom: 0, letterSpacing: ".02em" }}>Every Milestone Matters</div>
+          <div style={{ fontSize: "1.5rem", marginBottom: 2 }}><span style={{ fontWeight: 500, color: "#d4899e" }}>Baby</span><span style={{ fontWeight: 300, color: "#d4899e" }}>Tracker</span></div>
+          <div style={{ fontSize: ".82rem", color: "#aaa", marginBottom: 0, letterSpacing: ".02em" }}>Every Milestone Matters</div>
         </div>
 
         {error && <div style={{ background: "#fef2f2", color: "#dc2626", padding: "10px 14px", borderRadius: 8, fontSize: ".82rem", marginBottom: 16 }}>{error}</div>}
