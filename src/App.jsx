@@ -901,8 +901,10 @@ export default function BabyTracker(){
                     return(
                       <div key={topic.id} ref={function(el){eduRefs.current[topic.id]=el;}} onClick={function(){handleEduToggle(topic.id);}} style={{background:"#fff",borderRadius:14,overflow:"hidden",border:openEdu===topic.id?"2px solid "+(t.pri):"1px solid #e8e8e8",scrollMarginTop:HEADER_H+4,cursor:"pointer",transition:"box-shadow .15s",display:"flex",flexDirection:"column"}}>
                         <div style={{padding:"20px 20px 16px"}}>
-                          <div style={{fontSize:"1.1rem",marginBottom:8}}>{topic.icon}</div>
-                          <div style={{fontSize:".95rem",fontWeight:700,color:C.h,marginBottom:6}}>{topic.title}</div>
+                          <div style={{display:"flex",alignItems:"center",gap:8,marginBottom:6}}>
+                            <span style={{fontSize:"1.1rem",lineHeight:1}}>{topic.icon}</span>
+                            <span style={{fontSize:".95rem",fontWeight:700,color:C.h}}>{topic.title}</span>
+                          </div>
                           <div style={{fontSize:".8rem",color:C.sec,lineHeight:1.5,display:"-webkit-box",WebkitLineClamp:2,WebkitBoxOrient:"vertical",overflow:"hidden"}}>{topic.preview}</div>
                         </div>
                       </div>
