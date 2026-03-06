@@ -664,9 +664,9 @@ export default function BabyTracker({ session }){
         <div style={{display:"flex",alignItems:"center",justifyContent:"space-between"}}>
           <div>
             <div style={{fontSize:"1.1rem"}}><span style={{fontWeight:500,color:"#d4899e"}}>Baby</span><span style={{fontWeight:300,color:"#d4899e"}}>Tracker</span></div><div style={{fontSize:".72rem",color:"#aaa",marginTop:2}}>Every Milestone Matters</div>
-            <div style={{fontSize:".78rem",color:C.sec,marginTop:1}}>{todayStr()}</div>
           </div>
-          <div style={{display:"flex",alignItems:"center",gap:4}}>
+          <div style={{display:"flex",alignItems:"center",gap:10}}>
+            <span style={{fontSize:".78rem",color:C.sec}}>{todayStr()}</span>
             <div style={{position:"relative"}}>
               <button onClick={function(){setSettingsOpen(!settingsOpen);}} style={{width:34,height:34,borderRadius:8,background:"transparent",border:"none",cursor:"pointer",display:"flex",alignItems:"center",justifyContent:"center"}}>
                 <svg viewBox="0 0 24 24" style={{width:18,height:18,stroke:C.sec,fill:"none",strokeWidth:1.8,strokeLinecap:"round",strokeLinejoin:"round"}}><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
@@ -676,11 +676,9 @@ export default function BabyTracker({ session }){
             <button className="btHam" onClick={function(){setDrawerOpen(true);}} style={{display:"none",flexDirection:"column",justifyContent:"center",gap:4,width:34,height:34,background:"#f8f8f8",border:"1.5px solid #e8e8e8",borderRadius:8,cursor:"pointer",padding:7}} aria-label="Menu"><span style={{display:"block",height:2,background:C.sec,borderRadius:2}}/><span style={{display:"block",height:2,background:C.sec,borderRadius:2}}/><span style={{display:"block",height:2,background:C.sec,borderRadius:2}}/></button>
           </div>
         </div>
-        <div style={{marginTop:8,display:"flex",alignItems:"center",gap:10,flexWrap:"wrap"}}>
-          <span style={{background:t.badge,color:t.badgeTxt,borderRadius:20,padding:"5px 14px",fontSize:".82rem",fontWeight:700}}>{profile.name}</span>
-          <span style={{fontSize:".82rem",color:t.pri,fontWeight:600}}>{age.label} old</span>
-          <span onClick={function(){setChatOpen(true);}} style={{marginLeft:"auto",display:"flex",alignItems:"center",gap:4,color:BRAND,fontSize:".8rem",fontWeight:600,cursor:"pointer"}}>
-            <svg viewBox="0 0 24 24" style={{width:15,height:15,stroke:BRAND,fill:"none",strokeWidth:2,strokeLinecap:"round",strokeLinejoin:"round"}}><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+        <div style={{display:"flex",justifyContent:"flex-end",marginTop:6}}>
+          <span onClick={function(){setChatOpen(true);}} style={{display:"flex",alignItems:"center",gap:4,color:t.pri,fontSize:".8rem",fontWeight:600,cursor:"pointer"}}>
+            <svg viewBox="0 0 24 24" style={{width:15,height:15,stroke:t.pri,fill:"none",strokeWidth:2,strokeLinecap:"round",strokeLinejoin:"round"}}><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
             Ask Expert
           </span>
         </div>
@@ -702,6 +700,11 @@ export default function BabyTracker({ session }){
         <div className="btNavD" style={{width:200,minWidth:200,background:"#fff",borderRight:"1px solid #eee",padding:"12px 0",position:"sticky",top:105,height:"calc(100vh - 105px)",overflowY:"auto",display:"flex",flexDirection:"column"}}><NavItems/></div>
 
         <div style={{flex:1,padding:"24px 28px",paddingBottom:"60vh",overflowY:"auto",background:t.contBg}}>
+
+          <div style={{display:"flex",alignItems:"center",gap:10,flexWrap:"wrap",marginBottom:20}}>
+            <span style={{background:t.badge,color:t.badgeTxt,borderRadius:20,padding:"5px 14px",fontSize:".82rem",fontWeight:700}}>{profile.name}</span>
+            <span style={{fontSize:".82rem",color:t.pri,fontWeight:600}}>{age.label} old</span>
+          </div>
 
           {/* TRACKER */}
           <div ref={function(el){sectionRefs.current.tracker=el;}} data-sec="tracker" style={{marginBottom:36,scrollMarginTop:HEADER_H}}>
@@ -996,16 +999,16 @@ export default function BabyTracker({ session }){
       {/* CHAT */}
       {chatOpen&&(
         <div style={{position:"fixed",top:HEADER_H,right:0,width:390,maxWidth:"100vw",height:"min(480px,70vh)",background:"#fff",borderBottomLeftRadius:16,boxShadow:"-4px 4px 24px rgba(0,0,0,.12)",zIndex:500,display:"flex",flexDirection:"column",overflow:"hidden",border:"1px solid "+(t.mid),borderTop:"none"}}>
-          <div style={{padding:"14px 18px",background:"#f3f7f5",color:C.h,display:"flex",justifyContent:"space-between",alignItems:"center",flexShrink:0,borderBottom:"1px solid #e8eeec"}}>
-            <div><div style={{fontWeight:700,fontSize:".92rem",color:BRAND}}>Ask Expert</div><div style={{fontSize:".72rem",color:C.sec}}>{profile.name} &middot; {age.label} old</div></div>
-            <button onClick={function(){setChatOpen(false);}} style={{background:"#fff",border:"1px solid #e8eeec",color:C.sec,width:28,height:28,borderRadius:6,cursor:"pointer",fontSize:".85rem"}}>&#10005;</button>
+          <div style={{padding:"14px 18px",background:t.pri,display:"flex",justifyContent:"space-between",alignItems:"center",flexShrink:0}}>
+            <div><div style={{fontWeight:700,fontSize:".92rem",color:"#fff"}}>Ask Expert</div><div style={{fontSize:".72rem",color:"rgba(255,255,255,.75)"}}>{profile.name} &middot; {age.label} old</div></div>
+            <button onClick={function(){setChatOpen(false);}} style={{background:"rgba(255,255,255,.2)",border:"none",color:"#fff",width:28,height:28,borderRadius:6,cursor:"pointer",fontSize:".85rem"}}>&#10005;</button>
           </div>
           <div style={{flex:1,overflowY:"auto",padding:16}}>
             {chatMsgs.length===0&&(
               <div>
                 <p style={{fontSize:".85rem",color:C.sec,marginBottom:6,lineHeight:1.5}}>Hi! I'm BabyAdvisor - personalized for {profile.name}. Ask me anything:</p>
                 <div style={{display:"flex",flexDirection:"column",gap:4}}>
-                  {["Is this enough formula for "+pr.pos+" age?","Sleep tips for a "+currentMonth+"-month-old","When should "+pr.sub+" start solids?"].map(function(s,i){return <button key={i} onClick={function(){setChatInput(s);}} style={{background:t.lt,border:"none",borderRadius:8,padding:"8px 12px",fontSize:".82rem",color:"#666",cursor:"pointer",textAlign:"left",fontWeight:500}}>{s}</button>;})}
+                  {["Is this enough formula for "+pr.pos+" age?","Sleep tips for a "+currentMonth+"-month-old","When should "+pr.sub+" start solids?"].map(function(s,i){return <button key={i} onClick={function(){setChatInput(s);}} style={{background:t.lt,border:"none",borderRadius:8,padding:"8px 12px",fontSize:".82rem",color:t.dk,cursor:"pointer",textAlign:"left",fontWeight:500}}>{s}</button>;})}
                 </div>
               </div>
             )}
@@ -1021,7 +1024,7 @@ export default function BabyTracker({ session }){
           </div>
           <div style={{padding:"10px 14px",borderTop:"1px solid #eee",display:"flex",gap:8,flexShrink:0}}>
             <input ref={chatInputRef} value={chatInput} onChange={function(e){setChatInput(e.target.value);}} onKeyDown={function(e){if(e.key==="Enter")sendChat();}} placeholder="Ask about baby care..." style={{flex:1,padding:"10px 14px",border:"1.5px solid "+(t.mid),borderRadius:10,fontSize:".86rem",outline:"none"}}/>
-            <button onClick={sendChat} disabled={!chatInput.trim()||chatLoading} style={{background:BRAND,color:"#fff",border:"none",borderRadius:10,padding:"0 18px",fontWeight:700,cursor:chatInput.trim()&&!chatLoading?"pointer":"not-allowed",opacity:chatInput.trim()&&!chatLoading?1:.5,fontSize:".86rem"}}>Send</button>
+            <button onClick={sendChat} disabled={!chatInput.trim()||chatLoading} style={{background:t.pri,color:"#fff",border:"none",borderRadius:10,padding:"0 18px",fontWeight:700,cursor:chatInput.trim()&&!chatLoading?"pointer":"not-allowed",opacity:chatInput.trim()&&!chatLoading?1:.5,fontSize:".86rem"}}>Send</button>
           </div>
         </div>
       )}

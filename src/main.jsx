@@ -5,6 +5,18 @@ import App from './App.jsx'
 import Auth from './Auth.jsx'
 import './index.css'
 
+// Clear old service workers and caches on every load
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.getRegistrations().then(function (regs) {
+    regs.forEach(function (r) { r.unregister(); });
+  });
+}
+if ('caches' in window) {
+  caches.keys().then(function (names) {
+    names.forEach(function (name) { caches.delete(name); });
+  });
+}
+
 function Root() {
   const [session, setSession] = useState(null);
   const [loading, setLoading] = useState(true);
