@@ -10,6 +10,7 @@ function Root() {
   const [loading, setLoading] = useState(true);
 
   useEffect(function () {
+    if (!supabase) { setLoading(false); return; }
     supabase.auth.getSession().then(function (res) {
       setSession(res.data.session);
       setLoading(false);

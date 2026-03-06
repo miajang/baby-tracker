@@ -16,6 +16,7 @@ export default function Auth({ onLogin }) {
     setError("");
     setLoading(true);
     try {
+      if (!supabase) { setError("Database not configured"); setLoading(false); return; }
       var res;
       if (mode === "signup") {
         res = await supabase.auth.signUp({ email: email, password: password });
