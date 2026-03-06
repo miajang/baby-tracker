@@ -363,7 +363,6 @@ function MonthlySummarySection({ feeds, nightSleep, naps, growthEntries, profile
       <div style={{display:"flex",gap:12,flexWrap:"wrap",marginBottom:20}}>
         {[
           {label:"Days Tracked",value:daysTracked,icon:"\uD83D\uDCC5"},
-          {label:"Total Feeds",value:totalFeedCount,icon:"\uD83C\uDF7C"},
           {label:"Avg Intake / Day",value:avgOzPerDay+" oz",icon:"\uD83D\uDCCA"},
           {label:"Avg Sleep / Day",value:avgSleepPerDay,icon:"\uD83D\uDE34"}
         ].map(function(st,i){
