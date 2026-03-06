@@ -5,8 +5,10 @@ const BRAND = "#237a82";
 
 export default function Auth({ onLogin }) {
   const [mode, setMode] = useState("login");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const saved = function () { try { var v = localStorage.getItem("bt-login"); return v ? JSON.parse(v) : null; } catch(e) { return null; } }();
+  const [email, setEmail] = useState(saved ? saved.email : "");
+  const [password, setPassword] = useState(saved ? saved.password : "");
+  const [remember, setRemember] = useState(!!saved);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
@@ -25,8 +27,13 @@ export default function Auth({ onLogin }) {
       }
       if (res.error) {
         setError(res.error.message);
-      } else if (onLogin) {
-        onLogin(res.data.session);
+      } else {
+        if (remember) {
+          localStorage.setItem("bt-login", JSON.stringify({ email: email, password: password }));
+        } else {
+          localStorage.removeItem("bt-login");
+        }
+        if (onLogin) onLogin(res.data.session);
       }
     } catch (e) {
       setError(e.message || "Something went wrong");
@@ -69,8 +76,13 @@ export default function Auth({ onLogin }) {
           value={password}
           onChange={function (e) { setPassword(e.target.value); }}
           onKeyDown={function (e) { if (e.key === "Enter" && canSubmit) handleSubmit(); }}
-          style={{ width: "100%", padding: "10px 14px", border: "1.5px solid #ddd", borderRadius: 8, fontSize: ".92rem", marginBottom: 24, outline: "none", boxSizing: "border-box" }}
+          style={{ width: "100%", padding: "10px 14px", border: "1.5px solid #ddd", borderRadius: 8, fontSize: ".92rem", marginBottom: 16, outline: "none", boxSizing: "border-box" }}
         />
+
+        <label style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 20, cursor: "pointer", fontSize: ".84rem", color: "#666" }}>
+          <input type="checkbox" checked={remember} onChange={function () { setRemember(!remember); }} style={{ accentColor: BRAND, width: 16, height: 16, cursor: "pointer" }} />
+          Save login info
+        </label>
 
         <button
           type="submit"
