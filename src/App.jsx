@@ -736,7 +736,7 @@ export default function BabyTracker({ session }){
               <div style={{display:"flex",gap:8,flexWrap:"wrap",marginBottom:12}}>
                 <input placeholder="Brand" value={feedBrand} onChange={function(e){setFeedBrand(e.target.value);}} style={{width:80,padding:"8px 10px",border:"1.5px solid "+(t.mid),borderRadius:8,fontSize:".85rem",outline:"none"}}/>
                 <input placeholder="Notes" value={feedNote} onChange={function(e){setFeedNote(e.target.value);}} style={{flex:1,minWidth:50,padding:"8px 10px",border:"1.5px solid "+(t.mid),borderRadius:8,fontSize:".85rem",outline:"none"}}/>
-                <button onClick={addFeed} style={{background:t.pri,color:"#fff",border:"none",borderRadius:8,padding:"8px 16px",fontSize:".82rem",fontWeight:600,cursor:"pointer"}}>+ Add</button>
+                <button onClick={addFeed} style={{background:t.pri,color:"#fff",border:"none",borderRadius:6,padding:"6px 12px",fontSize:".78rem",fontWeight:600,cursor:"pointer"}}>Add</button>
               </div>
               <div style={{flex:1}}>
               {todayFeeds.length>0?todayFeeds.map(function(f){return(
@@ -744,7 +744,7 @@ export default function BabyTracker({ session }){
                   <div><strong>{f.oz} oz</strong> <span style={{color:C.sec}}>at {f.time}</span>{f.brand&&<span style={{background:t.badge,color:t.badgeTxt,borderRadius:10,padding:"1px 8px",fontSize:".7rem",marginLeft:6}}>{f.brand}</span>}{f.note&&<span style={{color:C.sec,marginLeft:6,fontStyle:"italic"}}>{f.note}</span>}</div>
                   <button onClick={function(){delFeed(f.id);}} style={{background:"none",border:"none",color:"#ccc",cursor:"pointer"}}>&#10005;</button>
                 </div>
-              );}):<div style={{fontSize:".82rem",color:C.help,fontStyle:"italic"}}>No feeds logged today</div>}
+              );}):<div style={{fontSize:".82rem",color:"#bbb",fontStyle:"italic"}}>No feeds logged today</div>}
               </div>
             </div>
 
@@ -756,7 +756,7 @@ export default function BabyTracker({ session }){
               <div style={{display:"flex",gap:10,flexWrap:"wrap",marginTop:12,marginBottom:12,alignItems:"flex-end"}}>
                 <div><div style={{fontSize:".72rem",color:C.sec,marginBottom:3}}>Start</div><TimeInput h={nsH1} m={nsM1} ap={nsAP1} onH={setNsH1} onM={setNsM1} onAP={setNsAP1} mid={t.mid}/></div>
                 <div><div style={{fontSize:".72rem",color:C.sec,marginBottom:3}}>End</div><TimeInput h={nsH2} m={nsM2} ap={nsAP2} onH={setNsH2} onM={setNsM2} onAP={setNsAP2} mid={t.mid}/></div>
-                <button onClick={addNight} style={{background:t.pri,color:"#fff",border:"none",borderRadius:8,padding:"8px 16px",fontSize:".82rem",fontWeight:600,cursor:"pointer",marginBottom:2}}>+ Add</button>
+                <button onClick={addNight} style={{background:t.pri,color:"#fff",border:"none",borderRadius:6,padding:"6px 12px",fontSize:".78rem",fontWeight:600,cursor:"pointer",marginBottom:2}}>Add</button>
               </div>
               <div style={{flex:1}}>
               {todayNights.length>0?todayNights.map(function(s){return(
@@ -764,7 +764,7 @@ export default function BabyTracker({ session }){
                   <span><strong>{s.start}</strong> &#8594; <strong>{s.end}</strong> <span style={{color:C.sec,marginLeft:6}}>({formatDurationExact(s.durMins||0)})</span></span>
                   <button onClick={function(){delNight(s.id);}} style={{background:"none",border:"none",color:"#ccc",cursor:"pointer"}}>&#10005;</button>
                 </div>
-              );}):<div style={{fontSize:".82rem",color:C.help,fontStyle:"italic"}}>No night sleep logged today</div>}
+              );}):<div style={{fontSize:".82rem",color:"#bbb",fontStyle:"italic"}}>No night sleep logged today</div>}
               </div>
             </div>
 
@@ -776,7 +776,7 @@ export default function BabyTracker({ session }){
               <div style={{display:"flex",gap:10,flexWrap:"wrap",marginTop:12,marginBottom:12,alignItems:"flex-end"}}>
                 <div><div style={{fontSize:".72rem",color:C.sec,marginBottom:3}}>Start</div><TimeInput h={napH1} m={napM1} ap={napAP1} onH={setNapH1} onM={setNapM1} onAP={setNapAP1} mid={t.mid}/></div>
                 <div><div style={{fontSize:".72rem",color:C.sec,marginBottom:3}}>End</div><TimeInput h={napH2} m={napM2} ap={napAP2} onH={setNapH2} onM={setNapM2} onAP={setNapAP2} mid={t.mid}/></div>
-                <button onClick={addNap} style={{background:t.pri,color:"#fff",border:"none",borderRadius:8,padding:"8px 16px",fontSize:".82rem",fontWeight:600,cursor:"pointer",marginBottom:2}}>+ Add</button>
+                <button onClick={addNap} style={{background:t.pri,color:"#fff",border:"none",borderRadius:6,padding:"6px 12px",fontSize:".78rem",fontWeight:600,cursor:"pointer",marginBottom:2}}>Add</button>
               </div>
               <div style={{flex:1}}>
               {todayNaps.length>0?todayNaps.map(function(s){return(
@@ -784,7 +784,7 @@ export default function BabyTracker({ session }){
                   <span><strong>{s.start}</strong> &#8594; <strong>{s.end}</strong> <span style={{color:C.sec,marginLeft:6}}>({formatDurationExact(s.durMins||0)})</span></span>
                   <button onClick={function(){delNap(s.id);}} style={{background:"none",border:"none",color:"#ccc",cursor:"pointer"}}>&#10005;</button>
                 </div>
-              );}):<div style={{fontSize:".82rem",color:C.help,fontStyle:"italic"}}>No naps logged today</div>}
+              );}):<div style={{fontSize:".82rem",color:"#bbb",fontStyle:"italic"}}>No naps logged today</div>}
               </div>
             </div>
             </div>
@@ -806,7 +806,7 @@ export default function BabyTracker({ session }){
                     <input type="text" inputMode="decimal" placeholder="Length" value={gL} onChange={function(e){var v=e.target.value;if(v===""||/^\d*\.?\d*$/.test(v))setGL(v);}} style={{width:80,padding:"8px 10px",border:"1.5px solid "+(t.mid),borderRadius:8,fontSize:".85rem",outline:"none"}}/>
                     <span style={{fontSize:".82rem",fontWeight:600,color:C.sec}}>in</span>
                   </div>
-                  <button onClick={addGrowth} style={{background:t.pri,color:"#fff",border:"none",borderRadius:8,padding:"8px 16px",fontSize:".82rem",fontWeight:600,cursor:"pointer"}}>+ Add</button>
+                  <button onClick={addGrowth} style={{background:t.pri,color:"#fff",border:"none",borderRadius:6,padding:"6px 12px",fontSize:".78rem",fontWeight:600,cursor:"pointer"}}>Add</button>
                 </div>
                 <div style={{flex:1}}>
                 {growthEntries.length>0?growthEntries.slice(0,10).map(function(g){
@@ -820,7 +820,7 @@ export default function BabyTracker({ session }){
                       {g.length&&<span><strong>{g.length} in</strong>{lP&&<span style={{color:t.pri,fontSize:".76rem",marginLeft:4}}>({lP})</span>}</span>}
                     </div>
                     <button onClick={function(){delGrowth(g.id);}} style={{background:"none",border:"none",color:"#ccc",cursor:"pointer"}}>{"\u2715"}</button>
-                  </div>);}):<div style={{fontSize:".82rem",color:C.help,fontStyle:"italic"}}>No entries yet. Record at each well-child visit.</div>}
+                  </div>);}):<div style={{fontSize:".82rem",color:"#bbb",fontStyle:"italic"}}>No entries yet. Record at each well-child visit.</div>}
                 </div>
               </div>
               {/* Right: growth insights */}
@@ -853,7 +853,7 @@ export default function BabyTracker({ session }){
                 );
               })()}
             </div>
-            <div style={{fontSize:".72rem",color:C.help,marginTop:10,fontStyle:"italic"}}>Based on WHO Child Growth Standards (0-24 months). For precise guidance, consult your pediatrician.</div>
+            <div style={{fontSize:".72rem",color:"#bbb",marginTop:10,fontStyle:"italic"}}>Based on WHO Child Growth Standards (0-24 months). For precise guidance, consult your pediatrician.</div>
           </div>
 
           {/* MILESTONES */}

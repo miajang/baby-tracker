@@ -44,7 +44,7 @@ export default function Auth({ onLogin }) {
   return (
       <div style={{ fontFamily: "'Segoe UI',system-ui,sans-serif", background: "#fff", borderRadius: 16, padding: "36px 32px", maxWidth: 400, width: "100%", boxShadow: "0 4px 20px rgba(0,0,0,.08)" }}>
         <div style={{ textAlign: "center", marginBottom: 32 }}>
-          <div style={{ width: 48, height: 48, borderRadius: "50%", background: BRAND, display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 12px" }}>
+          <div style={{ width: 48, height: 48, borderRadius: "50%", background: "#e4a0b0", display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 12px" }}>
             <svg viewBox="0 0 24 24" style={{ width: 26, height: 26, fill: "none", stroke: "#fff", strokeWidth: 1.8, strokeLinecap: "round", strokeLinejoin: "round" }}>
               <g transform="translate(0,1.5)">
                 <path d="M9 12l-1.5 7H6.5a2 2 0 0 1 0-4h11a2 2 0 0 1 0 4h-1l-1.5-7" />
@@ -82,14 +82,14 @@ export default function Auth({ onLogin }) {
         />
 
         <label style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 20, cursor: "pointer", fontSize: ".84rem", color: "#666" }}>
-          <span onClick={function () { setRemember(!remember); }} style={{ width: 18, height: 18, borderRadius: 4, border: remember ? "none" : "1px solid #ccc", background: remember ? BRAND : "#fff", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", flexShrink: 0 }}>{remember && <svg viewBox="0 0 24 24" style={{ width: 12, height: 12, fill: "none", stroke: "#fff", strokeWidth: 3, strokeLinecap: "round", strokeLinejoin: "round" }}><polyline points="20 6 9 17 4 12"/></svg>}</span>
+          <span onClick={function () { setRemember(!remember); }} style={{ width: 18, height: 18, borderRadius: 4, border: remember ? "none" : "1px solid #ccc", background: remember ? "#e4a0b0" : "#fff", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", flexShrink: 0 }}>{remember && <svg viewBox="0 0 24 24" style={{ width: 12, height: 12, fill: "none", stroke: "#fff", strokeWidth: 3, strokeLinecap: "round", strokeLinejoin: "round" }}><polyline points="20 6 9 17 4 12"/></svg>}</span>
           Save login info
         </label>
 
         <button
           type="submit"
           disabled={!canSubmit}
-          style={{ width: "100%", background: BRAND, color: "#fff", border: "none", padding: "12px", borderRadius: 8, fontSize: ".95rem", fontWeight: 700, cursor: canSubmit ? "pointer" : "not-allowed", opacity: canSubmit ? 1 : 0.65, transition: "opacity .15s" }}
+          style={{ width: "100%", background: "#e4a0b0", color: "#fff", border: "none", padding: "12px", borderRadius: 8, fontSize: ".95rem", fontWeight: 700, cursor: canSubmit ? "pointer" : "not-allowed", opacity: canSubmit ? 1 : 0.65, transition: "opacity .15s" }}
         >
           {loading ? "Please wait..." : mode === "login" ? "Log In" : "Sign Up"}
         </button>
