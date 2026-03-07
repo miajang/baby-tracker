@@ -346,7 +346,7 @@ function MonthlySummarySection({ feeds, nightSleep, naps, growthEntries, profile
   var ths = {padding:"10px 14px",fontSize:".72rem",fontWeight:700,color:C.sec,textTransform:"uppercase",letterSpacing:".05em",borderBottom:"1px solid #ddd",textAlign:"left",whiteSpace:"nowrap"};
   var dash = <span style={{color:"#ccc"}}>&mdash;</span>;
 
-  var arrowStyle = function(enabled){ return {width:34,height:34,borderRadius:8,border:"1px solid "+(enabled?"#ccc":"#ddd"),background:enabled?"#fff":"#f5f5f5",cursor:enabled?"pointer":"not-allowed",display:"flex",alignItems:"center",justifyContent:"center",opacity:enabled?1:0.5}; };
+  var arrowStyle = function(enabled){ return {width:34,height:34,borderRadius:8,border:"1px solid "+(enabled?"#ccc":"#ddd"),background:"#fff",cursor:enabled?"pointer":"not-allowed",display:"flex",alignItems:"center",justifyContent:"center",opacity:enabled?1:0.5}; };
 
   return (
     <div ref={sectionRef} data-sec="summary" style={{marginBottom:20}}>
