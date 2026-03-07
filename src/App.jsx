@@ -349,7 +349,7 @@ function MonthlySummarySection({ feeds, nightSleep, naps, growthEntries, profile
   var arrowStyle = function(enabled){ return {width:34,height:34,borderRadius:8,border:"1.5px solid "+(enabled?t.mid:"#eee"),background:enabled?"#fff":"#fafafa",cursor:enabled?"pointer":"not-allowed",display:"flex",alignItems:"center",justifyContent:"center",opacity:enabled?1:0.35}; };
 
   return (
-    <div ref={sectionRef} data-sec="summary" style={{marginBottom:20,scrollMarginTop:HEADER_H,background:"#fff",borderRadius:12,padding:"22px 24px",boxShadow:"0 2px 8px rgba(0,0,0,.04)"}}>
+    <div ref={sectionRef} data-sec="summary" style={{marginBottom:20,scrollMarginTop:HEADER_H}}>
       <div style={{fontSize:"1.05rem",fontWeight:600,color:t.pri,marginBottom:14,display:"flex",alignItems:"center",gap:8}}><NavIcon type="summary" color={t.pri}/> Summary</div>
 
       <div style={{display:"flex",alignItems:"center",gap:14,marginBottom:20}}>
@@ -377,7 +377,7 @@ function MonthlySummarySection({ feeds, nightSleep, naps, growthEntries, profile
         })}
       </div>
 
-      <div style={{background:"#fff",borderRadius:12,padding:"18px 20px",boxShadow:"0 2px 6px rgba(0,0,0,.05)",marginBottom:16}}>
+      <div style={{background:"#fff",borderRadius:12,padding:"18px 20px",boxShadow:"0 2px 8px rgba(0,0,0,.04)",marginBottom:16}}>
         <div style={{fontSize:".9rem",fontWeight:700,color:C.h,marginBottom:14}}>Feeding & Sleep Log</div>
         {fsRows.length === 0 ? (
           <div style={{fontSize:".84rem",color:C.help,fontStyle:"italic",padding:"16px 0",textAlign:"center"}}>No feeding or sleep data for {selLabel}.</div>
@@ -411,7 +411,7 @@ function MonthlySummarySection({ feeds, nightSleep, naps, growthEntries, profile
         )}
       </div>
 
-      <div style={{background:"#fff",borderRadius:12,padding:"18px 20px",boxShadow:"0 2px 6px rgba(0,0,0,.05)"}}>
+      <div style={{background:"#fff",borderRadius:12,padding:"18px 20px",boxShadow:"0 2px 8px rgba(0,0,0,.04)"}}>
         <div style={{fontSize:".9rem",fontWeight:700,color:C.h,marginBottom:14}}>Growth Record</div>
         {gRows.length === 0 ? (
           <div style={{fontSize:".84rem",color:C.help,fontStyle:"italic",padding:"16px 0",textAlign:"center"}}>No growth entries for {selLabel}.</div>
@@ -714,12 +714,12 @@ export default function BabyTracker({ session }){
           </div>
 
           {/* TRACKER */}
-          <div ref={function(el){sectionRefs.current.tracker=el;}} data-sec="tracker" style={{marginBottom:20,scrollMarginTop:HEADER_H,background:"#fff",borderRadius:12,padding:"22px 24px",boxShadow:"0 2px 8px rgba(0,0,0,.04)"}}>
+          <div ref={function(el){sectionRefs.current.tracker=el;}} data-sec="tracker" style={{marginBottom:20,scrollMarginTop:HEADER_H}}>
             <div style={{fontSize:"1.05rem",fontWeight:600,color:t.pri,marginBottom:14,display:"flex",alignItems:"center",gap:8}}><NavIcon type="tracker" color={t.pri}/> Tracker</div>
 
             <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(260px,1fr))",gap:14}}>
             {/* Formula Log card */}
-            <div style={{background:"#f8faf9",borderRadius:12,padding:"18px 20px",display:"flex",flexDirection:"column"}}>
+            <div style={{background:"#fff",borderRadius:12,padding:"18px 20px",display:"flex",flexDirection:"column",boxShadow:"0 2px 8px rgba(0,0,0,.04)"}}>
               <div style={{fontSize:".9rem",fontWeight:700,color:C.h,marginBottom:4}}>&#x1F37C; Formula Log</div>
               {todayFeeds.length>0&&<div style={{fontSize:".82rem",color:C.body,fontWeight:600,marginTop:2,marginBottom:12}}>Total: {todayOz} oz ({todayFeeds.length} feed{todayFeeds.length!==1?"s":""})</div>}
               {todayFeeds.length===0&&<div style={{height:12}}/>}
@@ -749,7 +749,7 @@ export default function BabyTracker({ session }){
             </div>
 
             {/* Night Sleep card */}
-            <div style={{background:"#f8faf9",borderRadius:12,padding:"18px 20px",display:"flex",flexDirection:"column"}}>
+            <div style={{background:"#fff",borderRadius:12,padding:"18px 20px",display:"flex",flexDirection:"column",boxShadow:"0 2px 8px rgba(0,0,0,.04)"}}>
               <div style={{fontSize:".9rem",fontWeight:700,color:C.h}}>&#x1F319; Night Sleep</div>
               {todayNightMins>0&&<div style={{fontSize:".82rem",color:C.body,fontWeight:600,marginTop:6,marginBottom:4}}>Total: {formatDurationExact(todayNightMins)}</div>}
               {nightEval&&<div style={{padding:"10px 14px",background:t.lt,borderRadius:8,marginTop:8,fontSize:".82rem",color:C.body,lineHeight:1.5}}>{nightEval}</div>}
@@ -769,7 +769,7 @@ export default function BabyTracker({ session }){
             </div>
 
             {/* Daily Naps card */}
-            <div style={{background:"#f8faf9",borderRadius:12,padding:"18px 20px",display:"flex",flexDirection:"column"}}>
+            <div style={{background:"#fff",borderRadius:12,padding:"18px 20px",display:"flex",flexDirection:"column",boxShadow:"0 2px 8px rgba(0,0,0,.04)"}}>
               <div style={{fontSize:".9rem",fontWeight:700,color:C.h}}>&#x1F634; Daily Naps</div>
               {todayNapMins>0&&<div style={{fontSize:".82rem",color:C.body,fontWeight:600,marginTop:6,marginBottom:4}}>Total: {formatDurationExact(todayNapMins)}</div>}
               {napEval&&<div style={{padding:"10px 14px",background:t.lt,borderRadius:8,marginTop:8,fontSize:".82rem",color:C.body,lineHeight:1.5}}>{napEval}</div>}
@@ -791,11 +791,11 @@ export default function BabyTracker({ session }){
           </div>
 
           {/* GROWTH */}
-          <div ref={function(el){sectionRefs.current.growth=el;}} data-sec="growth" style={{marginBottom:20,scrollMarginTop:HEADER_H,background:"#fff",borderRadius:12,padding:"22px 24px",boxShadow:"0 2px 8px rgba(0,0,0,.04)"}}>
+          <div ref={function(el){sectionRefs.current.growth=el;}} data-sec="growth" style={{marginBottom:20,scrollMarginTop:HEADER_H}}>
             <div style={{fontSize:"1.05rem",fontWeight:600,color:t.pri,marginBottom:14,display:"flex",alignItems:"center",gap:8}}><NavIcon type="growth" color={t.pri}/> Growth</div>
             <div className="btGrowthGrid" style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:14}}>
               {/* Left: input + log */}
-              <div style={{background:"#f8faf9",borderRadius:12,padding:"18px 20px",display:"flex",flexDirection:"column"}}>
+              <div style={{background:"#fff",borderRadius:12,padding:"18px 20px",display:"flex",flexDirection:"column",boxShadow:"0 2px 8px rgba(0,0,0,.04)"}}>
                 <div style={{fontSize:".88rem",fontWeight:700,color:C.h,marginBottom:12}}>Measurement</div>
                 <div style={{display:"flex",gap:8,flexWrap:"wrap",marginBottom:12}}>
                   <div style={{display:"flex",alignItems:"center",gap:4}}>
@@ -834,7 +834,7 @@ export default function BabyTracker({ session }){
                 var lLoIn=((lMedCm*0.96)/2.54).toFixed(1);
                 var lHiIn=((lMedCm*1.04)/2.54).toFixed(1);
                 return(
-                <div style={{background:"#f8faf9",borderRadius:12,padding:"18px 20px",display:"flex",flexDirection:"column"}}>
+                <div style={{background:"#fff",borderRadius:12,padding:"18px 20px",display:"flex",flexDirection:"column",boxShadow:"0 2px 8px rgba(0,0,0,.04)"}}>
                   <div style={{fontSize:".88rem",fontWeight:700,color:C.h,marginBottom:4}}>Growth Insights</div>
                   <div style={{fontSize:".78rem",color:C.sec,marginBottom:16}}>At {mo} month{mo!==1?"s":""} ({isGirl?"girls":"boys"})</div>
                   <div style={{display:"flex",gap:12}}>
@@ -857,7 +857,7 @@ export default function BabyTracker({ session }){
           </div>
 
           {/* MILESTONES */}
-          <div ref={function(el){sectionRefs.current.milestones=el;}} data-sec="milestones" style={{marginBottom:20,scrollMarginTop:HEADER_H,background:"#fff",borderRadius:12,padding:"22px 24px",boxShadow:"0 2px 8px rgba(0,0,0,.04)"}}>
+          <div ref={function(el){sectionRefs.current.milestones=el;}} data-sec="milestones" style={{marginBottom:20,scrollMarginTop:HEADER_H}}>
             <div style={{fontSize:"1.05rem",fontWeight:600,color:t.pri,marginBottom:6,display:"flex",alignItems:"center",gap:8}}><NavIcon type="milestones" color={t.pri}/> Milestones</div>
             <p style={{fontSize:".84rem",color:C.sec,marginBottom:16,lineHeight:1.5}}>Month-by-month developmental milestones based on CDC and AAP guidelines. Check all that apply as {profile.name} achieves them.</p>
 
@@ -959,7 +959,7 @@ export default function BabyTracker({ session }){
           <MonthlySummarySection feeds={feeds} nightSleep={nightSleep} naps={naps} growthEntries={growthEntries} profile={profile} age={age} t={t} sectionRef={function(el){sectionRefs.current.summary=el;}} />
 
           {/* EDUCATION */}
-          <div ref={function(el){sectionRefs.current.education=el;}} data-sec="education" style={{marginBottom:20,scrollMarginTop:HEADER_H,background:"#fff",borderRadius:12,padding:"22px 24px",boxShadow:"0 2px 8px rgba(0,0,0,.04)"}}>
+          <div ref={function(el){sectionRefs.current.education=el;}} data-sec="education" style={{marginBottom:20,scrollMarginTop:HEADER_H}}>
             <div style={{fontSize:"1.05rem",fontWeight:600,color:t.pri,marginBottom:6,display:"flex",alignItems:"center",gap:8}}><NavIcon type="education" color={t.pri}/> Education</div>
             <p style={{fontSize:".84rem",color:C.sec,marginBottom:16,lineHeight:1.5}}>Evidence-based guidance from CDC, AAP, and WHO.</p>
 
@@ -1028,10 +1028,10 @@ export default function BabyTracker({ session }){
           </div>
 
           {/* RESOURCES */}
-          <div ref={function(el){sectionRefs.current.resources=el;}} data-sec="resources" style={{marginBottom:20,scrollMarginTop:HEADER_H,background:"#fff",borderRadius:12,padding:"22px 24px",boxShadow:"0 2px 8px rgba(0,0,0,.04)"}}>
+          <div ref={function(el){sectionRefs.current.resources=el;}} data-sec="resources" style={{marginBottom:20,scrollMarginTop:HEADER_H}}>
             <div style={{fontSize:"1.05rem",fontWeight:600,color:t.pri,marginBottom:6,display:"flex",alignItems:"center",gap:8}}><NavIcon type="resources" color={t.pri}/> Resources</div>
             <p style={{fontSize:".84rem",color:C.sec,marginBottom:16,lineHeight:1.5}}>Credible sources for learning more about your baby's development, health, and well-being.</p>
-            <div style={{background:"#fff",borderRadius:12,padding:"18px 20px",boxShadow:"0 2px 6px rgba(0,0,0,.05)"}}>
+            <div style={{background:"#fff",borderRadius:12,padding:"18px 20px",boxShadow:"0 2px 8px rgba(0,0,0,.04)"}}>
               {resourcesData.map(function(r,i){return(
                 <div key={i} style={{padding:"10px 0",borderBottom:i<resourcesData.length-1?"1px solid #f5f5f5":"none"}}>
                   <a href={r.url} target="_blank" rel="noopener noreferrer" style={{fontSize:".88rem",fontWeight:600,color:C.body,textDecoration:"none"}}>{r.name}</a>
