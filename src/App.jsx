@@ -716,7 +716,9 @@ export default function BabyTracker({ session }){
           <div ref={function(el){sectionRefs.current.tracker=el;}} data-sec="tracker" style={{marginBottom:20,scrollMarginTop:HEADER_H,background:"#fff",borderRadius:12,padding:"22px 24px",boxShadow:"0 1px 3px rgba(0,0,0,.04)"}}>
             <div style={{fontSize:"1.05rem",fontWeight:600,color:t.pri,marginBottom:14,display:"flex",alignItems:"center",gap:8}}><NavIcon type="tracker" color={t.pri}/> Tracker</div>
 
-            <div style={{background:"#fff",borderRadius:12,padding:"18px 20px",marginBottom:16,boxShadow:"0 2px 6px rgba(0,0,0,.05)"}}>
+            <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(260px,1fr))",gap:14}}>
+            {/* Formula Log card */}
+            <div style={{background:"#f8faf9",borderRadius:12,padding:"18px 20px",display:"flex",flexDirection:"column"}}>
               <div style={{fontSize:".9rem",fontWeight:700,color:C.h,marginBottom:4}}>&#x1F37C; Formula Log</div>
               {todayFeeds.length>0&&<div style={{fontSize:".82rem",color:C.body,fontWeight:600,marginTop:2,marginBottom:12}}>Total: {todayOz} oz ({todayFeeds.length} feed{todayFeeds.length!==1?"s":""})</div>}
               {todayFeeds.length===0&&<div style={{height:12}}/>}
@@ -731,19 +733,22 @@ export default function BabyTracker({ session }){
                 </div>
               </div>
               <div style={{display:"flex",gap:8,flexWrap:"wrap",marginBottom:12}}>
-                <input placeholder="Brand" value={feedBrand} onChange={function(e){setFeedBrand(e.target.value);}} style={{width:100,padding:"8px 10px",border:"1.5px solid "+(t.mid),borderRadius:8,fontSize:".85rem",outline:"none"}}/>
-                <input placeholder="Notes" value={feedNote} onChange={function(e){setFeedNote(e.target.value);}} style={{flex:1,minWidth:60,padding:"8px 10px",border:"1.5px solid "+(t.mid),borderRadius:8,fontSize:".85rem",outline:"none"}}/>
+                <input placeholder="Brand" value={feedBrand} onChange={function(e){setFeedBrand(e.target.value);}} style={{width:80,padding:"8px 10px",border:"1.5px solid "+(t.mid),borderRadius:8,fontSize:".85rem",outline:"none"}}/>
+                <input placeholder="Notes" value={feedNote} onChange={function(e){setFeedNote(e.target.value);}} style={{flex:1,minWidth:50,padding:"8px 10px",border:"1.5px solid "+(t.mid),borderRadius:8,fontSize:".85rem",outline:"none"}}/>
                 <button onClick={addFeed} style={{background:t.pri,color:"#fff",border:"none",borderRadius:8,padding:"8px 16px",fontSize:".82rem",fontWeight:600,cursor:"pointer"}}>+ Add</button>
               </div>
+              <div style={{flex:1}}>
               {todayFeeds.length>0?todayFeeds.map(function(f){return(
-                <div key={f.id} style={{display:"flex",alignItems:"center",justifyContent:"space-between",padding:"7px 0",borderBottom:"1px solid #f5f5f5",fontSize:".84rem"}}>
+                <div key={f.id} style={{display:"flex",alignItems:"center",justifyContent:"space-between",padding:"7px 0",borderBottom:"1px solid #f0f0f0",fontSize:".84rem"}}>
                   <div><strong>{f.oz} oz</strong> <span style={{color:C.sec}}>at {f.time}</span>{f.brand&&<span style={{background:t.badge,color:t.badgeTxt,borderRadius:10,padding:"1px 8px",fontSize:".7rem",marginLeft:6}}>{f.brand}</span>}{f.note&&<span style={{color:C.sec,marginLeft:6,fontStyle:"italic"}}>{f.note}</span>}</div>
                   <button onClick={function(){delFeed(f.id);}} style={{background:"none",border:"none",color:"#ccc",cursor:"pointer"}}>&#10005;</button>
                 </div>
               );}):<div style={{fontSize:".82rem",color:C.help,fontStyle:"italic"}}>No feeds logged today</div>}
+              </div>
             </div>
 
-            <div style={{background:"#fff",borderRadius:12,padding:"18px 20px",marginBottom:16,boxShadow:"0 2px 6px rgba(0,0,0,.05)"}}>
+            {/* Night Sleep card */}
+            <div style={{background:"#f8faf9",borderRadius:12,padding:"18px 20px",display:"flex",flexDirection:"column"}}>
               <div style={{fontSize:".9rem",fontWeight:700,color:C.h}}>&#x1F319; Night Sleep</div>
               {todayNightMins>0&&<div style={{fontSize:".82rem",color:C.body,fontWeight:600,marginTop:6,marginBottom:4}}>Total: {formatDurationExact(todayNightMins)}</div>}
               {nightEval&&<div style={{padding:"10px 14px",background:t.lt,borderRadius:8,marginTop:8,fontSize:".82rem",color:C.body,lineHeight:1.5}}>{nightEval}</div>}
@@ -752,15 +757,18 @@ export default function BabyTracker({ session }){
                 <div><div style={{fontSize:".72rem",color:C.sec,marginBottom:3}}>End</div><TimeInput h={nsH2} m={nsM2} ap={nsAP2} onH={setNsH2} onM={setNsM2} onAP={setNsAP2} mid={t.mid}/></div>
                 <button onClick={addNight} style={{background:t.pri,color:"#fff",border:"none",borderRadius:8,padding:"8px 16px",fontSize:".82rem",fontWeight:600,cursor:"pointer",marginBottom:2}}>+ Add</button>
               </div>
+              <div style={{flex:1}}>
               {todayNights.length>0?todayNights.map(function(s){return(
-                <div key={s.id} style={{display:"flex",alignItems:"center",justifyContent:"space-between",padding:"7px 0",borderBottom:"1px solid #f5f5f5",fontSize:".84rem"}}>
+                <div key={s.id} style={{display:"flex",alignItems:"center",justifyContent:"space-between",padding:"7px 0",borderBottom:"1px solid #f0f0f0",fontSize:".84rem"}}>
                   <span><strong>{s.start}</strong> &#8594; <strong>{s.end}</strong> <span style={{color:C.sec,marginLeft:6}}>({formatDurationExact(s.durMins||0)})</span></span>
                   <button onClick={function(){delNight(s.id);}} style={{background:"none",border:"none",color:"#ccc",cursor:"pointer"}}>&#10005;</button>
                 </div>
               );}):<div style={{fontSize:".82rem",color:C.help,fontStyle:"italic"}}>No night sleep logged today</div>}
+              </div>
             </div>
 
-            <div style={{background:"#fff",borderRadius:12,padding:"18px 20px",boxShadow:"0 2px 6px rgba(0,0,0,.05)"}}>
+            {/* Daily Naps card */}
+            <div style={{background:"#f8faf9",borderRadius:12,padding:"18px 20px",display:"flex",flexDirection:"column"}}>
               <div style={{fontSize:".9rem",fontWeight:700,color:C.h}}>&#x1F634; Daily Naps</div>
               {todayNapMins>0&&<div style={{fontSize:".82rem",color:C.body,fontWeight:600,marginTop:6,marginBottom:4}}>Total: {formatDurationExact(todayNapMins)}</div>}
               {napEval&&<div style={{padding:"10px 14px",background:t.lt,borderRadius:8,marginTop:8,fontSize:".82rem",color:C.body,lineHeight:1.5}}>{napEval}</div>}
@@ -769,12 +777,15 @@ export default function BabyTracker({ session }){
                 <div><div style={{fontSize:".72rem",color:C.sec,marginBottom:3}}>End</div><TimeInput h={napH2} m={napM2} ap={napAP2} onH={setNapH2} onM={setNapM2} onAP={setNapAP2} mid={t.mid}/></div>
                 <button onClick={addNap} style={{background:t.pri,color:"#fff",border:"none",borderRadius:8,padding:"8px 16px",fontSize:".82rem",fontWeight:600,cursor:"pointer",marginBottom:2}}>+ Add</button>
               </div>
+              <div style={{flex:1}}>
               {todayNaps.length>0?todayNaps.map(function(s){return(
-                <div key={s.id} style={{display:"flex",alignItems:"center",justifyContent:"space-between",padding:"7px 0",borderBottom:"1px solid #f5f5f5",fontSize:".84rem"}}>
+                <div key={s.id} style={{display:"flex",alignItems:"center",justifyContent:"space-between",padding:"7px 0",borderBottom:"1px solid #f0f0f0",fontSize:".84rem"}}>
                   <span><strong>{s.start}</strong> &#8594; <strong>{s.end}</strong> <span style={{color:C.sec,marginLeft:6}}>({formatDurationExact(s.durMins||0)})</span></span>
                   <button onClick={function(){delNap(s.id);}} style={{background:"none",border:"none",color:"#ccc",cursor:"pointer"}}>&#10005;</button>
                 </div>
               );}):<div style={{fontSize:".82rem",color:C.help,fontStyle:"italic"}}>No naps logged today</div>}
+              </div>
+            </div>
             </div>
           </div>
 
