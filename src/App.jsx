@@ -253,10 +253,10 @@ function TimeInput({h,m,ap,onH,onM,onAP,mid}){
   const fw=52;
   return(
     <div style={{display:"flex",alignItems:"center",gap:4}}>
-      <input placeholder="Hr" inputMode="numeric" value={h} onChange={e=>{const v=e.target.value.replace(/\D/g,"");if(v===""||(/^\d{1,2}$/.test(v)&&parseInt(v)<=12))onH(v);}} style={{width:fw,padding:"8px 4px",border:"1.5px solid "+(mid),borderRadius:8,fontSize:".85rem",outline:"none",textAlign:"center"}}/>
+      <input placeholder="Hr" inputMode="numeric" value={h} onChange={e=>{const v=e.target.value.replace(/\D/g,"");if(v===""||(/^\d{1,2}$/.test(v)&&parseInt(v)<=12))onH(v);}} style={{width:fw,padding:"8px 4px",border:"1px solid "+(mid),borderRadius:8,fontSize:".85rem",outline:"none",textAlign:"center"}}/>
       <span style={{color:"#bbb",fontWeight:600}}>:</span>
-      <input placeholder="Min" inputMode="numeric" value={m} onChange={e=>{const v=e.target.value.replace(/\D/g,"");if(v===""||(/^\d{1,2}$/.test(v)&&parseInt(v)<=59))onM(v);}} style={{width:fw,padding:"8px 4px",border:"1.5px solid "+(mid),borderRadius:8,fontSize:".85rem",outline:"none",textAlign:"center"}}/>
-      <div style={{display:"flex",borderRadius:6,overflow:"hidden",border:"1.5px solid "+(mid)}}>
+      <input placeholder="Min" inputMode="numeric" value={m} onChange={e=>{const v=e.target.value.replace(/\D/g,"");if(v===""||(/^\d{1,2}$/.test(v)&&parseInt(v)<=59))onM(v);}} style={{width:fw,padding:"8px 4px",border:"1px solid "+(mid),borderRadius:8,fontSize:".85rem",outline:"none",textAlign:"center"}}/>
+      <div style={{display:"flex",borderRadius:6,overflow:"hidden",border:"1px solid "+(mid)}}>
         <button onClick={()=>onAP("AM")} style={{padding:"7px 8px",fontSize:".74rem",fontWeight:600,background:ap==="AM"?"#eee":"#fff",border:"none",cursor:"pointer",color:ap==="AM"?C.h:"#bbb"}}>AM</button>
         <button onClick={()=>onAP("PM")} style={{padding:"7px 8px",fontSize:".74rem",fontWeight:600,background:ap==="PM"?"#eee":"#fff",border:"none",cursor:"pointer",color:ap==="PM"?C.h:"#bbb",borderLeft:"1px solid "+(mid)}}>PM</button>
       </div>
@@ -346,7 +346,7 @@ function MonthlySummarySection({ feeds, nightSleep, naps, growthEntries, profile
   var ths = {padding:"10px 14px",fontSize:".72rem",fontWeight:700,color:C.sec,textTransform:"uppercase",letterSpacing:".05em",borderBottom:"2px solid "+(t.mid),textAlign:"left",whiteSpace:"nowrap"};
   var dash = <span style={{color:"#ccc"}}>&mdash;</span>;
 
-  var arrowStyle = function(enabled){ return {width:34,height:34,borderRadius:8,border:"1.5px solid "+(enabled?t.mid:"#eee"),background:enabled?"#fff":"#fafafa",cursor:enabled?"pointer":"not-allowed",display:"flex",alignItems:"center",justifyContent:"center",opacity:enabled?1:0.35}; };
+  var arrowStyle = function(enabled){ return {width:34,height:34,borderRadius:8,border:"1px solid "+(enabled?t.mid:"#eee"),background:enabled?"#fff":"#fafafa",cursor:enabled?"pointer":"not-allowed",display:"flex",alignItems:"center",justifyContent:"center",opacity:enabled?1:0.35}; };
 
   return (
     <div ref={sectionRef} data-sec="summary" style={{marginBottom:20,scrollMarginTop:HEADER_H}}>
@@ -568,7 +568,7 @@ export default function BabyTracker({ session }){
           <div style={{fontSize:"1.3rem",marginBottom:2}}><span style={{fontWeight:500,color:"#d4899e"}}>Baby</span><span style={{fontWeight:300,color:"#d4899e"}}>Tracker</span></div>
           <div style={{fontSize:".82rem",color:"#aaa",marginBottom:28}}>Every Milestone Matters</div>
           <div style={{fontSize:".78rem",fontWeight:600,color:C.sec,textTransform:"uppercase",letterSpacing:".06em",marginBottom:6}}>Name</div>
-          <input value={profile.name} onChange={function(e){setProfile(function(pv){return Object.assign({},pv,{name:e.target.value});});}} style={{width:"100%",padding:"10px 14px",border:"1.5px solid #ddd",borderRadius:8,fontSize:".92rem",marginBottom:16,outline:"none",boxSizing:"border-box"}}/>
+          <input value={profile.name} onChange={function(e){setProfile(function(pv){return Object.assign({},pv,{name:e.target.value});});}} style={{width:"100%",padding:"10px 14px",border:"1px solid #ddd",borderRadius:8,fontSize:".92rem",marginBottom:16,outline:"none",boxSizing:"border-box"}}/>
           <div style={{fontSize:".78rem",fontWeight:600,color:C.sec,textTransform:"uppercase",letterSpacing:".06em",marginBottom:6}}>Gender</div>
           <div style={{display:"flex",gap:10,marginBottom:16}}>
             {["girl","boy"].map(function(g){var gc=g==="girl"?"#d4899e":"#6a9fd8";var glc=g==="girl"?"#fefafb":"#f5f9fd";var sel=(profile.gender||"girl")===g;return(
@@ -576,7 +576,7 @@ export default function BabyTracker({ session }){
             );})}
           </div>
           <div style={{fontSize:".78rem",fontWeight:600,color:C.sec,textTransform:"uppercase",letterSpacing:".06em",marginBottom:6}}>Birth Date</div>
-          <input type="date" value={profile.birthDate} onChange={function(e){var v=e.target.value;var yr=parseInt(v.split("-")[0],10);if(yr<1900||yr>2100)return;setProfile(function(pv){return Object.assign({},pv,{birthDate:v});});}} style={{width:"100%",padding:"10px 14px",border:"1.5px solid #ddd",borderRadius:8,fontSize:".92rem",marginBottom:6,outline:"none",boxSizing:"border-box"}}/>
+          <input type="date" value={profile.birthDate} onChange={function(e){var v=e.target.value;var yr=parseInt(v.split("-")[0],10);if(yr<1900||yr>2100)return;setProfile(function(pv){return Object.assign({},pv,{birthDate:v});});}} style={{width:"100%",padding:"10px 14px",border:"1px solid #ddd",borderRadius:8,fontSize:".92rem",marginBottom:6,outline:"none",boxSizing:"border-box"}}/>
           {profile.birthDate&&<div style={{fontSize:".8rem",color:themes[theme].pri,fontWeight:600,marginBottom:16}}>{calcAge(profile.birthDate).label} old</div>}
           <div style={{fontSize:".78rem",fontWeight:600,color:C.sec,textTransform:"uppercase",letterSpacing:".06em",marginBottom:10}}>Theme Color</div>
           <div style={{display:"flex",gap:14,marginBottom:28}}>
@@ -596,7 +596,7 @@ export default function BabyTracker({ session }){
     <div style={{position:"absolute",right:0,top:42,background:"#fff",border:"1px solid #e8e8e8",borderRadius:12,padding:"16px 18px",boxShadow:"0 6px 24px rgba(0,0,0,.12)",zIndex:200,width:260}} onClick={function(e){e.stopPropagation();}}>
       <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:14}}>
         <div style={{fontSize:".78rem",color:C.h,fontWeight:700}}>Settings</div>
-        <button onClick={function(e){e.stopPropagation();setSettingsOpen(false);}} style={{width:24,height:24,borderRadius:6,background:"none",border:"1.5px solid "+(t.mid),cursor:"pointer",fontSize:".75rem",color:t.pri,display:"flex",alignItems:"center",justifyContent:"center",fontWeight:700}}>&#10005;</button>
+        <button onClick={function(e){e.stopPropagation();setSettingsOpen(false);}} style={{width:24,height:24,borderRadius:6,background:"none",border:"1px solid "+(t.mid),cursor:"pointer",fontSize:".75rem",color:t.pri,display:"flex",alignItems:"center",justifyContent:"center",fontWeight:700}}>&#10005;</button>
       </div>
       <div style={{fontSize:".7rem",color:C.sec,fontWeight:700,textTransform:"uppercase",letterSpacing:".07em",marginBottom:8}}>Baby Profile</div>
       <div style={{fontSize:".72rem",fontWeight:600,color:C.sec,marginBottom:4}}>Name</div>
@@ -604,7 +604,7 @@ export default function BabyTracker({ session }){
       <div style={{fontSize:".72rem",fontWeight:600,color:C.sec,marginBottom:4}}>Gender</div>
       <div style={{display:"flex",gap:8,marginBottom:10}}>
         {["girl","boy"].map(function(g){var gc=g==="girl"?"#d4899e":"#6a9fd8";var glc=g==="girl"?"#fefafb":"#f5f9fd";var sel=(profile.gender||"girl")===g;return(
-          <button key={g} onClick={function(){var np=Object.assign({},profile,{gender:g});setProfile(np);if(userId)db.saveProfile(userId,Object.assign({},np,{theme:theme}));}} style={{flex:1,padding:"7px 0",borderRadius:8,border:sel?"1.5px solid "+gc:"1px solid #e0e0e0",background:sel?glc:"#fff",color:sel?gc:"#999",fontWeight:600,fontSize:".82rem",cursor:"pointer",transition:"all .15s",textTransform:"capitalize"}}>{g}</button>
+          <button key={g} onClick={function(){var np=Object.assign({},profile,{gender:g});setProfile(np);if(userId)db.saveProfile(userId,Object.assign({},np,{theme:theme}));}} style={{flex:1,padding:"7px 0",borderRadius:8,border:sel?"1px solid "+gc:"1px solid #e0e0e0",background:sel?glc:"#fff",color:sel?gc:"#999",fontWeight:600,fontSize:".82rem",cursor:"pointer",transition:"all .15s",textTransform:"capitalize"}}>{g}</button>
         );})}
       </div>
       <div style={{fontSize:".72rem",fontWeight:600,color:C.sec,marginBottom:4}}>Birth Date</div>
@@ -627,7 +627,7 @@ export default function BabyTracker({ session }){
       <div style={{position:"fixed",top:0,left:0,right:0,bottom:0,zIndex:999,display:"flex",alignItems:"center",justifyContent:"center"}}>
         <div onClick={function(){setLoginOpen(false);}} style={{position:"absolute",top:0,left:0,right:0,bottom:0,background:"rgba(0,0,0,.4)"}}/>
         <div style={{position:"relative",zIndex:1000,width:"100%",maxWidth:420,margin:"0 16px"}}>
-          <button onClick={function(){setLoginOpen(false);}} style={{position:"absolute",top:12,right:12,zIndex:1001,width:28,height:28,borderRadius:8,background:"#fff",border:"1.5px solid #ddd",cursor:"pointer",fontSize:".8rem",fontWeight:700,color:"#666",display:"flex",alignItems:"center",justifyContent:"center"}}>&#10005;</button>
+          <button onClick={function(){setLoginOpen(false);}} style={{position:"absolute",top:12,right:12,zIndex:1001,width:28,height:28,borderRadius:8,background:"#fff",border:"1px solid #ddd",cursor:"pointer",fontSize:".8rem",fontWeight:700,color:"#666",display:"flex",alignItems:"center",justifyContent:"center"}}>&#10005;</button>
           <Auth onLogin={function(){setLoginOpen(false);}}/>
         </div>
       </div>
@@ -679,7 +679,7 @@ export default function BabyTracker({ session }){
               </button>
               <SettingsPopover/>
             </div>
-            <button className="btHam" onClick={function(){setDrawerOpen(true);}} style={{display:"none",flexDirection:"column",justifyContent:"center",gap:4,width:34,height:34,background:"#f8f8f8",border:"1.5px solid #e8e8e8",borderRadius:8,cursor:"pointer",padding:7}} aria-label="Menu"><span style={{display:"block",height:2,background:C.sec,borderRadius:2}}/><span style={{display:"block",height:2,background:C.sec,borderRadius:2}}/><span style={{display:"block",height:2,background:C.sec,borderRadius:2}}/></button>
+            <button className="btHam" onClick={function(){setDrawerOpen(true);}} style={{display:"none",flexDirection:"column",justifyContent:"center",gap:4,width:34,height:34,background:"#f8f8f8",border:"1px solid #e8e8e8",borderRadius:8,cursor:"pointer",padding:7}} aria-label="Menu"><span style={{display:"block",height:2,background:C.sec,borderRadius:2}}/><span style={{display:"block",height:2,background:C.sec,borderRadius:2}}/><span style={{display:"block",height:2,background:C.sec,borderRadius:2}}/></button>
           </div>
           <div style={{display:"flex",justifyContent:"flex-end",alignItems:"center",paddingRight:8}}>
             <span onClick={function(){setChatOpen(true);}} style={{display:"flex",alignItems:"center",gap:4,color:t.pri,fontSize:".8rem",fontWeight:600,cursor:"pointer"}}>
@@ -725,7 +725,7 @@ export default function BabyTracker({ session }){
               {todayFeeds.length===0&&<div style={{height:12}}/>}
               <div style={{display:"flex",gap:8,flexWrap:"wrap",marginBottom:8}}>
                 <div style={{display:"flex",alignItems:"center",gap:4}}>
-                  <input type="text" inputMode="decimal" placeholder="0" value={feedOz} onChange={function(e){var v=e.target.value;if(v===""||/^\d*\.?\d*$/.test(v))setFeedOz(v);}} style={{width:56,padding:"8px 10px",border:"1.5px solid "+(t.mid),borderRadius:8,fontSize:".85rem",outline:"none",textAlign:"center"}}/>
+                  <input type="text" inputMode="decimal" placeholder="0" value={feedOz} onChange={function(e){var v=e.target.value;if(v===""||/^\d*\.?\d*$/.test(v))setFeedOz(v);}} style={{width:56,padding:"8px 10px",border:"1px solid "+(t.mid),borderRadius:8,fontSize:".85rem",outline:"none",textAlign:"center"}}/>
                   <span style={{fontSize:".82rem",fontWeight:600,color:C.sec}}>oz</span>
                 </div>
                 <div style={{display:"flex",alignItems:"center",gap:6}}>
@@ -734,8 +734,8 @@ export default function BabyTracker({ session }){
                 </div>
               </div>
               <div style={{display:"flex",gap:8,flexWrap:"wrap",marginBottom:12}}>
-                <input placeholder="Brand" value={feedBrand} onChange={function(e){setFeedBrand(e.target.value);}} style={{width:80,padding:"8px 10px",border:"1.5px solid "+(t.mid),borderRadius:8,fontSize:".85rem",outline:"none"}}/>
-                <input placeholder="Notes" value={feedNote} onChange={function(e){setFeedNote(e.target.value);}} style={{flex:1,minWidth:50,padding:"8px 10px",border:"1.5px solid "+(t.mid),borderRadius:8,fontSize:".85rem",outline:"none"}}/>
+                <input placeholder="Brand" value={feedBrand} onChange={function(e){setFeedBrand(e.target.value);}} style={{width:80,padding:"8px 10px",border:"1px solid "+(t.mid),borderRadius:8,fontSize:".85rem",outline:"none"}}/>
+                <input placeholder="Notes" value={feedNote} onChange={function(e){setFeedNote(e.target.value);}} style={{flex:1,minWidth:50,padding:"8px 10px",border:"1px solid "+(t.mid),borderRadius:8,fontSize:".85rem",outline:"none"}}/>
                 <button onClick={addFeed} style={{background:t.pri,color:"#fff",border:"none",borderRadius:6,padding:"6px 12px",fontSize:".78rem",fontWeight:600,cursor:"pointer"}}>Add</button>
               </div>
               <div style={{flex:1}}>
@@ -799,11 +799,11 @@ export default function BabyTracker({ session }){
                 <div style={{fontSize:".88rem",fontWeight:700,color:C.h,marginBottom:12}}>Measurement</div>
                 <div style={{display:"flex",gap:8,flexWrap:"wrap",marginBottom:12}}>
                   <div style={{display:"flex",alignItems:"center",gap:4}}>
-                    <input type="text" inputMode="decimal" placeholder="Weight" value={gW} onChange={function(e){var v=e.target.value;if(v===""||/^\d*\.?\d*$/.test(v))setGW(v);}} style={{width:80,padding:"8px 10px",border:"1.5px solid "+(t.mid),borderRadius:8,fontSize:".85rem",outline:"none"}}/>
+                    <input type="text" inputMode="decimal" placeholder="Weight" value={gW} onChange={function(e){var v=e.target.value;if(v===""||/^\d*\.?\d*$/.test(v))setGW(v);}} style={{width:80,padding:"8px 10px",border:"1px solid "+(t.mid),borderRadius:8,fontSize:".85rem",outline:"none"}}/>
                     <span style={{fontSize:".82rem",fontWeight:600,color:C.sec}}>lbs</span>
                   </div>
                   <div style={{display:"flex",alignItems:"center",gap:4}}>
-                    <input type="text" inputMode="decimal" placeholder="Length" value={gL} onChange={function(e){var v=e.target.value;if(v===""||/^\d*\.?\d*$/.test(v))setGL(v);}} style={{width:80,padding:"8px 10px",border:"1.5px solid "+(t.mid),borderRadius:8,fontSize:".85rem",outline:"none"}}/>
+                    <input type="text" inputMode="decimal" placeholder="Length" value={gL} onChange={function(e){var v=e.target.value;if(v===""||/^\d*\.?\d*$/.test(v))setGL(v);}} style={{width:80,padding:"8px 10px",border:"1px solid "+(t.mid),borderRadius:8,fontSize:".85rem",outline:"none"}}/>
                     <span style={{fontSize:".82rem",fontWeight:600,color:C.sec}}>in</span>
                   </div>
                   <button onClick={addGrowth} style={{background:t.pri,color:"#fff",border:"none",borderRadius:6,padding:"6px 12px",fontSize:".78rem",fontWeight:600,cursor:"pointer"}}>Add</button>
@@ -878,7 +878,7 @@ export default function BabyTracker({ session }){
                     var isCurrent=md.month===currentMonth;
                     var progressColor=count===0?"#ddd":pct>=75?"#4caf50":pct>=50?"#f59e0b":"#e57373";
                     return(
-                      <div key={md.month} ref={function(el){monthRefs.current[md.month]=el;}} style={{background:"#f8faf9",borderRadius:14,overflow:"hidden",border:openMonth===md.month?"2px solid "+(t.pri):isCurrent?"2px solid "+(t.pri):"1px solid #e8e8e8",scrollMarginTop:HEADER_H+4,cursor:"pointer",transition:"box-shadow .15s",display:"flex",flexDirection:"column"}} onClick={function(){handleMonthToggle(md.month);}}>
+                      <div key={md.month} ref={function(el){monthRefs.current[md.month]=el;}} style={{background:"#fff",borderRadius:14,overflow:"hidden",border:openMonth===md.month?"2px solid "+(t.pri):isCurrent?"2px solid "+(t.pri):"none",boxShadow:"0 2px 8px rgba(0,0,0,.04)",scrollMarginTop:HEADER_H+4,cursor:"pointer",transition:"box-shadow .15s",display:"flex",flexDirection:"column"}} onClick={function(){handleMonthToggle(md.month);}}>
                         <div style={{padding:"20px 20px 16px"}}>
                           <div style={{display:"flex",alignItems:"center",gap:8,marginBottom:6}}>
                             <div style={{fontSize:".95rem",fontWeight:700,color:C.h}}>{md.label}</div>
@@ -902,7 +902,7 @@ export default function BabyTracker({ session }){
                     var total=getMonthTotal(md.month);
                     var evalText=getMilestoneEval(profile.name,count,total,pr);
                     return(
-                      <div style={{background:"#fff",borderRadius:14,padding:"20px 22px",border:"1px solid #e8e8e8",marginTop:14,marginBottom:14,scrollMarginTop:HEADER_H+4}}>
+                      <div style={{background:"#fff",borderRadius:14,padding:"20px 22px",boxShadow:"0 2px 8px rgba(0,0,0,.04)",marginTop:14,marginBottom:14,scrollMarginTop:HEADER_H+4}}>
                         <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:12}}>
                           <div style={{fontSize:"1rem",fontWeight:700,color:C.h}}>{md.label}</div>
                           <button onClick={function(e){e.stopPropagation();setOpenMonth(null);}} style={{width:28,height:28,borderRadius:6,background:"#f5f5f5",border:"1px solid #e8e8e8",cursor:"pointer",fontSize:".8rem",color:C.sec,display:"flex",alignItems:"center",justifyContent:"center"}}>&#10005;</button>
@@ -975,7 +975,7 @@ export default function BabyTracker({ session }){
                   <div style={{display:"grid",gridTemplateColumns:"repeat("+ECOLS+",1fr)",gap:14,marginBottom:rowHasOpen?0:14}}>
                   {row.map(function(topic){
                     return(
-                      <div key={topic.id} ref={function(el){eduRefs.current[topic.id]=el;}} onClick={function(){handleEduToggle(topic.id);}} style={{background:"#f8faf9",borderRadius:14,overflow:"hidden",border:openEdu===topic.id?"2px solid "+(t.pri):"1px solid #e8e8e8",scrollMarginTop:HEADER_H+4,cursor:"pointer",transition:"box-shadow .15s",display:"flex",flexDirection:"column"}}>
+                      <div key={topic.id} ref={function(el){eduRefs.current[topic.id]=el;}} onClick={function(){handleEduToggle(topic.id);}} style={{background:"#fff",borderRadius:14,overflow:"hidden",border:openEdu===topic.id?"2px solid "+(t.pri):"none",boxShadow:"0 2px 8px rgba(0,0,0,.04)",scrollMarginTop:HEADER_H+4,cursor:"pointer",transition:"box-shadow .15s",display:"flex",flexDirection:"column"}}>
                         <div style={{padding:"20px 20px 16px"}}>
                           <div style={{display:"flex",alignItems:"center",gap:8,marginBottom:6}}>
                             <span style={{fontSize:"1.1rem",lineHeight:1}}>{topic.icon}</span>
@@ -992,7 +992,7 @@ export default function BabyTracker({ session }){
                     var topicDiveKey="edu-"+topic.id;
                     var allContent=topic.articles.map(function(a){return a.t+": "+a.content;}).join("\n\n");
                     return(
-                      <div style={{background:"#fff",borderRadius:14,padding:"20px 22px",border:"1px solid #e8e8e8",marginTop:14,marginBottom:14,scrollMarginTop:HEADER_H+4}}>
+                      <div style={{background:"#fff",borderRadius:14,padding:"20px 22px",boxShadow:"0 2px 8px rgba(0,0,0,.04)",marginTop:14,marginBottom:14,scrollMarginTop:HEADER_H+4}}>
                         <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:12}}>
                           <div style={{fontSize:"1rem",fontWeight:700,color:C.h}}>{topic.icon} {topic.title}</div>
                           <button onClick={function(e){e.stopPropagation();setOpenEdu(null);}} style={{width:28,height:28,borderRadius:6,background:"#f5f5f5",border:"1px solid #e8e8e8",cursor:"pointer",fontSize:".8rem",color:C.sec,display:"flex",alignItems:"center",justifyContent:"center"}}>&#10005;</button>
@@ -1084,7 +1084,7 @@ export default function BabyTracker({ session }){
             <div ref={chatEndRef}/>
           </div>
           <div style={{padding:"10px 14px",borderTop:"1px solid #eee",display:"flex",gap:8,flexShrink:0}}>
-            <input ref={chatInputRef} value={chatInput} onChange={function(e){setChatInput(e.target.value);}} onKeyDown={function(e){if(e.key==="Enter")sendChat();}} placeholder="Ask about baby care..." style={{flex:1,padding:"10px 14px",border:"1.5px solid "+(t.mid),borderRadius:10,fontSize:".86rem",outline:"none"}}/>
+            <input ref={chatInputRef} value={chatInput} onChange={function(e){setChatInput(e.target.value);}} onKeyDown={function(e){if(e.key==="Enter")sendChat();}} placeholder="Ask about baby care..." style={{flex:1,padding:"10px 14px",border:"1px solid "+(t.mid),borderRadius:10,fontSize:".86rem",outline:"none"}}/>
             <button onClick={sendChat} disabled={!chatInput.trim()||chatLoading} style={{background:t.pri,color:"#fff",border:"none",borderRadius:10,padding:"0 18px",fontWeight:600,cursor:chatInput.trim()&&!chatLoading?"pointer":"not-allowed",opacity:chatInput.trim()&&!chatLoading?1:.5,fontSize:".86rem"}}>Send</button>
           </div>
         </div>
