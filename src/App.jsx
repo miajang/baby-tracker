@@ -253,12 +253,12 @@ function TimeInput({h,m,ap,onH,onM,onAP,mid}){
   const fw=52;
   return(
     <div style={{display:"flex",alignItems:"center",gap:4}}>
-      <input placeholder="Hr" inputMode="numeric" value={h} onChange={e=>{const v=e.target.value.replace(/\D/g,"");if(v===""||(/^\d{1,2}$/.test(v)&&parseInt(v)<=12))onH(v);}} style={{width:fw,padding:"8px 4px",border:"1px solid "+(mid),borderRadius:8,fontSize:".85rem",outline:"none",textAlign:"center"}}/>
+      <input placeholder="Hr" inputMode="numeric" value={h} onChange={e=>{const v=e.target.value.replace(/\D/g,"");if(v===""||(/^\d{1,2}$/.test(v)&&parseInt(v)<=12))onH(v);}} style={{width:fw,padding:"8px 4px",border:"1px solid #ddd",borderRadius:8,fontSize:".85rem",outline:"none",textAlign:"center"}}/>
       <span style={{color:"#bbb",fontWeight:600}}>:</span>
-      <input placeholder="Min" inputMode="numeric" value={m} onChange={e=>{const v=e.target.value.replace(/\D/g,"");if(v===""||(/^\d{1,2}$/.test(v)&&parseInt(v)<=59))onM(v);}} style={{width:fw,padding:"8px 4px",border:"1px solid "+(mid),borderRadius:8,fontSize:".85rem",outline:"none",textAlign:"center"}}/>
-      <div style={{display:"flex",borderRadius:6,overflow:"hidden",border:"1px solid "+(mid)}}>
+      <input placeholder="Min" inputMode="numeric" value={m} onChange={e=>{const v=e.target.value.replace(/\D/g,"");if(v===""||(/^\d{1,2}$/.test(v)&&parseInt(v)<=59))onM(v);}} style={{width:fw,padding:"8px 4px",border:"1px solid #ddd",borderRadius:8,fontSize:".85rem",outline:"none",textAlign:"center"}}/>
+      <div style={{display:"flex",borderRadius:6,overflow:"hidden",border:"1px solid #ddd"}}>
         <button onClick={()=>onAP("AM")} style={{padding:"7px 8px",fontSize:".74rem",fontWeight:600,background:ap==="AM"?"#eee":"#fff",border:"none",cursor:"pointer",color:ap==="AM"?C.h:"#bbb"}}>AM</button>
-        <button onClick={()=>onAP("PM")} style={{padding:"7px 8px",fontSize:".74rem",fontWeight:600,background:ap==="PM"?"#eee":"#fff",border:"none",cursor:"pointer",color:ap==="PM"?C.h:"#bbb",borderLeft:"1px solid "+(mid)}}>PM</button>
+        <button onClick={()=>onAP("PM")} style={{padding:"7px 8px",fontSize:".74rem",fontWeight:600,background:ap==="PM"?"#eee":"#fff",border:"none",cursor:"pointer",color:ap==="PM"?C.h:"#bbb",borderLeft:"1px solid #ddd"}}>PM</button>
       </div>
     </div>
   );
@@ -343,13 +343,13 @@ function MonthlySummarySection({ feeds, nightSleep, naps, growthEntries, profile
   var canNext = selIdx < months.length - 1;
 
   var cs = {padding:"10px 14px",fontSize:".82rem",color:C.body,borderBottom:"1px solid #f0f0f0"};
-  var ths = {padding:"10px 14px",fontSize:".72rem",fontWeight:700,color:C.sec,textTransform:"uppercase",letterSpacing:".05em",borderBottom:"2px solid "+(t.mid),textAlign:"left",whiteSpace:"nowrap"};
+  var ths = {padding:"10px 14px",fontSize:".72rem",fontWeight:700,color:C.sec,textTransform:"uppercase",letterSpacing:".05em",borderBottom:"1px solid #ddd",textAlign:"left",whiteSpace:"nowrap"};
   var dash = <span style={{color:"#ccc"}}>&mdash;</span>;
 
   var arrowStyle = function(enabled){ return {width:34,height:34,borderRadius:8,border:"1px solid "+(enabled?t.mid:"#eee"),background:enabled?"#fff":"#fafafa",cursor:enabled?"pointer":"not-allowed",display:"flex",alignItems:"center",justifyContent:"center",opacity:enabled?1:0.35}; };
 
   return (
-    <div ref={sectionRef} data-sec="summary" style={{marginBottom:20,scrollMarginTop:HEADER_H}}>
+    <div ref={sectionRef} data-sec="summary" style={{marginBottom:20}}>
       <div style={{fontSize:"1.05rem",fontWeight:600,color:t.pri,marginBottom:14,display:"flex",alignItems:"center",gap:8}}><NavIcon type="summary" color={t.pri}/> Summary</div>
 
       <div style={{display:"flex",alignItems:"center",gap:14,marginBottom:20}}>
@@ -512,7 +512,6 @@ export default function BabyTracker({ session }){
   },[userId]);
 
   useEffect(function(){if(loaded&&userId)db.saveProfile(userId,Object.assign({},profile,{theme:theme}));},[profile,theme,loaded]);
-  useEffect(function(){if(loaded)setOpenMonth(currentMonth);},[loaded,currentMonth]);
 
   var setFeedTimeNow = function(){
     var ct = getCurrentTimeFields();
@@ -545,9 +544,7 @@ export default function BabyTracker({ session }){
   var sendChat=async function(){if(!chatInput.trim()||chatLoading)return;var msg=chatInput.trim();setChatInput("");setChatMsgs(function(pv){return pv.concat([{role:"user",text:msg}]);});setChatLoading(true);var ctx="Baby: "+profile.name+", "+age.label+" old ("+currentMonth+" months).";var gp=gender==="boy"?"Use he/him pronouns.":"Use she/her pronouns.";var sys=CHAT_SYS+"\n"+gp+"\n\n"+ctx;var hist=chatMsgs.slice(-6).map(function(m){return{role:m.role==="user"?"user":"assistant",content:m.text};});var r=await callAI(sys,msg,hist);setChatMsgs(function(pv){return pv.concat([{role:"assistant",text:r}]);});setChatLoading(false);};
 
   var renderBold=function(text){var parts=text.split(/\*\*([^*]+)\*\*/g);return parts.map(function(pt,i){return i%2===1?<strong key={i} style={{color:t.pri,display:pt.endsWith(':')?'block':'inline'}}>{pt}</strong>:<span key={i}>{pt}</span>;});};
-  var navClick=function(sec){setActiveNav(sec);setDrawerOpen(false);var el=sectionRefs.current[sec];if(el){var offset=sec==="tracker"?-4:12;var top=el.getBoundingClientRect().top+window.scrollY-HEADER_H+offset;window.scrollTo({top:top,behavior:"smooth"});}};
-
-  useEffect(function(){var timer=setTimeout(function(){var obs=new IntersectionObserver(function(entries){entries.forEach(function(e){if(e.isIntersecting)setActiveNav(e.target.dataset.sec);});},{threshold:.15,rootMargin:"-15% 0px -75% 0px"});navSections.forEach(function(s){var el=sectionRefs.current[s.id];if(el)obs.observe(el);});return function(){obs.disconnect();};},150);return function(){clearTimeout(timer);};},[]);
+  var navClick=function(sec){setActiveNav(sec);window.scrollTo({top:0});};
 
   var todayFeeds=feeds.filter(function(f){return f.date===new Date().toLocaleDateString();});
   var todayOz=todayFeeds.reduce(function(s,f){return s+f.oz;},0);
@@ -596,7 +593,7 @@ export default function BabyTracker({ session }){
     <div style={{position:"absolute",right:0,top:42,background:"#fff",border:"1px solid #e8e8e8",borderRadius:12,padding:"16px 18px",boxShadow:"0 6px 24px rgba(0,0,0,.12)",zIndex:200,width:260}} onClick={function(e){e.stopPropagation();}}>
       <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:14}}>
         <div style={{fontSize:".78rem",color:C.h,fontWeight:700}}>Settings</div>
-        <button onClick={function(e){e.stopPropagation();setSettingsOpen(false);}} style={{width:24,height:24,borderRadius:6,background:"none",border:"1px solid "+(t.mid),cursor:"pointer",fontSize:".75rem",color:t.pri,display:"flex",alignItems:"center",justifyContent:"center",fontWeight:700}}>&#10005;</button>
+        <button onClick={function(e){e.stopPropagation();setSettingsOpen(false);}} style={{width:24,height:24,borderRadius:6,background:"none",border:"1px solid #ddd",cursor:"pointer",fontSize:".75rem",color:t.pri,display:"flex",alignItems:"center",justifyContent:"center",fontWeight:700}}>&#10005;</button>
       </div>
       <div style={{fontSize:".7rem",color:C.sec,fontWeight:700,textTransform:"uppercase",letterSpacing:".07em",marginBottom:8}}>Baby Profile</div>
       <div style={{fontSize:".72rem",fontWeight:600,color:C.sec,marginBottom:4}}>Name</div>
@@ -634,12 +631,11 @@ export default function BabyTracker({ session }){
     );
   };
 
-  var NavItems=function(props){
-    var onExtra = props.onExtra;
+  var NavItems=function(){
     return(
     <>
       {navSections.map(function(s){return(
-        <div key={s.id} onClick={function(){navClick(s.id);if(onExtra)onExtra();}} style={{display:"flex",alignItems:"center",gap:8,padding:"10px 16px",fontSize:".87rem",color:activeNav===s.id?t.pri:C.sec,cursor:"pointer",fontWeight:activeNav===s.id?500:400,borderLeft:activeNav===s.id?"3px solid "+(t.pri):"3px solid transparent"}}>
+        <div key={s.id} onClick={function(){navClick(s.id);}} style={{display:"flex",alignItems:"center",gap:8,padding:"10px 16px",fontSize:".87rem",color:activeNav===s.id?t.pri:C.sec,cursor:"pointer",fontWeight:activeNav===s.id?500:400,borderLeft:activeNav===s.id?"3px solid "+(t.pri):"3px solid transparent"}}>
           <NavIcon type={s.icon} color={activeNav===s.id?t.pri:C.sec}/>{s.label}
         </div>
       );})}
@@ -649,14 +645,14 @@ export default function BabyTracker({ session }){
 
   var DataTable=function(props){return(
     <table style={{width:"100%",borderCollapse:"collapse",fontSize:".82rem",margin:"12px 0"}}>
-      <thead><tr>{props.headers.map(function(h,i){return <th key={i} style={{textAlign:"left",padding:"8px 10px",borderBottom:"2px solid "+(t.mid),color:C.body,fontWeight:700,fontSize:".75rem",textTransform:"uppercase",letterSpacing:".04em"}}>{h}</th>;})}</tr></thead>
+      <thead><tr>{props.headers.map(function(h,i){return <th key={i} style={{textAlign:"left",padding:"8px 10px",borderBottom:"1px solid #ddd",color:C.body,fontWeight:700,fontSize:".75rem",textTransform:"uppercase",letterSpacing:".04em"}}>{h}</th>;})}</tr></thead>
       <tbody>{props.rows.map(function(row,ri){return <tr key={ri}>{row.map(function(cell,ci){return <td key={ci} style={{padding:"7px 10px",borderBottom:"1px solid #f0f0f0",color:C.body}}>{cell}</td>;})}</tr>;})}</tbody>
     </table>
   );};
 
   return(
     <div style={{fontFamily:"'Segoe UI',system-ui,sans-serif",background:"#fff",minHeight:"100vh",color:C.body}}>
-      <style>{"@keyframes spin{to{transform:rotate(360deg)}} @media(max-width:768px){.btNavD{display:none!important}.btHam{display:flex!important}.btGrowthGrid{grid-template-columns:1fr!important}} input::-webkit-outer-spin-button,input::-webkit-inner-spin-button{-webkit-appearance:none;margin:0} input[type=number]{-moz-appearance:textfield;}"}</style>
+      <style>{"@keyframes spin{to{transform:rotate(360deg)}} @media(max-width:768px){.btNavD{display:none!important}.btBottomBar{display:flex!important}.btGrowthGrid{grid-template-columns:1fr!important}.btMsGrid{grid-template-columns:1fr!important}.btEduGrid{grid-template-columns:1fr!important}} input::-webkit-outer-spin-button,input::-webkit-inner-spin-button{-webkit-appearance:none;margin:0} input[type=number]{-moz-appearance:textfield;}"}</style>
 
       <LoginOverlay/>
       {summaryOpen && <MonthlySummaryPage feeds={feeds} nightSleep={nightSleep} naps={naps} growthEntries={growthEntries} profile={profile} age={age} onClose={function(){setSummaryOpen(false);}} t={t} />}
@@ -679,7 +675,6 @@ export default function BabyTracker({ session }){
               </button>
               <SettingsPopover/>
             </div>
-            <button className="btHam" onClick={function(){setDrawerOpen(true);}} style={{display:"none",flexDirection:"column",justifyContent:"center",gap:4,width:34,height:34,background:"#f8f8f8",border:"1px solid #e8e8e8",borderRadius:8,cursor:"pointer",padding:7}} aria-label="Menu"><span style={{display:"block",height:2,background:C.sec,borderRadius:2}}/><span style={{display:"block",height:2,background:C.sec,borderRadius:2}}/><span style={{display:"block",height:2,background:C.sec,borderRadius:2}}/></button>
           </div>
           <div style={{display:"flex",justifyContent:"flex-end",alignItems:"center",paddingRight:8}}>
             <span onClick={function(){setChatOpen(true);}} style={{display:"flex",alignItems:"center",gap:4,color:t.pri,fontSize:".8rem",fontWeight:600,cursor:"pointer"}}>
@@ -691,21 +686,11 @@ export default function BabyTracker({ session }){
       </header>
 
       {settingsOpen&&<div onClick={function(){setSettingsOpen(false);}} style={{position:"fixed",inset:0,zIndex:99}}/>}
-      {drawerOpen&&<div onClick={function(){setDrawerOpen(false);}} style={{position:"fixed",inset:0,background:"rgba(0,0,0,.35)",zIndex:300}}/>}
-      {drawerOpen&&(
-        <div style={{position:"fixed",top:0,left:0,width:250,height:"100vh",background:"#fff",zIndex:400,boxShadow:"4px 0 20px rgba(0,0,0,.15)",display:"flex",flexDirection:"column"}}>
-          <div style={{padding:"16px 18px",borderBottom:"1px solid #eee",display:"flex",alignItems:"center",justifyContent:"space-between"}}>
-            <span style={{fontSize:".85rem",fontWeight:700,color:C.h}}>Navigation</span>
-            <button onClick={function(){setDrawerOpen(false);}} style={{width:28,height:28,borderRadius:6,background:"#f5f5f5",border:"1px solid #e8e8e8",cursor:"pointer",fontSize:".85rem",color:C.sec,display:"flex",alignItems:"center",justifyContent:"center"}}>&#10005;</button>
-          </div>
-          <div style={{padding:"10px 0",flex:1,display:"flex",flexDirection:"column"}}><NavItems onExtra={function(){setDrawerOpen(false);}}/></div>
-        </div>
-      )}
 
       <div style={{display:"flex",minHeight:"calc(100vh - 105px)"}}>
         <div className="btNavD" style={{width:200,minWidth:200,background:"#fff",borderRight:"1px solid #eee",padding:"12px 0",position:"sticky",top:105,height:"calc(100vh - 105px)",overflowY:"auto",display:"flex",flexDirection:"column"}}><NavItems/></div>
 
-        <div style={{flex:1,padding:"24px 28px",paddingBottom:"60vh",overflowY:"auto",background:"#F9FAFB"}}>
+        <div style={{flex:1,padding:"24px 28px",paddingBottom:80,overflowY:"auto",background:"#F9FAFB"}}>
 
           <div style={{fontSize:".78rem",color:C.sec,marginBottom:8}}>{todayStr()}</div>
           <div style={{display:"flex",alignItems:"center",gap:10,flexWrap:"wrap",marginBottom:20}}>
@@ -713,8 +698,9 @@ export default function BabyTracker({ session }){
             <span style={{fontSize:".82rem",color:t.pri,fontWeight:600}}>{age.label} old</span>
           </div>
 
+          {activeNav==="tracker"&&<div>
           {/* TRACKER */}
-          <div ref={function(el){sectionRefs.current.tracker=el;}} data-sec="tracker" style={{marginBottom:20,scrollMarginTop:HEADER_H}}>
+          <div ref={function(el){sectionRefs.current.tracker=el;}} data-sec="tracker" style={{marginBottom:20}}>
             <div style={{fontSize:"1.05rem",fontWeight:600,color:t.pri,marginBottom:14,display:"flex",alignItems:"center",gap:8}}><NavIcon type="tracker" color={t.pri}/> Tracker</div>
 
             <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(260px,1fr))",gap:14}}>
@@ -725,18 +711,18 @@ export default function BabyTracker({ session }){
               {todayFeeds.length===0&&<div style={{height:12}}/>}
               <div style={{display:"flex",gap:8,flexWrap:"wrap",marginBottom:8}}>
                 <div style={{display:"flex",alignItems:"center",gap:4}}>
-                  <input type="text" inputMode="decimal" placeholder="0" value={feedOz} onChange={function(e){var v=e.target.value;if(v===""||/^\d*\.?\d*$/.test(v))setFeedOz(v);}} style={{width:56,padding:"8px 10px",border:"1px solid "+(t.mid),borderRadius:8,fontSize:".85rem",outline:"none",textAlign:"center"}}/>
+                  <input type="text" inputMode="decimal" placeholder="0" value={feedOz} onChange={function(e){var v=e.target.value;if(v===""||/^\d*\.?\d*$/.test(v))setFeedOz(v);}} style={{width:56,padding:"8px 10px",border:"1px solid #ddd",borderRadius:8,fontSize:".85rem",outline:"none",textAlign:"center"}}/>
                   <span style={{fontSize:".82rem",fontWeight:600,color:C.sec}}>oz</span>
                 </div>
                 <div style={{display:"flex",alignItems:"center",gap:6}}>
                   <TimeInput h={feedH} m={feedM} ap={feedAP} onH={setFeedH} onM={setFeedM} onAP={setFeedAP} mid={t.mid}/>
-                  <button onClick={setFeedTimeNow} title="Set to now" style={{background:t.lt,border:"1px solid "+(t.mid),borderRadius:6,padding:"7px 8px",fontSize:".7rem",fontWeight:600,color:t.pri,cursor:"pointer",whiteSpace:"nowrap"}}>Now</button>
+                  <button onClick={setFeedTimeNow} title="Set to now" style={{background:t.lt,border:"1px solid #ddd",borderRadius:6,padding:"7px 8px",fontSize:".7rem",fontWeight:600,color:t.pri,cursor:"pointer",whiteSpace:"nowrap"}}>Now</button>
                 </div>
               </div>
               <div style={{display:"flex",gap:8,flexWrap:"wrap",marginBottom:12}}>
-                <input placeholder="Brand" value={feedBrand} onChange={function(e){setFeedBrand(e.target.value);}} style={{width:80,padding:"8px 10px",border:"1px solid "+(t.mid),borderRadius:8,fontSize:".85rem",outline:"none"}}/>
-                <input placeholder="Notes" value={feedNote} onChange={function(e){setFeedNote(e.target.value);}} style={{flex:1,minWidth:50,padding:"8px 10px",border:"1px solid "+(t.mid),borderRadius:8,fontSize:".85rem",outline:"none"}}/>
-                <button onClick={addFeed} style={{background:t.pri,color:"#fff",border:"none",borderRadius:6,padding:"6px 12px",fontSize:".78rem",fontWeight:600,cursor:"pointer"}}>Add</button>
+                <input placeholder="Brand" value={feedBrand} onChange={function(e){setFeedBrand(e.target.value);}} style={{width:80,padding:"8px 10px",border:"1px solid #ddd",borderRadius:8,fontSize:".85rem",outline:"none"}}/>
+                <input placeholder="Notes" value={feedNote} onChange={function(e){setFeedNote(e.target.value);}} style={{flex:1,minWidth:50,padding:"8px 10px",border:"1px solid #ddd",borderRadius:8,fontSize:".85rem",outline:"none"}}/>
+                <button onClick={addFeed} style={{background:t.pri,color:"#fff",border:"none",borderRadius:6,padding:"0 14px",height:34,fontSize:".78rem",fontWeight:600,cursor:"pointer"}}>Add</button>
               </div>
               <div style={{flex:1}}>
               {todayFeeds.length>0?todayFeeds.map(function(f){return(
@@ -756,7 +742,7 @@ export default function BabyTracker({ session }){
               <div style={{display:"flex",gap:10,flexWrap:"wrap",marginTop:12,marginBottom:12,alignItems:"flex-end"}}>
                 <div><div style={{fontSize:".72rem",color:C.sec,marginBottom:3}}>Start</div><TimeInput h={nsH1} m={nsM1} ap={nsAP1} onH={setNsH1} onM={setNsM1} onAP={setNsAP1} mid={t.mid}/></div>
                 <div><div style={{fontSize:".72rem",color:C.sec,marginBottom:3}}>End</div><TimeInput h={nsH2} m={nsM2} ap={nsAP2} onH={setNsH2} onM={setNsM2} onAP={setNsAP2} mid={t.mid}/></div>
-                <button onClick={addNight} style={{background:t.pri,color:"#fff",border:"none",borderRadius:6,padding:"6px 12px",fontSize:".78rem",fontWeight:600,cursor:"pointer",marginBottom:2}}>Add</button>
+                <button onClick={addNight} style={{background:t.pri,color:"#fff",border:"none",borderRadius:6,padding:"0 14px",height:34,fontSize:".78rem",fontWeight:600,cursor:"pointer"}}>Add</button>
               </div>
               <div style={{flex:1}}>
               {todayNights.length>0?todayNights.map(function(s){return(
@@ -776,7 +762,7 @@ export default function BabyTracker({ session }){
               <div style={{display:"flex",gap:10,flexWrap:"wrap",marginTop:12,marginBottom:12,alignItems:"flex-end"}}>
                 <div><div style={{fontSize:".72rem",color:C.sec,marginBottom:3}}>Start</div><TimeInput h={napH1} m={napM1} ap={napAP1} onH={setNapH1} onM={setNapM1} onAP={setNapAP1} mid={t.mid}/></div>
                 <div><div style={{fontSize:".72rem",color:C.sec,marginBottom:3}}>End</div><TimeInput h={napH2} m={napM2} ap={napAP2} onH={setNapH2} onM={setNapM2} onAP={setNapAP2} mid={t.mid}/></div>
-                <button onClick={addNap} style={{background:t.pri,color:"#fff",border:"none",borderRadius:6,padding:"6px 12px",fontSize:".78rem",fontWeight:600,cursor:"pointer",marginBottom:2}}>Add</button>
+                <button onClick={addNap} style={{background:t.pri,color:"#fff",border:"none",borderRadius:6,padding:"0 14px",height:34,fontSize:".78rem",fontWeight:600,cursor:"pointer"}}>Add</button>
               </div>
               <div style={{flex:1}}>
               {todayNaps.length>0?todayNaps.map(function(s){return(
@@ -789,9 +775,11 @@ export default function BabyTracker({ session }){
             </div>
             </div>
           </div>
+          </div>}
 
+          {activeNav==="growth"&&<div>
           {/* GROWTH */}
-          <div ref={function(el){sectionRefs.current.growth=el;}} data-sec="growth" style={{marginBottom:20,scrollMarginTop:HEADER_H}}>
+          <div ref={function(el){sectionRefs.current.growth=el;}} data-sec="growth" style={{marginBottom:20}}>
             <div style={{fontSize:"1.05rem",fontWeight:600,color:t.pri,marginBottom:14,display:"flex",alignItems:"center",gap:8}}><NavIcon type="growth" color={t.pri}/> Growth</div>
             <div className="btGrowthGrid" style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:14}}>
               {/* Left: input + log */}
@@ -799,14 +787,14 @@ export default function BabyTracker({ session }){
                 <div style={{fontSize:".88rem",fontWeight:700,color:C.h,marginBottom:12}}>Measurement</div>
                 <div style={{display:"flex",gap:8,flexWrap:"wrap",marginBottom:12}}>
                   <div style={{display:"flex",alignItems:"center",gap:4}}>
-                    <input type="text" inputMode="decimal" placeholder="Weight" value={gW} onChange={function(e){var v=e.target.value;if(v===""||/^\d*\.?\d*$/.test(v))setGW(v);}} style={{width:80,padding:"8px 10px",border:"1px solid "+(t.mid),borderRadius:8,fontSize:".85rem",outline:"none"}}/>
+                    <input type="text" inputMode="decimal" placeholder="Weight" value={gW} onChange={function(e){var v=e.target.value;if(v===""||/^\d*\.?\d*$/.test(v))setGW(v);}} style={{width:80,padding:"8px 10px",border:"1px solid #ddd",borderRadius:8,fontSize:".85rem",outline:"none"}}/>
                     <span style={{fontSize:".82rem",fontWeight:600,color:C.sec}}>lbs</span>
                   </div>
                   <div style={{display:"flex",alignItems:"center",gap:4}}>
-                    <input type="text" inputMode="decimal" placeholder="Length" value={gL} onChange={function(e){var v=e.target.value;if(v===""||/^\d*\.?\d*$/.test(v))setGL(v);}} style={{width:80,padding:"8px 10px",border:"1px solid "+(t.mid),borderRadius:8,fontSize:".85rem",outline:"none"}}/>
+                    <input type="text" inputMode="decimal" placeholder="Length" value={gL} onChange={function(e){var v=e.target.value;if(v===""||/^\d*\.?\d*$/.test(v))setGL(v);}} style={{width:80,padding:"8px 10px",border:"1px solid #ddd",borderRadius:8,fontSize:".85rem",outline:"none"}}/>
                     <span style={{fontSize:".82rem",fontWeight:600,color:C.sec}}>in</span>
                   </div>
-                  <button onClick={addGrowth} style={{background:t.pri,color:"#fff",border:"none",borderRadius:6,padding:"6px 12px",fontSize:".78rem",fontWeight:600,cursor:"pointer"}}>Add</button>
+                  <button onClick={addGrowth} style={{background:t.pri,color:"#fff",border:"none",borderRadius:6,padding:"0 14px",height:34,fontSize:".78rem",fontWeight:600,cursor:"pointer"}}>Add</button>
                 </div>
                 <div style={{flex:1}}>
                 {growthEntries.length>0?growthEntries.slice(0,10).map(function(g){
@@ -855,9 +843,11 @@ export default function BabyTracker({ session }){
             </div>
             <div style={{fontSize:".72rem",color:"#bbb",marginTop:10,fontStyle:"italic"}}>Based on WHO Child Growth Standards (0-24 months). For precise guidance, consult your pediatrician.</div>
           </div>
+          </div>}
 
+          {activeNav==="milestones"&&<div>
           {/* MILESTONES */}
-          <div ref={function(el){sectionRefs.current.milestones=el;}} data-sec="milestones" style={{marginBottom:20,scrollMarginTop:HEADER_H}}>
+          <div ref={function(el){sectionRefs.current.milestones=el;}} data-sec="milestones" style={{marginBottom:20}}>
             <div style={{fontSize:"1.05rem",fontWeight:600,color:t.pri,marginBottom:6,display:"flex",alignItems:"center",gap:8}}><NavIcon type="milestones" color={t.pri}/> Milestones</div>
             <p style={{fontSize:".84rem",color:C.sec,marginBottom:16,lineHeight:1.5}}>Month-by-month developmental milestones based on CDC and AAP guidelines. Check all that apply as {profile.name} achieves them.</p>
 
@@ -870,7 +860,7 @@ export default function BabyTracker({ session }){
                 var rowHasOpen=row.some(function(md){return md.month===openMonth;});
                 return(
                   <React.Fragment key={ri}>
-                  <div style={{display:"grid",gridTemplateColumns:"repeat("+COLS+",1fr)",gap:14,marginBottom:rowHasOpen?0:14}}>
+                  <div className="btMsGrid" style={{display:"grid",gridTemplateColumns:"repeat("+COLS+",1fr)",gap:14,marginBottom:rowHasOpen?0:14}}>
                   {row.map(function(md){
                     var count=getMonthCount(md.month);
                     var total=getMonthTotal(md.month);
@@ -878,7 +868,7 @@ export default function BabyTracker({ session }){
                     var isCurrent=md.month===currentMonth;
                     var progressColor=count===0?"#ddd":pct>=75?"#4caf50":pct>=50?"#f59e0b":"#e57373";
                     return(
-                      <div key={md.month} ref={function(el){monthRefs.current[md.month]=el;}} style={{background:"#fff",borderRadius:14,overflow:"hidden",border:openMonth===md.month?"2px solid "+(t.pri):isCurrent?"2px solid "+(t.pri):"none",boxShadow:"0 2px 8px rgba(0,0,0,.04)",scrollMarginTop:HEADER_H+4,cursor:"pointer",transition:"box-shadow .15s",display:"flex",flexDirection:"column"}} onClick={function(){handleMonthToggle(md.month);}}>
+                      <div key={md.month} ref={function(el){monthRefs.current[md.month]=el;}} style={{background:"#fff",borderRadius:14,overflow:"hidden",border:openMonth===md.month?"1px solid "+(t.pri):isCurrent?"1px solid "+(t.pri):"none",boxShadow:"0 2px 8px rgba(0,0,0,.04)",scrollMarginTop:HEADER_H+4,cursor:"pointer",transition:"box-shadow .15s",display:"flex",flexDirection:"column"}} onClick={function(){handleMonthToggle(md.month);}}>
                         <div style={{padding:"20px 20px 16px"}}>
                           <div style={{display:"flex",alignItems:"center",gap:8,marginBottom:6}}>
                             <div style={{fontSize:".95rem",fontWeight:700,color:C.h}}>{md.label}</div>
@@ -933,7 +923,7 @@ export default function BabyTracker({ session }){
                           );
                         })}
                         {!diveResults["ms-"+md.month]&&<div style={{marginTop:14}}>
-                          <button onClick={function(){doDive("milestone","ms-"+md.month,"Month "+md.month+" milestones for "+profile.name+", "+age.label+" old. Checked: "+count+"/"+total+".");}} style={{background:t.badge,color:t.badgeTxt,border:"1px solid "+(t.mid),borderRadius:8,padding:"8px 14px",fontSize:".8rem",fontWeight:600,cursor:"pointer",display:"flex",alignItems:"center",gap:5}}>
+                          <button onClick={function(){doDive("milestone","ms-"+md.month,"Month "+md.month+" milestones for "+profile.name+", "+age.label+" old. Checked: "+count+"/"+total+".");}} style={{background:t.badge,color:t.badgeTxt,border:"none",borderRadius:6,padding:"0 14px",height:34,fontSize:".78rem",fontWeight:600,cursor:"pointer",display:"flex",alignItems:"center",gap:5}}>
                             <svg viewBox="0 0 24 24" style={{width:14,height:14,stroke:t.badgeTxt,fill:"none",strokeWidth:2.2,strokeLinecap:"round",strokeLinejoin:"round"}}><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
                             Learn More
                           </button>
@@ -954,12 +944,16 @@ export default function BabyTracker({ session }){
               });
             })()}
           </div>
+          </div>}
 
+          {activeNav==="summary"&&<div>
           {/* SUMMARY */}
           <MonthlySummarySection feeds={feeds} nightSleep={nightSleep} naps={naps} growthEntries={growthEntries} profile={profile} age={age} t={t} sectionRef={function(el){sectionRefs.current.summary=el;}} />
+          </div>}
 
+          {activeNav==="education"&&<div>
           {/* EDUCATION */}
-          <div ref={function(el){sectionRefs.current.education=el;}} data-sec="education" style={{marginBottom:20,scrollMarginTop:HEADER_H}}>
+          <div ref={function(el){sectionRefs.current.education=el;}} data-sec="education" style={{marginBottom:20}}>
             <div style={{fontSize:"1.05rem",fontWeight:600,color:t.pri,marginBottom:6,display:"flex",alignItems:"center",gap:8}}><NavIcon type="education" color={t.pri}/> Education</div>
             <p style={{fontSize:".84rem",color:C.sec,marginBottom:16,lineHeight:1.5}}>Evidence-based guidance from CDC, AAP, and WHO.</p>
 
@@ -972,10 +966,10 @@ export default function BabyTracker({ session }){
                 var rowHasOpen=row.some(function(t2){return t2.id===openEdu;});
                 return(
                   <React.Fragment key={ri}>
-                  <div style={{display:"grid",gridTemplateColumns:"repeat("+ECOLS+",1fr)",gap:14,marginBottom:rowHasOpen?0:14}}>
+                  <div className="btEduGrid" style={{display:"grid",gridTemplateColumns:"repeat("+ECOLS+",1fr)",gap:14,marginBottom:rowHasOpen?0:14}}>
                   {row.map(function(topic){
                     return(
-                      <div key={topic.id} ref={function(el){eduRefs.current[topic.id]=el;}} onClick={function(){handleEduToggle(topic.id);}} style={{background:"#fff",borderRadius:14,overflow:"hidden",border:openEdu===topic.id?"2px solid "+(t.pri):"none",boxShadow:"0 2px 8px rgba(0,0,0,.04)",scrollMarginTop:HEADER_H+4,cursor:"pointer",transition:"box-shadow .15s",display:"flex",flexDirection:"column"}}>
+                      <div key={topic.id} ref={function(el){eduRefs.current[topic.id]=el;}} onClick={function(){handleEduToggle(topic.id);}} style={{background:"#fff",borderRadius:14,overflow:"hidden",border:openEdu===topic.id?"1px solid "+(t.pri):"none",boxShadow:"0 2px 8px rgba(0,0,0,.04)",scrollMarginTop:HEADER_H+4,cursor:"pointer",transition:"box-shadow .15s",display:"flex",flexDirection:"column"}}>
                         <div style={{padding:"20px 20px 16px"}}>
                           <div style={{display:"flex",alignItems:"center",gap:8,marginBottom:6}}>
                             <span style={{fontSize:"1.1rem",lineHeight:1}}>{topic.icon}</span>
@@ -1005,8 +999,8 @@ export default function BabyTracker({ session }){
                           </div>
                         );})}
                         <div style={{marginTop:16,paddingTop:12}}>
-                          {!diveResults[topicDiveKey]&&<button onClick={function(){doDive("education",topicDiveKey,"Category: "+topic.title+". Baby: "+profile.name+", "+age.label+" old.\n\n"+allContent);}} style={{background:t.badge,color:t.badgeTxt,border:"1px solid "+(t.mid),borderRadius:6,padding:"6px 12px",fontSize:".76rem",fontWeight:600,cursor:"pointer",display:"inline-flex",alignItems:"center",gap:4}}>
-                            <svg viewBox="0 0 24 24" style={{width:13,height:13,stroke:t.badgeTxt,fill:"none",strokeWidth:2.2,strokeLinecap:"round",strokeLinejoin:"round"}}><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                          {!diveResults[topicDiveKey]&&<button onClick={function(){doDive("education",topicDiveKey,"Category: "+topic.title+". Baby: "+profile.name+", "+age.label+" old.\n\n"+allContent);}} style={{background:t.badge,color:t.badgeTxt,border:"none",borderRadius:6,padding:"0 14px",height:34,fontSize:".78rem",fontWeight:600,cursor:"pointer",display:"inline-flex",alignItems:"center",gap:4}}>
+                            <svg viewBox="0 0 24 24" style={{width:14,height:14,stroke:t.badgeTxt,fill:"none",strokeWidth:2.2,strokeLinecap:"round",strokeLinejoin:"round"}}><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
                             Learn More
                           </button>}
                           {diveLoading===topicDiveKey&&<Spinner/>}
@@ -1026,9 +1020,11 @@ export default function BabyTracker({ session }){
               });
             })()}
           </div>
+          </div>}
 
+          {activeNav==="resources"&&<div>
           {/* RESOURCES */}
-          <div ref={function(el){sectionRefs.current.resources=el;}} data-sec="resources" style={{marginBottom:20,scrollMarginTop:HEADER_H}}>
+          <div ref={function(el){sectionRefs.current.resources=el;}} data-sec="resources" style={{marginBottom:20}}>
             <div style={{fontSize:"1.05rem",fontWeight:600,color:t.pri,marginBottom:6,display:"flex",alignItems:"center",gap:8}}><NavIcon type="resources" color={t.pri}/> Resources</div>
             <p style={{fontSize:".84rem",color:C.sec,marginBottom:16,lineHeight:1.5}}>Credible sources for learning more about your baby's development, health, and well-being.</p>
             <div style={{background:"#fff",borderRadius:12,padding:"18px 20px",boxShadow:"0 2px 8px rgba(0,0,0,.04)"}}>
@@ -1041,6 +1037,7 @@ export default function BabyTracker({ session }){
               );})}
             </div>
           </div>
+          </div>}
 
           <div style={{marginTop:20}}>
             <p style={{fontSize:".72rem",color:C.help,lineHeight:1.6}}>Sources: CDC, AAP, and WHO evidence-based guidelines. Not a substitute for pediatric advice.</p>
@@ -1057,12 +1054,22 @@ export default function BabyTracker({ session }){
         </div>
       </div>
 
+      {/* BOTTOM NAV */}
+      <div className="btBottomBar" style={{display:"none",position:"fixed",bottom:0,left:0,right:0,background:"#fff",borderTop:"1px solid #e8eeec",justifyContent:"space-around",alignItems:"center",zIndex:200,boxShadow:"0 -2px 8px rgba(0,0,0,.06)",paddingTop:8,paddingBottom:"calc(env(safe-area-inset-bottom) + 8px)"}}>
+        {navSections.map(function(s){return(
+          <button key={s.id} onClick={function(){navClick(s.id);}} style={{flex:1,height:46,border:"none",background:"transparent",cursor:"pointer",display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",gap:3,transition:"all .15s",padding:0}} aria-label={s.label}>
+            <NavIcon type={s.icon} color={activeNav===s.id?t.pri:"#999"}/>
+            <span style={{fontSize:".62rem",fontWeight:activeNav===s.id?600:400,color:activeNav===s.id?t.pri:"#999",letterSpacing:".01em"}}>{s.label}</span>
+          </button>
+        );})}
+      </div>
+
       {/* CHAT */}
       {chatOpen&&(
-        <div style={{position:"fixed",top:HEADER_H,right:0,width:390,maxWidth:"100vw",height:"min(480px,70vh)",background:"#fff",borderBottomLeftRadius:16,boxShadow:"-4px 4px 24px rgba(0,0,0,.12)",zIndex:500,display:"flex",flexDirection:"column",overflow:"hidden",border:"1px solid "+(t.mid),borderTop:"none"}}>
+        <div style={{position:"fixed",top:HEADER_H,right:0,width:390,maxWidth:"100vw",height:"min(480px,70vh)",background:"#fff",borderBottomLeftRadius:16,boxShadow:"-4px 4px 24px rgba(0,0,0,.12)",zIndex:500,display:"flex",flexDirection:"column",overflow:"hidden",border:"1px solid #ddd",borderTop:"none"}}>
           <div style={{padding:"14px 18px",background:t.lt,display:"flex",justifyContent:"space-between",alignItems:"center",flexShrink:0}}>
             <div><div style={{fontWeight:500,fontSize:".92rem",color:t.pri}}>Ask Expert</div><div style={{fontSize:".72rem",color:"#777"}}>{profile.name} &middot; {age.label} old</div></div>
-            <button onClick={function(){setChatOpen(false);}} style={{background:"#fff",border:"1px solid "+(t.mid),color:"#777",width:28,height:28,borderRadius:6,cursor:"pointer",fontSize:".85rem",display:"flex",alignItems:"center",justifyContent:"center"}}>&#10005;</button>
+            <button onClick={function(){setChatOpen(false);}} style={{background:"#fff",border:"1px solid #ddd",color:"#777",width:28,height:28,borderRadius:6,cursor:"pointer",fontSize:".85rem",display:"flex",alignItems:"center",justifyContent:"center"}}>&#10005;</button>
           </div>
           <div style={{flex:1,overflowY:"auto",padding:16}}>
             {chatMsgs.length===0&&(
@@ -1084,7 +1091,7 @@ export default function BabyTracker({ session }){
             <div ref={chatEndRef}/>
           </div>
           <div style={{padding:"10px 14px",borderTop:"1px solid #eee",display:"flex",gap:8,flexShrink:0}}>
-            <input ref={chatInputRef} value={chatInput} onChange={function(e){setChatInput(e.target.value);}} onKeyDown={function(e){if(e.key==="Enter")sendChat();}} placeholder="Ask about baby care..." style={{flex:1,padding:"10px 14px",border:"1px solid "+(t.mid),borderRadius:10,fontSize:".86rem",outline:"none"}}/>
+            <input ref={chatInputRef} value={chatInput} onChange={function(e){setChatInput(e.target.value);}} onKeyDown={function(e){if(e.key==="Enter")sendChat();}} placeholder="Ask about baby care..." style={{flex:1,padding:"10px 14px",border:"1px solid #ddd",borderRadius:10,fontSize:".86rem",outline:"none"}}/>
             <button onClick={sendChat} disabled={!chatInput.trim()||chatLoading} style={{background:t.pri,color:"#fff",border:"none",borderRadius:10,padding:"0 18px",fontWeight:600,cursor:chatInput.trim()&&!chatLoading?"pointer":"not-allowed",opacity:chatInput.trim()&&!chatLoading?1:.5,fontSize:".86rem"}}>Send</button>
           </div>
         </div>
