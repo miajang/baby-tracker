@@ -349,7 +349,7 @@ function MonthlySummarySection({ feeds, nightSleep, naps, growthEntries, profile
   var arrowStyle = function(enabled){ return {width:34,height:34,borderRadius:8,border:"1.5px solid "+(enabled?t.mid:"#eee"),background:enabled?"#fff":"#fafafa",cursor:enabled?"pointer":"not-allowed",display:"flex",alignItems:"center",justifyContent:"center",opacity:enabled?1:0.35}; };
 
   return (
-    <div ref={sectionRef} data-sec="summary" style={{marginBottom:36,scrollMarginTop:HEADER_H,borderTop:"1px solid #e8eeec",paddingTop:14}}>
+    <div ref={sectionRef} data-sec="summary" style={{marginBottom:20,scrollMarginTop:HEADER_H,background:"#fff",borderRadius:12,padding:"22px 24px",boxShadow:"0 1px 3px rgba(0,0,0,.04)"}}>
       <div style={{fontSize:"1.05rem",fontWeight:600,color:t.pri,marginBottom:14,display:"flex",alignItems:"center",gap:8}}><NavIcon type="summary" color={t.pri}/> Summary</div>
 
       <div style={{display:"flex",alignItems:"center",gap:14,marginBottom:20}}>
@@ -705,7 +705,7 @@ export default function BabyTracker({ session }){
       <div style={{display:"flex",minHeight:"calc(100vh - 105px)"}}>
         <div className="btNavD" style={{width:200,minWidth:200,background:"#fff",borderRight:"1px solid #eee",padding:"12px 0",position:"sticky",top:105,height:"calc(100vh - 105px)",overflowY:"auto",display:"flex",flexDirection:"column"}}><NavItems/></div>
 
-        <div style={{flex:1,padding:"24px 28px",paddingBottom:"60vh",overflowY:"auto",background:t.contBg}}>
+        <div style={{flex:1,padding:"24px 28px",paddingBottom:"60vh",overflowY:"auto",background:"#f2f4f8"}}>
 
           <div style={{display:"flex",alignItems:"center",gap:10,flexWrap:"wrap",marginBottom:20}}>
             <span style={{background:t.badge,color:t.badgeTxt,borderRadius:20,padding:"5px 14px",fontSize:".82rem",fontWeight:700}}>{profile.name}</span>
@@ -713,7 +713,7 @@ export default function BabyTracker({ session }){
           </div>
 
           {/* TRACKER */}
-          <div ref={function(el){sectionRefs.current.tracker=el;}} data-sec="tracker" style={{marginBottom:36,scrollMarginTop:HEADER_H}}>
+          <div ref={function(el){sectionRefs.current.tracker=el;}} data-sec="tracker" style={{marginBottom:20,scrollMarginTop:HEADER_H,background:"#fff",borderRadius:12,padding:"22px 24px",boxShadow:"0 1px 3px rgba(0,0,0,.04)"}}>
             <div style={{fontSize:"1.05rem",fontWeight:600,color:t.pri,marginBottom:14,display:"flex",alignItems:"center",gap:8}}><NavIcon type="tracker" color={t.pri}/> Tracker</div>
 
             <div style={{background:"#fff",borderRadius:12,padding:"18px 20px",marginBottom:16,boxShadow:"0 2px 6px rgba(0,0,0,.05)"}}>
@@ -779,7 +779,7 @@ export default function BabyTracker({ session }){
           </div>
 
           {/* GROWTH */}
-          <div ref={function(el){sectionRefs.current.growth=el;}} data-sec="growth" style={{marginBottom:36,scrollMarginTop:HEADER_H,borderTop:"1px solid #e8eeec",paddingTop:14}}>
+          <div ref={function(el){sectionRefs.current.growth=el;}} data-sec="growth" style={{marginBottom:20,scrollMarginTop:HEADER_H,background:"#fff",borderRadius:12,padding:"22px 24px",boxShadow:"0 1px 3px rgba(0,0,0,.04)"}}>
             <div style={{fontSize:"1.05rem",fontWeight:600,color:t.pri,marginBottom:12,display:"flex",alignItems:"center",gap:8}}><NavIcon type="growth" color={t.pri}/> Growth</div>
             <div style={{background:"#fff",borderRadius:12,padding:"18px 20px",boxShadow:"0 2px 6px rgba(0,0,0,.05)"}}>
               <div style={{display:"flex",gap:8,flexWrap:"wrap",marginBottom:12}}>
@@ -807,7 +807,7 @@ export default function BabyTracker({ session }){
           </div>
 
           {/* MILESTONES */}
-          <div ref={function(el){sectionRefs.current.milestones=el;}} data-sec="milestones" style={{marginBottom:36,scrollMarginTop:HEADER_H,borderTop:"1px solid #e8eeec",paddingTop:14}}>
+          <div ref={function(el){sectionRefs.current.milestones=el;}} data-sec="milestones" style={{marginBottom:20,scrollMarginTop:HEADER_H,background:"#fff",borderRadius:12,padding:"22px 24px",boxShadow:"0 1px 3px rgba(0,0,0,.04)"}}>
             <div style={{fontSize:"1.05rem",fontWeight:600,color:t.pri,marginBottom:6,display:"flex",alignItems:"center",gap:8}}><NavIcon type="milestones" color={t.pri}/> Milestones</div>
             <p style={{fontSize:".84rem",color:C.sec,marginBottom:16,lineHeight:1.5}}>Month-by-month developmental milestones based on CDC and AAP guidelines. Check all that apply as {profile.name} achieves them.</p>
 
@@ -828,7 +828,7 @@ export default function BabyTracker({ session }){
                     var isCurrent=md.month===currentMonth;
                     var progressColor=count===0?"#ddd":pct>=75?"#4caf50":pct>=50?"#f59e0b":"#e57373";
                     return(
-                      <div key={md.month} ref={function(el){monthRefs.current[md.month]=el;}} style={{background:"#fff",borderRadius:14,overflow:"hidden",border:openMonth===md.month?"2px solid "+(t.pri):isCurrent?"2px solid "+(t.pri):"1px solid #e8e8e8",scrollMarginTop:HEADER_H+4,cursor:"pointer",transition:"box-shadow .15s",display:"flex",flexDirection:"column"}} onClick={function(){handleMonthToggle(md.month);}}>
+                      <div key={md.month} ref={function(el){monthRefs.current[md.month]=el;}} style={{background:"#f8faf9",borderRadius:14,overflow:"hidden",border:openMonth===md.month?"2px solid "+(t.pri):isCurrent?"2px solid "+(t.pri):"1px solid #e8e8e8",scrollMarginTop:HEADER_H+4,cursor:"pointer",transition:"box-shadow .15s",display:"flex",flexDirection:"column"}} onClick={function(){handleMonthToggle(md.month);}}>
                         <div style={{padding:"20px 20px 16px"}}>
                           <div style={{display:"flex",alignItems:"center",gap:8,marginBottom:6}}>
                             <div style={{fontSize:".95rem",fontWeight:700,color:C.h}}>{md.label}</div>
@@ -909,7 +909,7 @@ export default function BabyTracker({ session }){
           <MonthlySummarySection feeds={feeds} nightSleep={nightSleep} naps={naps} growthEntries={growthEntries} profile={profile} age={age} t={t} sectionRef={function(el){sectionRefs.current.summary=el;}} />
 
           {/* EDUCATION */}
-          <div ref={function(el){sectionRefs.current.education=el;}} data-sec="education" style={{marginBottom:36,scrollMarginTop:HEADER_H,borderTop:"1px solid #e8eeec",paddingTop:14}}>
+          <div ref={function(el){sectionRefs.current.education=el;}} data-sec="education" style={{marginBottom:20,scrollMarginTop:HEADER_H,background:"#fff",borderRadius:12,padding:"22px 24px",boxShadow:"0 1px 3px rgba(0,0,0,.04)"}}>
             <div style={{fontSize:"1.05rem",fontWeight:600,color:t.pri,marginBottom:6,display:"flex",alignItems:"center",gap:8}}><NavIcon type="education" color={t.pri}/> Education</div>
             <p style={{fontSize:".84rem",color:C.sec,marginBottom:16,lineHeight:1.5}}>Evidence-based guidance from CDC, AAP, and WHO.</p>
 
@@ -925,7 +925,7 @@ export default function BabyTracker({ session }){
                   <div style={{display:"grid",gridTemplateColumns:"repeat("+ECOLS+",1fr)",gap:14,marginBottom:rowHasOpen?0:14}}>
                   {row.map(function(topic){
                     return(
-                      <div key={topic.id} ref={function(el){eduRefs.current[topic.id]=el;}} onClick={function(){handleEduToggle(topic.id);}} style={{background:"#fff",borderRadius:14,overflow:"hidden",border:openEdu===topic.id?"2px solid "+(t.pri):"1px solid #e8e8e8",scrollMarginTop:HEADER_H+4,cursor:"pointer",transition:"box-shadow .15s",display:"flex",flexDirection:"column"}}>
+                      <div key={topic.id} ref={function(el){eduRefs.current[topic.id]=el;}} onClick={function(){handleEduToggle(topic.id);}} style={{background:"#f8faf9",borderRadius:14,overflow:"hidden",border:openEdu===topic.id?"2px solid "+(t.pri):"1px solid #e8e8e8",scrollMarginTop:HEADER_H+4,cursor:"pointer",transition:"box-shadow .15s",display:"flex",flexDirection:"column"}}>
                         <div style={{padding:"20px 20px 16px"}}>
                           <div style={{display:"flex",alignItems:"center",gap:8,marginBottom:6}}>
                             <span style={{fontSize:"1.1rem",lineHeight:1}}>{topic.icon}</span>
@@ -978,7 +978,7 @@ export default function BabyTracker({ session }){
           </div>
 
           {/* RESOURCES */}
-          <div ref={function(el){sectionRefs.current.resources=el;}} data-sec="resources" style={{marginBottom:36,scrollMarginTop:HEADER_H,borderTop:"1px solid #e8eeec",paddingTop:14}}>
+          <div ref={function(el){sectionRefs.current.resources=el;}} data-sec="resources" style={{marginBottom:20,scrollMarginTop:HEADER_H,background:"#fff",borderRadius:12,padding:"22px 24px",boxShadow:"0 1px 3px rgba(0,0,0,.04)"}}>
             <div style={{fontSize:"1.05rem",fontWeight:600,color:t.pri,marginBottom:6,display:"flex",alignItems:"center",gap:8}}><NavIcon type="resources" color={t.pri}/> Resources</div>
             <p style={{fontSize:".84rem",color:C.sec,marginBottom:16,lineHeight:1.5}}>Credible sources for learning more about your baby's development, health, and well-being.</p>
             <div style={{background:"#fff",borderRadius:12,padding:"18px 20px",boxShadow:"0 2px 6px rgba(0,0,0,.05)"}}>
@@ -995,7 +995,7 @@ export default function BabyTracker({ session }){
           <div style={{marginTop:20}}>
             <p style={{fontSize:".72rem",color:C.help,lineHeight:1.6}}>Sources: CDC, AAP, and WHO evidence-based guidelines. Not a substitute for pediatric advice.</p>
           </div>
-          <div style={{padding:"16px 0",borderTop:"1px solid #eee",marginTop:12,textAlign:"center"}}>
+          <div style={{padding:"16px 0",marginTop:12,textAlign:"center"}}>
             <div style={{display:"flex",alignItems:"center",justifyContent:"center",gap:6}}>
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" style={{width:16,height:16,flexShrink:0}}><circle cx="24" cy="24" r="24" fill="#d4899e"/><g fill="none" stroke="#fff" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" transform="translate(12,13)"><path d="M9 12l-1.5 7H6.5a2 2 0 0 1 0-4h11a2 2 0 0 1 0 4h-1l-1.5-7"/><circle cx="12" cy="7" r="4.5"/></g></svg>
               <span style={{fontSize:".82rem"}}><span style={{fontWeight:500,color:"#d4899e"}}>Baby</span><span style={{fontWeight:300,color:"#d4899e"}}>Tracker</span></span>
