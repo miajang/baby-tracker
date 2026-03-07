@@ -664,7 +664,7 @@ export default function BabyTracker({ session }){
         <div style={{display:"grid",gridTemplateColumns:"auto 1fr",gridTemplateRows:"auto auto",columnGap:16,rowGap:4}}>
           <div style={{gridRow:"1/3",display:"flex",alignItems:"flex-end"}}>
             <div style={{display:"flex",alignItems:"center",gap:7}}>
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" style={{width:26,height:26,flexShrink:0}}><circle cx="24" cy="24" r="24" fill="#d4899e"/><g fill="none" stroke="#fff" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" transform="translate(12,10)"><path d="M9 12l-1.5 7H6.5a2 2 0 0 1 0-4h11a2 2 0 0 1 0 4h-1l-1.5-7"/><circle cx="12" cy="7" r="4.5"/></g></svg>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" style={{width:26,height:26,flexShrink:0}}><circle cx="24" cy="24" r="24" fill="#d4899e"/><g fill="none" stroke="#fff" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" transform="translate(12,13)"><path d="M9 12l-1.5 7H6.5a2 2 0 0 1 0-4h11a2 2 0 0 1 0 4h-1l-1.5-7"/><circle cx="12" cy="7" r="4.5"/></g></svg>
               <div>
                 <div style={{fontSize:"1.1rem"}}><span style={{fontWeight:500,color:"#d4899e"}}>Baby</span><span style={{fontWeight:300,color:"#d4899e"}}>Tracker</span></div>
                 <div style={{fontSize:".72rem",color:"#aaa",marginTop:1}}>Every Milestone Matters</div>
@@ -997,7 +997,7 @@ export default function BabyTracker({ session }){
           </div>
           <div style={{padding:"16px 0",borderTop:"1px solid #eee",marginTop:12,textAlign:"center"}}>
             <div style={{display:"flex",alignItems:"center",justifyContent:"center",gap:6}}>
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" style={{width:16,height:16,flexShrink:0}}><circle cx="24" cy="24" r="24" fill="#d4899e"/><g fill="none" stroke="#fff" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" transform="translate(12,10)"><path d="M9 12l-1.5 7H6.5a2 2 0 0 1 0-4h11a2 2 0 0 1 0 4h-1l-1.5-7"/><circle cx="12" cy="7" r="4.5"/></g></svg>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" style={{width:16,height:16,flexShrink:0}}><circle cx="24" cy="24" r="24" fill="#d4899e"/><g fill="none" stroke="#fff" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" transform="translate(12,13)"><path d="M9 12l-1.5 7H6.5a2 2 0 0 1 0-4h11a2 2 0 0 1 0 4h-1l-1.5-7"/><circle cx="12" cy="7" r="4.5"/></g></svg>
               <span style={{fontSize:".82rem"}}><span style={{fontWeight:500,color:"#d4899e"}}>Baby</span><span style={{fontWeight:300,color:"#d4899e"}}>Tracker</span></span>
               <span style={{fontSize:".68rem",color:"#aaa"}}>&middot;</span>
               <span style={{fontSize:".68rem",color:"#aaa"}}>Every Milestone Matters</span>

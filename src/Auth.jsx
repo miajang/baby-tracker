@@ -46,8 +46,10 @@ export default function Auth({ onLogin }) {
         <div style={{ textAlign: "center", marginBottom: 32 }}>
           <div style={{ width: 48, height: 48, borderRadius: "50%", background: BRAND, display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 12px" }}>
             <svg viewBox="0 0 24 24" style={{ width: 26, height: 26, fill: "none", stroke: "#fff", strokeWidth: 1.8, strokeLinecap: "round", strokeLinejoin: "round" }}>
-              <path d="M9 12l-1.5 7H6.5a2 2 0 0 1 0-4h11a2 2 0 0 1 0 4h-1l-1.5-7" />
-              <circle cx="12" cy="7" r="4.5" />
+              <g transform="translate(0,1.5)">
+                <path d="M9 12l-1.5 7H6.5a2 2 0 0 1 0-4h11a2 2 0 0 1 0 4h-1l-1.5-7" />
+                <circle cx="12" cy="7" r="4.5" />
+              </g>
             </svg>
           </div>
           <div style={{ fontSize: "1.5rem", marginBottom: 2 }}><span style={{ fontWeight: 500, color: "#d4899e" }}>Baby</span><span style={{ fontWeight: 300, color: "#d4899e" }}>Tracker</span></div>
