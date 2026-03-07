@@ -346,19 +346,19 @@ function MonthlySummarySection({ feeds, nightSleep, naps, growthEntries, profile
   var ths = {padding:"10px 14px",fontSize:".72rem",fontWeight:700,color:C.sec,textTransform:"uppercase",letterSpacing:".05em",borderBottom:"1px solid #ddd",textAlign:"left",whiteSpace:"nowrap"};
   var dash = <span style={{color:"#ccc"}}>&mdash;</span>;
 
-  var arrowStyle = function(enabled){ return {width:34,height:34,borderRadius:8,border:"1px solid "+(enabled?t.mid:"#eee"),background:enabled?"#fff":"#fafafa",cursor:enabled?"pointer":"not-allowed",display:"flex",alignItems:"center",justifyContent:"center",opacity:enabled?1:0.35}; };
+  var arrowStyle = function(enabled){ return {width:34,height:34,borderRadius:8,border:"1px solid "+(enabled?"#ccc":"#ddd"),background:enabled?"#fff":"#f5f5f5",cursor:enabled?"pointer":"not-allowed",display:"flex",alignItems:"center",justifyContent:"center",opacity:enabled?1:0.5}; };
 
   return (
     <div ref={sectionRef} data-sec="summary" style={{marginBottom:20}}>
       <div style={{fontSize:"1.05rem",fontWeight:600,color:t.pri,marginBottom:14,display:"flex",alignItems:"center",gap:8}}><NavIcon type="summary" color={t.pri}/> Summary</div>
 
-      <div style={{display:"flex",alignItems:"center",gap:14,marginBottom:20}}>
+      <div style={{display:"flex",alignItems:"center",gap:14,paddingBottom:14,marginBottom:18,borderBottom:"1px solid #f0f0f0"}}>
         <button onClick={function(){if(canPrev)setSelIdx(selIdx-1);}} disabled={!canPrev} style={arrowStyle(canPrev)}>
-          <svg viewBox="0 0 24 24" style={{width:16,height:16,stroke:canPrev?t.pri:"#bbb",fill:"none",strokeWidth:2.5,strokeLinecap:"round",strokeLinejoin:"round"}}><polyline points="15 18 9 12 15 6"/></svg>
+          <svg viewBox="0 0 24 24" style={{width:16,height:16,stroke:canPrev?t.pri:"#ccc",fill:"none",strokeWidth:2.5,strokeLinecap:"round",strokeLinejoin:"round"}}><polyline points="15 18 9 12 15 6"/></svg>
         </button>
         <div style={{fontSize:"1rem",fontWeight:700,color:C.h,minWidth:180,textAlign:"center"}}>{selLabel}</div>
         <button onClick={function(){if(canNext)setSelIdx(selIdx+1);}} disabled={!canNext} style={arrowStyle(canNext)}>
-          <svg viewBox="0 0 24 24" style={{width:16,height:16,stroke:canNext?t.pri:"#bbb",fill:"none",strokeWidth:2.5,strokeLinecap:"round",strokeLinejoin:"round"}}><polyline points="9 18 15 12 9 6"/></svg>
+          <svg viewBox="0 0 24 24" style={{width:16,height:16,stroke:canNext?t.pri:"#ccc",fill:"none",strokeWidth:2.5,strokeLinecap:"round",strokeLinejoin:"round"}}><polyline points="9 18 15 12 9 6"/></svg>
         </button>
       </div>
 
@@ -826,12 +826,12 @@ export default function BabyTracker({ session }){
                   <div style={{fontSize:".88rem",fontWeight:700,color:C.h,marginBottom:4}}>Growth Insights</div>
                   <div style={{fontSize:".78rem",color:C.sec,marginBottom:16}}>At {mo} month{mo!==1?"s":""} ({isGirl?"girls":"boys"})</div>
                   <div style={{display:"flex",gap:12}}>
-                    <div style={{flex:1,background:"#fff",borderRadius:10,padding:"16px 14px",textAlign:"center"}}>
+                    <div style={{flex:1,background:"#F2F4F8",borderRadius:10,padding:"16px 14px",textAlign:"center"}}>
                       <div style={{fontSize:".72rem",color:C.sec,textTransform:"uppercase",letterSpacing:".05em",marginBottom:6}}>Weight Range</div>
                       <div style={{fontSize:".95rem",fontWeight:600,color:C.h}}>{wLoLbs} {"\u2013"} {wHiLbs}</div>
                       <div style={{fontSize:".76rem",color:C.sec,marginTop:2}}>lbs</div>
                     </div>
-                    <div style={{flex:1,background:"#fff",borderRadius:10,padding:"16px 14px",textAlign:"center"}}>
+                    <div style={{flex:1,background:"#F2F4F8",borderRadius:10,padding:"16px 14px",textAlign:"center"}}>
                       <div style={{fontSize:".72rem",color:C.sec,textTransform:"uppercase",letterSpacing:".05em",marginBottom:6}}>Height Range</div>
                       <div style={{fontSize:".95rem",fontWeight:600,color:C.h}}>{lLoIn} {"\u2013"} {lHiIn}</div>
                       <div style={{fontSize:".76rem",color:C.sec,marginTop:2}}>inches</div>
