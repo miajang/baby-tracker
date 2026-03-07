@@ -527,6 +527,7 @@ export default function BabyTracker({ session }){
   var addNap=function(){if(!napH1||!napH2)return;var st=formatTimeFields(napH1,napM1,napAP1),en=formatTimeFields(napH2,napM2,napAP2);var dur=calcDurFromFields(napH1,napM1,napAP1,napH2,napM2,napAP2);var entry={id:Date.now(),date:new Date().toLocaleDateString(),start:st,end:en,durMins:dur};setNaps(function(pv){return[entry].concat(pv);});if(userId)db.addNap(userId,entry);setNapH1("");setNapM1("");setNapH2("");setNapM2("");};
   var delNap=function(id){setNaps(function(pv){return pv.filter(function(s){return s.id!==id;});});if(userId)db.deleteNap(userId,id);};
   var addGrowth=function(){if(!gW&&!gL)return;var entry={id:Date.now(),date:new Date().toLocaleDateString(),weight:gW?parseFloat(gW):null,length:gL?parseFloat(gL):null,ageMonths:age.months};setGrowthEntries(function(pv){return[entry].concat(pv);});if(userId)db.addGrowthEntry(userId,entry);setGW("");setGL("");};
+  var delGrowth=function(id){setGrowthEntries(function(pv){return pv.filter(function(g){return g.id!==id;});});if(userId)db.deleteGrowthEntry(userId,id);};
 
   var toggleCheck=function(mo,cat,idx){var k=mo+"-"+cat+"-"+idx;setMilestoneChecks(function(pv){var n=Object.assign({},pv);n[k]=n[k]?null:new Date().toLocaleDateString();if(userId)db.saveMilestoneChecks(userId,n);return n;});};
   var getMonthCount=function(mo){var c=0;var md=milestoneData.find(function(m){return m.month===mo;});if(!md)return 0;md.categories.forEach(function(cat){cat.items.forEach(function(_,i){if(milestoneChecks[mo+"-"+cat.cat+"-"+i])c++;});});return c;};
@@ -655,7 +656,7 @@ export default function BabyTracker({ session }){
 
   return(
     <div style={{fontFamily:"'Segoe UI',system-ui,sans-serif",background:"#fff",minHeight:"100vh",color:C.body}}>
-      <style>{"@keyframes spin{to{transform:rotate(360deg)}} @media(max-width:768px){.btNavD{display:none!important}.btHam{display:flex!important}} input::-webkit-outer-spin-button,input::-webkit-inner-spin-button{-webkit-appearance:none;margin:0} input[type=number]{-moz-appearance:textfield;}"}</style>
+      <style>{"@keyframes spin{to{transform:rotate(360deg)}} @media(max-width:768px){.btNavD{display:none!important}.btHam{display:flex!important}.btGrowthGrid{grid-template-columns:1fr!important}} input::-webkit-outer-spin-button,input::-webkit-inner-spin-button{-webkit-appearance:none;margin:0} input[type=number]{-moz-appearance:textfield;}"}</style>
 
       <LoginOverlay/>
       {summaryOpen && <MonthlySummaryPage feeds={feeds} nightSleep={nightSleep} naps={naps} growthEntries={growthEntries} profile={profile} age={age} onClose={function(){setSummaryOpen(false);}} t={t} />}
@@ -791,30 +792,68 @@ export default function BabyTracker({ session }){
 
           {/* GROWTH */}
           <div ref={function(el){sectionRefs.current.growth=el;}} data-sec="growth" style={{marginBottom:20,scrollMarginTop:HEADER_H,background:"#fff",borderRadius:12,padding:"22px 24px",boxShadow:"0 1px 3px rgba(0,0,0,.04)"}}>
-            <div style={{fontSize:"1.05rem",fontWeight:600,color:t.pri,marginBottom:12,display:"flex",alignItems:"center",gap:8}}><NavIcon type="growth" color={t.pri}/> Growth</div>
-            <div style={{background:"#fff",borderRadius:12,padding:"18px 20px",boxShadow:"0 2px 6px rgba(0,0,0,.05)"}}>
-              <div style={{display:"flex",gap:8,flexWrap:"wrap",marginBottom:12}}>
-                <div style={{display:"flex",alignItems:"center",gap:4}}>
-                  <input type="text" inputMode="decimal" placeholder="Weight" value={gW} onChange={function(e){var v=e.target.value;if(v===""||/^\d*\.?\d*$/.test(v))setGW(v);}} style={{width:80,padding:"8px 10px",border:"1.5px solid "+(t.mid),borderRadius:8,fontSize:".85rem",outline:"none"}}/>
-                  <span style={{fontSize:".82rem",fontWeight:600,color:C.sec}}>lbs</span>
+            <div style={{fontSize:"1.05rem",fontWeight:600,color:t.pri,marginBottom:14,display:"flex",alignItems:"center",gap:8}}><NavIcon type="growth" color={t.pri}/> Growth</div>
+            <div className="btGrowthGrid" style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:14}}>
+              {/* Left: input + log */}
+              <div style={{background:"#f8faf9",borderRadius:12,padding:"18px 20px",display:"flex",flexDirection:"column"}}>
+                <div style={{fontSize:".88rem",fontWeight:700,color:C.h,marginBottom:12}}>Measurement</div>
+                <div style={{display:"flex",gap:8,flexWrap:"wrap",marginBottom:12}}>
+                  <div style={{display:"flex",alignItems:"center",gap:4}}>
+                    <input type="text" inputMode="decimal" placeholder="Weight" value={gW} onChange={function(e){var v=e.target.value;if(v===""||/^\d*\.?\d*$/.test(v))setGW(v);}} style={{width:80,padding:"8px 10px",border:"1.5px solid "+(t.mid),borderRadius:8,fontSize:".85rem",outline:"none"}}/>
+                    <span style={{fontSize:".82rem",fontWeight:600,color:C.sec}}>lbs</span>
+                  </div>
+                  <div style={{display:"flex",alignItems:"center",gap:4}}>
+                    <input type="text" inputMode="decimal" placeholder="Length" value={gL} onChange={function(e){var v=e.target.value;if(v===""||/^\d*\.?\d*$/.test(v))setGL(v);}} style={{width:80,padding:"8px 10px",border:"1.5px solid "+(t.mid),borderRadius:8,fontSize:".85rem",outline:"none"}}/>
+                    <span style={{fontSize:".82rem",fontWeight:600,color:C.sec}}>in</span>
+                  </div>
+                  <button onClick={addGrowth} style={{background:t.pri,color:"#fff",border:"none",borderRadius:8,padding:"8px 16px",fontSize:".82rem",fontWeight:600,cursor:"pointer"}}>+ Add</button>
                 </div>
-                <div style={{display:"flex",alignItems:"center",gap:4}}>
-                  <input type="text" inputMode="decimal" placeholder="Length" value={gL} onChange={function(e){var v=e.target.value;if(v===""||/^\d*\.?\d*$/.test(v))setGL(v);}} style={{width:80,padding:"8px 10px",border:"1.5px solid "+(t.mid),borderRadius:8,fontSize:".85rem",outline:"none"}}/>
-                  <span style={{fontSize:".82rem",fontWeight:600,color:C.sec}}>in</span>
+                <div style={{flex:1}}>
+                {growthEntries.length>0?growthEntries.slice(0,10).map(function(g){
+                  var wP=g.weight?getPercentileLabel(g.weight,g.ageMonths!=null?g.ageMonths:age.months,"weight"):null;
+                  var lP=g.length?getPercentileLabel(g.length,g.ageMonths!=null?g.ageMonths:age.months,"length"):null;
+                  return(
+                  <div key={g.id} style={{display:"flex",gap:16,padding:"7px 0",borderBottom:"1px solid #f0f0f0",fontSize:".84rem",alignItems:"center",flexWrap:"wrap"}}>
+                    <div style={{flex:1,display:"flex",gap:16,alignItems:"center",flexWrap:"wrap"}}>
+                      <span style={{color:C.sec,minWidth:80}}>{g.date}</span>
+                      {g.weight&&<span><strong>{g.weight} lbs</strong>{wP&&<span style={{color:t.pri,fontSize:".76rem",marginLeft:4}}>({wP})</span>}</span>}
+                      {g.length&&<span><strong>{g.length} in</strong>{lP&&<span style={{color:t.pri,fontSize:".76rem",marginLeft:4}}>({lP})</span>}</span>}
+                    </div>
+                    <button onClick={function(){delGrowth(g.id);}} style={{background:"none",border:"none",color:"#ccc",cursor:"pointer"}}>{"\u2715"}</button>
+                  </div>);}):<div style={{fontSize:".82rem",color:C.help,fontStyle:"italic"}}>No entries yet. Record at each well-child visit.</div>}
                 </div>
-                <button onClick={addGrowth} style={{background:t.pri,color:"#fff",border:"none",borderRadius:8,padding:"8px 16px",fontSize:".82rem",fontWeight:600,cursor:"pointer"}}>+ Add</button>
               </div>
-              {growthEntries.length>0?growthEntries.slice(0,10).map(function(g){
-                var wP=g.weight?getPercentileLabel(g.weight,g.ageMonths!=null?g.ageMonths:age.months,"weight"):null;
-                var lP=g.length?getPercentileLabel(g.length,g.ageMonths!=null?g.ageMonths:age.months,"length"):null;
+              {/* Right: growth insights */}
+              {(function(){
+                var mo=Math.min(Math.max(Math.round(age.months),0),12);
+                var isGirl=gender==="girl";
+                var wMedKg=isGirl?whoWeightGirls[0][mo]:whoWeightBoys[0][mo];
+                var lMedCm=isGirl?whoLengthGirls[0][mo]:whoLengthBoys[0][mo];
+                var wLoLbs=((wMedKg*0.90)/0.453592).toFixed(1);
+                var wHiLbs=((wMedKg*1.10)/0.453592).toFixed(1);
+                var lLoIn=((lMedCm*0.96)/2.54).toFixed(1);
+                var lHiIn=((lMedCm*1.04)/2.54).toFixed(1);
                 return(
-                <div key={g.id} style={{display:"flex",gap:16,padding:"7px 0",borderBottom:"1px solid #f5f5f5",fontSize:".84rem",alignItems:"center",flexWrap:"wrap"}}>
-                  <span style={{color:C.sec,minWidth:80}}>{g.date}</span>
-                  {g.weight&&<span><strong>{g.weight} lbs</strong>{wP&&<span style={{color:t.pri,fontSize:".76rem",marginLeft:4}}>({wP})</span>}</span>}
-                  {g.length&&<span><strong>{g.length} in</strong>{lP&&<span style={{color:t.pri,fontSize:".76rem",marginLeft:4}}>({lP})</span>}</span>}
-                </div>);}):<div style={{fontSize:".82rem",color:C.help,fontStyle:"italic"}}>No entries yet. Record at each well-child visit.</div>}
-              <div style={{fontSize:".72rem",color:C.help,marginTop:12,fontStyle:"italic"}}>Approximate percentiles based on WHO Child Growth Standards (0-24 months). For precise percentiles, consult your pediatrician.</div>
+                <div style={{background:"#f8faf9",borderRadius:12,padding:"18px 20px",display:"flex",flexDirection:"column"}}>
+                  <div style={{fontSize:".88rem",fontWeight:700,color:C.h,marginBottom:4}}>Growth Insights</div>
+                  <div style={{fontSize:".78rem",color:C.sec,marginBottom:16}}>At {mo} month{mo!==1?"s":""} ({isGirl?"girls":"boys"})</div>
+                  <div style={{display:"flex",gap:12}}>
+                    <div style={{flex:1,background:"#fff",borderRadius:10,padding:"16px 14px",textAlign:"center"}}>
+                      <div style={{fontSize:".72rem",color:C.sec,textTransform:"uppercase",letterSpacing:".05em",marginBottom:6}}>Weight Range</div>
+                      <div style={{fontSize:".95rem",fontWeight:600,color:C.h}}>{wLoLbs} {"\u2013"} {wHiLbs}</div>
+                      <div style={{fontSize:".76rem",color:C.sec,marginTop:2}}>lbs</div>
+                    </div>
+                    <div style={{flex:1,background:"#fff",borderRadius:10,padding:"16px 14px",textAlign:"center"}}>
+                      <div style={{fontSize:".72rem",color:C.sec,textTransform:"uppercase",letterSpacing:".05em",marginBottom:6}}>Height Range</div>
+                      <div style={{fontSize:".95rem",fontWeight:600,color:C.h}}>{lLoIn} {"\u2013"} {lHiIn}</div>
+                      <div style={{fontSize:".76rem",color:C.sec,marginTop:2}}>inches</div>
+                    </div>
+                  </div>
+                </div>
+                );
+              })()}
             </div>
+            <div style={{fontSize:".72rem",color:C.help,marginTop:10,fontStyle:"italic"}}>Based on WHO Child Growth Standards (0-24 months). For precise guidance, consult your pediatrician.</div>
           </div>
 
           {/* MILESTONES */}
