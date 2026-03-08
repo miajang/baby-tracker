@@ -7,9 +7,9 @@ const BRAND = "#CC5B80";
 const C={h:"#333",body:"#444",sec:"#666",help:"#777"};
 
 const themes = {
-  pink: { pri:"#CC5B80",lt:"#fdf6f9",mid:"#e6a8be",dk:"#a84968",badge:"#faedf2",badgeTxt:"#a84968",learn:"#CC5B80",hover:"#fdf0f5",contBg:"#F9FAFB" },
-  blue: { pri:"#6a9fd8",lt:"#f5f9fd",mid:"#bcd5ee",dk:"#4a7fb8",badge:"#e8f1fa",badgeTxt:"#4a7fb8",learn:"#6a9fd8",hover:"#eef5fc",contBg:"#F9FAFB" },
-  sage: { pri:"#7fa87a",lt:"#f5f8f4",mid:"#c4d6c1",dk:"#5e8a58",badge:"#e8f0e6",badgeTxt:"#5e8a58",learn:"#7fa87a",hover:"#eef4ed",contBg:"#F9FAFB" }
+  pink: { pri:"#CC5B80",btn:"#d8809e",lt:"#fdf6f9",mid:"#e6a8be",dk:"#a84968",badge:"#faedf2",badgeTxt:"#a84968",learn:"#CC5B80",hover:"#fdf0f5",contBg:"#F9FAFB" },
+  blue: { pri:"#6a9fd8",btn:"#8bb5e2",lt:"#f5f9fd",mid:"#bcd5ee",dk:"#4a7fb8",badge:"#e8f1fa",badgeTxt:"#4a7fb8",learn:"#6a9fd8",hover:"#eef5fc",contBg:"#F9FAFB" },
+  sage: { pri:"#7fa87a",btn:"#99ba95",lt:"#f5f8f4",mid:"#c4d6c1",dk:"#5e8a58",badge:"#e8f0e6",badgeTxt:"#5e8a58",learn:"#7fa87a",hover:"#eef4ed",contBg:"#F9FAFB" }
 };
 const themeColors = ["pink","blue","sage"];
 
@@ -542,7 +542,7 @@ export default function BabyTracker({ session }){
   var doDive=async function(type,key,ctx){if(diveResults[key]){setDiveResults(function(pv){var n=Object.assign({},pv);delete n[key];return n;});return;}setDiveLoading(key);var sys=type==="milestone"?DEEP_DIVE_MS:DEEP_DIVE_ED;var gp=gender==="boy"?"Use he/him pronouns for baby.":"Use she/her pronouns for baby.";var r=await callAI(sys+"\n"+gp,"Baby: "+profile.name+", "+age.label+" old.\n\n"+ctx);setDiveResults(function(pv){var n=Object.assign({},pv);n[key]=r;return n;});setDiveLoading(null);};
 
   useEffect(function(){var onResize=function(){setIsMobile(window.innerWidth<=768);};window.addEventListener("resize",onResize);return function(){window.removeEventListener("resize",onResize);};},[]);
-  useEffect(function(){if(chatEndRef.current)chatEndRef.current.scrollIntoView({behavior:"smooth"});},[chatMsgs,chatLoading]);
+  useEffect(function(){if(chatLoading){if(chatEndRef.current)chatEndRef.current.scrollIntoView({behavior:"smooth"});}else if(chatMsgs.length>0&&chatMsgs[chatMsgs.length-1].role==="assistant"){var container=chatEndRef.current&&chatEndRef.current.parentElement;if(container){var msgs=container.querySelectorAll("[data-chat-msg]");var last=msgs[msgs.length-1];if(last)last.scrollIntoView({behavior:"smooth",block:"start"});}}},[chatMsgs,chatLoading]);
   useEffect(function(){if(chatOpen){setChatMsgs([]);setChatInput("");setTimeout(function(){if(chatInputRef.current)chatInputRef.current.focus();},100);}},[chatOpen]);
   var sendChat=async function(){if(!chatInput.trim()||chatLoading)return;var msg=chatInput.trim();setChatInput("");setChatMsgs(function(pv){return pv.concat([{role:"user",text:msg}]);});setChatLoading(true);var ctx="Baby: "+profile.name+", "+age.label+" old ("+currentMonth+" months).";var gp=gender==="boy"?"Use he/him pronouns.":"Use she/her pronouns.";var sys=CHAT_SYS+"\n"+gp+"\n\n"+ctx;var hist=chatMsgs.slice(-6).map(function(m){return{role:m.role==="user"?"user":"assistant",content:m.text};});var r=await callAI(sys,msg,hist);setChatMsgs(function(pv){return pv.concat([{role:"assistant",text:r}]);});setChatLoading(false);};
 
@@ -730,7 +730,7 @@ export default function BabyTracker({ session }){
               <div style={{display:"flex",gap:8,flexWrap:"wrap",marginBottom:12}}>
                 <input placeholder="Brand" value={feedBrand} onChange={function(e){setFeedBrand(e.target.value);}} style={{width:80,padding:"8px 10px",border:"1px solid #ddd",borderRadius:8,fontSize:".85rem",outline:"none"}}/>
                 <input placeholder="Notes" value={feedNote} onChange={function(e){setFeedNote(e.target.value);}} style={{flex:1,minWidth:50,padding:"8px 10px",border:"1px solid #ddd",borderRadius:8,fontSize:".85rem",outline:"none"}}/>
-                <button onClick={addFeed} style={{background:t.pri,color:"#fff",border:"none",borderRadius:6,padding:"0 14px",height:34,fontSize:".78rem",fontWeight:600,cursor:"pointer"}}>Add</button>
+                <button onClick={addFeed} style={{background:t.btn,color:"#fff",border:"none",borderRadius:6,padding:"0 14px",height:34,fontSize:".78rem",fontWeight:600,cursor:"pointer"}}>Add</button>
               </div>
               <div style={{flex:1}}>
               {todayFeeds.length>0?todayFeeds.map(function(f){return(
@@ -750,7 +750,7 @@ export default function BabyTracker({ session }){
               <div style={{display:"flex",gap:10,flexWrap:"wrap",marginTop:12,marginBottom:12,alignItems:"flex-end"}}>
                 <div><div style={{fontSize:".72rem",color:C.sec,marginBottom:3}}>Start</div><TimeInput h={nsH1} m={nsM1} ap={nsAP1} onH={setNsH1} onM={setNsM1} onAP={setNsAP1} mid={t.mid}/></div>
                 <div><div style={{fontSize:".72rem",color:C.sec,marginBottom:3}}>End</div><TimeInput h={nsH2} m={nsM2} ap={nsAP2} onH={setNsH2} onM={setNsM2} onAP={setNsAP2} mid={t.mid}/></div>
-                <button onClick={addNight} style={{background:t.pri,color:"#fff",border:"none",borderRadius:6,padding:"0 14px",height:34,fontSize:".78rem",fontWeight:600,cursor:"pointer"}}>Add</button>
+                <button onClick={addNight} style={{background:t.btn,color:"#fff",border:"none",borderRadius:6,padding:"0 14px",height:34,fontSize:".78rem",fontWeight:600,cursor:"pointer"}}>Add</button>
               </div>
               <div style={{flex:1}}>
               {todayNights.length>0?todayNights.map(function(s){return(
@@ -770,7 +770,7 @@ export default function BabyTracker({ session }){
               <div style={{display:"flex",gap:10,flexWrap:"wrap",marginTop:12,marginBottom:12,alignItems:"flex-end"}}>
                 <div><div style={{fontSize:".72rem",color:C.sec,marginBottom:3}}>Start</div><TimeInput h={napH1} m={napM1} ap={napAP1} onH={setNapH1} onM={setNapM1} onAP={setNapAP1} mid={t.mid}/></div>
                 <div><div style={{fontSize:".72rem",color:C.sec,marginBottom:3}}>End</div><TimeInput h={napH2} m={napM2} ap={napAP2} onH={setNapH2} onM={setNapM2} onAP={setNapAP2} mid={t.mid}/></div>
-                <button onClick={addNap} style={{background:t.pri,color:"#fff",border:"none",borderRadius:6,padding:"0 14px",height:34,fontSize:".78rem",fontWeight:600,cursor:"pointer"}}>Add</button>
+                <button onClick={addNap} style={{background:t.btn,color:"#fff",border:"none",borderRadius:6,padding:"0 14px",height:34,fontSize:".78rem",fontWeight:600,cursor:"pointer"}}>Add</button>
               </div>
               <div style={{flex:1}}>
               {todayNaps.length>0?todayNaps.map(function(s){return(
@@ -799,7 +799,7 @@ export default function BabyTracker({ session }){
                     <input type="text" inputMode="decimal" placeholder="Length" value={gL} onChange={function(e){var v=e.target.value;if(v===""||/^\d*\.?\d*$/.test(v))setGL(v);}} style={{width:80,padding:"8px 10px",border:"1px solid #ddd",borderRadius:8,fontSize:".85rem",outline:"none"}}/>
                     <span style={{fontSize:".82rem",fontWeight:600,color:C.sec}}>in</span>
                   </div>
-                  <button onClick={addGrowth} style={{background:t.pri,color:"#fff",border:"none",borderRadius:6,padding:"0 14px",height:34,fontSize:".78rem",fontWeight:600,cursor:"pointer"}}>Add</button>
+                  <button onClick={addGrowth} style={{background:t.btn,color:"#fff",border:"none",borderRadius:6,padding:"0 14px",height:34,fontSize:".78rem",fontWeight:600,cursor:"pointer"}}>Add</button>
                 </div>
                 <div style={{flex:1}}>
                 {growthEntries.length>0?growthEntries.slice(0,10).map(function(g){
@@ -1050,12 +1050,12 @@ export default function BabyTracker({ session }){
               <div>
                 <p style={{fontSize:".85rem",color:C.sec,marginBottom:6,lineHeight:1.5}}>Hi! I'm BabyAdvisor - personalized for {profile.name}. Ask me anything:</p>
                 <div style={{display:"flex",flexDirection:"column",gap:4}}>
-                  {["Is this enough formula for "+pr.pos+" age?","Sleep tips for a "+currentMonth+"-month-old","When should "+pr.sub+" start solids?"].map(function(s,i){return <button key={i} onClick={function(){setChatInput(s);}} style={{background:t.lt,border:"none",borderRadius:8,padding:"8px 12px",fontSize:".82rem",color:"#555",cursor:"pointer",textAlign:"left",fontWeight:500}}>{s}</button>;})}
+                  {["How many oz should a "+currentMonth+"-month-old drink per day?","Sleep tips for a "+currentMonth+"-month-old","When should "+pr.sub+" start solids?"].map(function(s,i){return <button key={i} onClick={function(){setChatInput(s);}} style={{background:t.lt,border:"none",borderRadius:8,padding:"8px 12px",fontSize:".82rem",color:"#555",cursor:"pointer",textAlign:"left",fontWeight:500}}>{s}</button>;})}
                 </div>
               </div>
             )}
             {chatMsgs.map(function(m,i){return(
-              <div key={i} style={{marginBottom:12,display:"flex",justifyContent:m.role==="user"?"flex-end":"flex-start"}}>
+              <div key={i} data-chat-msg={m.role} style={{marginBottom:12,display:"flex",justifyContent:m.role==="user"?"flex-end":"flex-start"}}>
                 <div style={{maxWidth:"85%",padding:"10px 14px",borderRadius:m.role==="user"?"14px 14px 4px 14px":"14px 14px 14px 4px",background:m.role==="user"?t.badge:t.lt,color:"#666",fontSize:".84rem",lineHeight:1.7}}>
                   {m.text.split("\n").filter(Boolean).map(function(pt,j){return <p key={j} style={{marginBottom:4}}>{renderBold(pt)}</p>;})}
                 </div>
