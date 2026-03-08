@@ -2,6 +2,7 @@ import { useState } from "react";
 import { supabase } from "./supabaseClient.js";
 
 const BRAND = "#CC5B80";
+const BTN = "#d8809e";
 
 export default function Auth({ onLogin }) {
   const [mode, setMode] = useState("login");
@@ -82,14 +83,14 @@ export default function Auth({ onLogin }) {
         />
 
         <label style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 20, cursor: "pointer", fontSize: ".84rem", color: "#666" }}>
-          <span onClick={function () { setRemember(!remember); }} style={{ width: 18, height: 18, borderRadius: 4, border: remember ? "none" : "1px solid #ccc", background: remember ? "#e4a0b0" : "#fff", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", flexShrink: 0 }}>{remember && <svg viewBox="0 0 24 24" style={{ width: 12, height: 12, fill: "none", stroke: "#fff", strokeWidth: 3, strokeLinecap: "round", strokeLinejoin: "round" }}><polyline points="20 6 9 17 4 12"/></svg>}</span>
+          <span onClick={function () { setRemember(!remember); }} style={{ width: 18, height: 18, borderRadius: 4, border: remember ? "none" : "1px solid #ccc", background: remember ? BTN : "#fff", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", flexShrink: 0 }}>{remember && <svg viewBox="0 0 24 24" style={{ width: 12, height: 12, fill: "none", stroke: "#fff", strokeWidth: 3, strokeLinecap: "round", strokeLinejoin: "round" }}><polyline points="20 6 9 17 4 12"/></svg>}</span>
           Save login info
         </label>
 
         <button
           type="submit"
           disabled={!canSubmit}
-          style={{ width: "100%", background: "#CC5B80", color: "#fff", border: "none", padding: "12px", borderRadius: 8, fontSize: ".95rem", fontWeight: 700, cursor: canSubmit ? "pointer" : "not-allowed", opacity: canSubmit ? 1 : 0.65, transition: "opacity .15s" }}
+          style={{ width: "100%", background: BTN, color: "#fff", border: "none", padding: "12px", borderRadius: 8, fontSize: ".95rem", fontWeight: 700, cursor: canSubmit ? "pointer" : "not-allowed", opacity: canSubmit ? 1 : 0.65, transition: "opacity .15s" }}
         >
           {loading ? "Please wait..." : mode === "login" ? "Log In" : "Sign Up"}
         </button>

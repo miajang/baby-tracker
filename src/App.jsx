@@ -13,8 +13,8 @@ const themes = {
 };
 const themeColors = ["pink","blue","sage"];
 
-const NavIcon = ({type,color}) => {
-  const s = {width:16,height:16,stroke:color,fill:"none",strokeWidth:2,strokeLinecap:"round",strokeLinejoin:"round"};
+const NavIcon = ({type,color,size,weight}) => {
+  const s = {width:size||16,height:size||16,stroke:color,fill:"none",strokeWidth:weight||2,strokeLinecap:"round",strokeLinejoin:"round"};
   if(type==="tracker") return <svg viewBox="0 0 24 24" style={s}><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>;
   if(type==="growth") return <svg viewBox="0 0 24 24" style={s}><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>;
   if(type==="milestones") return <svg viewBox="0 0 24 24" style={s}><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>;
@@ -547,7 +547,7 @@ export default function BabyTracker({ session }){
   var sendChat=async function(){if(!chatInput.trim()||chatLoading)return;var msg=chatInput.trim();setChatInput("");setChatMsgs(function(pv){return pv.concat([{role:"user",text:msg}]);});setChatLoading(true);var ctx="Baby: "+profile.name+", "+age.label+" old ("+currentMonth+" months).";var gp=gender==="boy"?"Use he/him pronouns.":"Use she/her pronouns.";var sys=CHAT_SYS+"\n"+gp+"\n\n"+ctx;var hist=chatMsgs.slice(-6).map(function(m){return{role:m.role==="user"?"user":"assistant",content:m.text};});var r=await callAI(sys,msg,hist);setChatMsgs(function(pv){return pv.concat([{role:"assistant",text:r}]);});setChatLoading(false);};
 
   var renderBold=function(text){var parts=text.split(/\*\*([^*]+)\*\*/g);return parts.map(function(pt,i){return i%2===1?<strong key={i} style={{color:t.pri,display:pt.endsWith(':')?'block':'inline'}}>{pt}</strong>:<span key={i}>{pt}</span>;});};
-  var navClick=function(sec){setActiveNav(sec);window.scrollTo({top:0});};
+  var navClick=function(sec){setActiveNav(sec);window.scrollTo({top:0,behavior:"instant"});};
 
   var todayFeeds=feeds.filter(function(f){return f.date===new Date().toLocaleDateString();});
   var todayOz=todayFeeds.reduce(function(s,f){return s+f.oz;},0);
@@ -582,7 +582,7 @@ export default function BabyTracker({ session }){
           <div style={{display:"flex",gap:14,marginBottom:28}}>
             {themeColors.map(function(k){return <div key={k} onClick={function(){setTheme(k);}} style={{width:32,height:32,borderRadius:"50%",background:themes[k].pri,cursor:"pointer",display:"flex",alignItems:"center",justifyContent:"center"}}>{theme===k&&<span style={{color:"#fff",fontSize:".75rem",fontWeight:800}}>&#10003;</span>}</div>;})}
           </div>
-          <button onClick={function(){saveProf(Object.assign({},profile,{setupDone:true,theme:theme}));}} disabled={!profile.name||!profile.birthDate} style={{width:"100%",background:profile.name&&profile.birthDate?BRAND:"#ccc",color:"#fff",border:"none",padding:"12px",borderRadius:8,fontSize:".95rem",fontWeight:700,cursor:profile.name&&profile.birthDate?"pointer":"not-allowed"}}>Get Started</button>
+          <button onClick={function(){saveProf(Object.assign({},profile,{setupDone:true,theme:theme}));}} disabled={!profile.name||!profile.birthDate} style={{width:"100%",background:profile.name&&profile.birthDate?t.btn:"#ccc",color:"#fff",border:"none",padding:"12px",borderRadius:8,fontSize:".95rem",fontWeight:700,cursor:profile.name&&profile.birthDate?"pointer":"not-allowed"}}>Get Started</button>
         </div>
       </div>
     );
@@ -696,14 +696,16 @@ export default function BabyTracker({ session }){
       {settingsOpen&&<div onClick={function(){setSettingsOpen(false);}} style={{position:"fixed",inset:0,zIndex:99}}/>}
 
       <div style={{display:"flex",minHeight:"calc(100vh - 105px)"}}>
-        <div className="btNavD" style={{width:200,minWidth:200,background:"#fff",borderRight:"1px solid #eee",padding:"12px 0",position:"sticky",top:105,height:"calc(100vh - 105px)",overflowY:"auto",display:"flex",flexDirection:"column"}}><NavItems/></div>
+        <div className="btNavD" style={{width:200,minWidth:200,flexShrink:0}}>
+          <div style={{position:"fixed",top:105,width:200,height:"calc(100vh - 105px)",background:"#fff",borderRight:"1px solid #eee",padding:"12px 0",overflowY:"auto",display:"flex",flexDirection:"column"}}><NavItems/></div>
+        </div>
 
         <div style={{flex:1,padding:"24px 28px",paddingBottom:80,overflowY:"auto",background:"#F9FAFB"}}>
 
           <div style={{fontSize:".78rem",color:C.sec,marginBottom:8}}>{todayStr()}</div>
           <div style={{display:"flex",alignItems:"center",gap:10,flexWrap:"wrap",marginBottom:20}}>
-            <span style={{background:t.badge,color:t.badgeTxt,borderRadius:20,padding:"5px 14px",fontSize:".82rem",fontWeight:700}}>{profile.name}</span>
-            <span style={{fontSize:".82rem",color:t.pri,fontWeight:600}}>{age.label} old</span>
+            <span style={{background:"#f0f0f0",color:"#555",borderRadius:20,padding:"5px 14px",fontSize:".82rem",fontWeight:700}}>{profile.name}</span>
+            <span style={{fontSize:".82rem",color:"#777",fontWeight:600}}>{age.label} old</span>
           </div>
 
           {activeNav==="tracker"&&<div>
@@ -969,17 +971,15 @@ export default function BabyTracker({ session }){
               var allContent=topic.articles.map(function(a){return a.t+": "+a.content;}).join("\n\n");
               return(
                 <div key={topic.id} ref={function(el){eduRefs.current[topic.id]=el;}} style={{background:"#fff",borderRadius:12,overflow:"hidden",boxShadow:"0 2px 8px rgba(0,0,0,.04)",marginBottom:14,scrollMarginTop:HEADER_H+4}}>
-                  <div onClick={function(){handleEduToggle(topic.id);}} style={{padding:"18px 20px",cursor:"pointer",display:"flex",alignItems:"flex-start",justifyContent:"space-between",gap:12}}>
-                    <div style={{flex:1}}>
-                      <div style={{display:"flex",alignItems:"center",gap:8,marginBottom:4}}>
+                  <div onClick={function(){handleEduToggle(topic.id);}} style={{padding:"18px 20px",cursor:"pointer"}}>
+                    <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",gap:8,marginBottom:4}}>
+                      <div style={{display:"flex",alignItems:"center",gap:8}}>
                         <span style={{fontSize:"1.1rem",lineHeight:1}}>{topic.icon}</span>
                         <span style={{fontSize:".95rem",fontWeight:600,color:C.body}}>{topic.title}</span>
                       </div>
-                      <div style={{fontSize:".84rem",color:C.sec,lineHeight:1.5,marginTop:4}}>{topic.preview}</div>
+                      <span style={{fontSize:".72rem",color:t.pri,flexShrink:0}}>{isOpen?"\u25B2":"\u25BC"}</span>
                     </div>
-                    <div style={{fontSize:".78rem",fontWeight:600,color:t.pri,whiteSpace:"nowrap",flexShrink:0,marginTop:2}}>
-                      {isOpen?"Show less \u25B2":"Learn more \u25BC"}
-                    </div>
+                    <div style={{fontSize:".84rem",color:C.sec,lineHeight:1.5,marginTop:4}}>{topic.preview}</div>
                   </div>
                   {isOpen&&(
                     <div style={{padding:"0 20px 18px"}}>
@@ -1030,8 +1030,8 @@ export default function BabyTracker({ session }){
       <div className="btBottomBar" style={{display:"none",position:"fixed",bottom:0,left:0,right:0,background:"#fff",borderTop:"1px solid #e8eeec",justifyContent:"space-around",alignItems:"center",zIndex:200,boxShadow:"0 -2px 8px rgba(0,0,0,.06)",paddingTop:8,paddingBottom:"calc(env(safe-area-inset-bottom) + 8px)",paddingLeft:12,paddingRight:12}}>
         {navSections.map(function(s){return(
           <button key={s.id} onClick={function(){navClick(s.id);}} style={{flex:1,height:46,border:"none",background:"transparent",cursor:"pointer",display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",gap:3,transition:"all .15s",padding:0}} aria-label={s.label}>
-            <NavIcon type={s.icon} color={activeNav===s.id?t.pri:C.sec}/>
-            <span style={{fontSize:".62rem",fontWeight:activeNav===s.id?500:400,color:activeNav===s.id?t.pri:C.sec,letterSpacing:".01em"}}>{s.label}</span>
+            <NavIcon type={s.icon} color={activeNav===s.id?t.pri:C.sec} size={22} weight={2.4}/>
+            <span style={{fontSize:".7rem",fontWeight:activeNav===s.id?600:500,color:activeNav===s.id?t.pri:C.sec,letterSpacing:".01em"}}>{s.label}</span>
           </button>
         );})}
       </div>
@@ -1066,7 +1066,7 @@ export default function BabyTracker({ session }){
           </div>
           <div style={{padding:"10px 14px",borderTop:"1px solid #eee",display:"flex",gap:8,flexShrink:0}}>
             <input ref={chatInputRef} value={chatInput} onChange={function(e){setChatInput(e.target.value);}} onKeyDown={function(e){if(e.key==="Enter")sendChat();}} placeholder="Ask about baby care..." style={{flex:1,padding:"10px 14px",border:"1px solid #ddd",borderRadius:10,fontSize:".86rem",outline:"none"}}/>
-            <button onClick={sendChat} disabled={!chatInput.trim()||chatLoading} style={{background:t.pri,color:"#fff",border:"none",borderRadius:10,padding:"0 18px",fontWeight:600,cursor:chatInput.trim()&&!chatLoading?"pointer":"not-allowed",opacity:chatInput.trim()&&!chatLoading?1:.5,fontSize:".86rem"}}>Send</button>
+            <button onClick={sendChat} disabled={!chatInput.trim()||chatLoading} style={{background:t.btn,color:"#fff",border:"none",borderRadius:10,padding:"0 18px",fontWeight:600,cursor:chatInput.trim()&&!chatLoading?"pointer":"not-allowed",opacity:chatInput.trim()&&!chatLoading?1:.5,fontSize:".86rem"}}>Send</button>
           </div>
         </div>
         </>
