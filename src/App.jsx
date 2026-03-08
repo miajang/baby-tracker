@@ -1027,9 +1027,9 @@ export default function BabyTracker({ session }){
       </div>
 
       {/* BOTTOM NAV */}
-      <div className="btBottomBar" style={{display:"none",position:"fixed",bottom:0,left:0,right:0,background:"#fff",borderTop:"1px solid #e8eeec",justifyContent:"space-around",alignItems:"center",zIndex:200,boxShadow:"0 -2px 8px rgba(0,0,0,.06)",paddingTop:8,paddingBottom:"calc(env(safe-area-inset-bottom) + 8px)",paddingLeft:12,paddingRight:12}}>
+      <div className="btBottomBar" style={{display:"none",position:"fixed",bottom:0,left:0,right:0,background:"#fff",borderTop:"1px solid #e8eeec",justifyContent:"space-around",alignItems:"center",zIndex:200,boxShadow:"0 -2px 8px rgba(0,0,0,.06)",paddingTop:12,paddingBottom:"calc(env(safe-area-inset-bottom) + 10px)",paddingLeft:12,paddingRight:12}}>
         {navSections.map(function(s){return(
-          <button key={s.id} onClick={function(){navClick(s.id);}} style={{flex:1,height:46,border:"none",background:"transparent",cursor:"pointer",display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",gap:3,transition:"all .15s",padding:0}} aria-label={s.label}>
+          <button key={s.id} onClick={function(){navClick(s.id);}} style={{flex:1,height:50,border:"none",background:"transparent",cursor:"pointer",display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",gap:3,transition:"all .15s",padding:0}} aria-label={s.label}>
             <NavIcon type={s.icon} color={activeNav===s.id?t.pri:C.sec} size={22} weight={2.4}/>
             <span style={{fontSize:".7rem",fontWeight:activeNav===s.id?600:500,color:activeNav===s.id?t.pri:C.sec,letterSpacing:".01em"}}>{s.label}</span>
           </button>
@@ -1056,12 +1056,12 @@ export default function BabyTracker({ session }){
             )}
             {chatMsgs.map(function(m,i){return(
               <div key={i} data-chat-msg={m.role} style={{marginBottom:12,display:"flex",justifyContent:m.role==="user"?"flex-end":"flex-start"}}>
-                <div style={{maxWidth:"85%",padding:"10px 14px",borderRadius:m.role==="user"?"14px 14px 4px 14px":"14px 14px 14px 4px",background:m.role==="user"?t.badge:t.lt,color:"#666",fontSize:".84rem",lineHeight:1.7}}>
+                <div style={{maxWidth:"85%",padding:"10px 14px",borderRadius:m.role==="user"?"14px 14px 4px 14px":"14px 14px 14px 4px",background:m.role==="user"?"#E8E8EC":"#F5F5F7",color:"#666",fontSize:".84rem",lineHeight:1.7}}>
                   {m.text.split("\n").filter(Boolean).map(function(pt,j){return <p key={j} style={{marginBottom:4}}>{renderBold(pt)}</p>;})}
                 </div>
               </div>
             );})}
-            {chatLoading&&<div style={{display:"flex",justifyContent:"flex-start",marginBottom:12}}><div style={{padding:"10px 14px",borderRadius:"14px 14px 14px 4px",background:t.lt}}><Spinner/></div></div>}
+            {chatLoading&&<div style={{display:"flex",justifyContent:"flex-start",marginBottom:12}}><div style={{padding:"10px 14px",borderRadius:"14px 14px 14px 4px",background:"#F5F5F7"}}><Spinner/></div></div>}
             <div ref={chatEndRef}/>
           </div>
           <div style={{padding:"10px 14px",borderTop:"1px solid #eee",display:"flex",gap:8,flexShrink:0}}>
