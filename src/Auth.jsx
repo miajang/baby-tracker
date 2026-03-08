@@ -54,7 +54,7 @@ export default function Auth({ onLogin }) {
             </svg>
           </div>
           <div style={{ fontSize: "1.5rem", marginBottom: 2 }}><span style={{ fontWeight: 550, color: "#CC5B80" }}>Baby</span><span style={{ fontWeight: 350, color: "#CC5B80" }}>Tracker</span></div>
-          <div style={{ fontSize: ".82rem", color: "#999", marginBottom: 0, letterSpacing: ".02em" }}>Every Milestone Matters</div>
+          <div style={{ fontSize: ".82rem", color: "#777", marginBottom: 0, letterSpacing: ".02em" }}>Every Milestone Matters</div>
         </div>
 
         {error && <div style={{ background: "#fef2f2", color: "#dc2626", padding: "10px 14px", borderRadius: 8, fontSize: ".82rem", marginBottom: 16 }}>{error}</div>}

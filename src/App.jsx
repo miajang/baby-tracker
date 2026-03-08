@@ -566,7 +566,7 @@ export default function BabyTracker({ session }){
         <style>{"@keyframes spin{to{transform:rotate(360deg)}}"}</style>
         <div style={{background:"#fff",borderRadius:16,padding:"36px 32px",maxWidth:400,width:"100%",boxShadow:"0 4px 20px rgba(0,0,0,.08)"}}>
           <div style={{fontSize:"1.3rem",marginBottom:2}}><span style={{fontWeight:550,color:"#CC5B80"}}>Baby</span><span style={{fontWeight:350,color:"#CC5B80"}}>Tracker</span></div>
-          <div style={{fontSize:".82rem",color:"#999",marginBottom:28}}>Every Milestone Matters</div>
+          <div style={{fontSize:".82rem",color:"#777",marginBottom:28}}>Every Milestone Matters</div>
           <div style={{fontSize:".78rem",fontWeight:600,color:C.sec,textTransform:"uppercase",letterSpacing:".06em",marginBottom:6}}>Name</div>
           <input value={profile.name} onChange={function(e){setProfile(function(pv){return Object.assign({},pv,{name:e.target.value});});}} style={{width:"100%",padding:"10px 14px",border:"1px solid #ddd",borderRadius:8,fontSize:".92rem",marginBottom:16,outline:"none",boxSizing:"border-box"}}/>
           <div style={{fontSize:".78rem",fontWeight:600,color:C.sec,textTransform:"uppercase",letterSpacing:".06em",marginBottom:6}}>Gender</div>
@@ -672,7 +672,7 @@ export default function BabyTracker({ session }){
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" style={{width:26,height:26,flexShrink:0}}><circle cx="24" cy="24" r="24" fill="#CC5B80"/><g fill="none" stroke="#fff" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" transform="translate(12,13)"><path d="M9 12l-1.5 7H6.5a2 2 0 0 1 0-4h11a2 2 0 0 1 0 4h-1l-1.5-7"/><circle cx="12" cy="7" r="4.5"/></g></svg>
               <div>
                 <div style={{fontSize:"1.1rem"}}><span style={{fontWeight:550,color:"#CC5B80"}}>Baby</span><span style={{fontWeight:350,color:"#CC5B80"}}>Tracker</span></div>
-                <div style={{fontSize:".72rem",color:"#999",marginTop:1}}>Every Milestone Matters</div>
+                <div style={{fontSize:".72rem",color:"#777",marginTop:1}}>Every Milestone Matters</div>
               </div>
             </div>
           </div>
@@ -740,7 +740,7 @@ export default function BabyTracker({ session }){
                   <div><span style={{fontWeight:500}}>{f.oz} oz</span> <span style={{color:C.sec}}>at {f.time}</span>{f.brand&&<span style={{background:t.badge,color:t.badgeTxt,borderRadius:10,padding:"1px 8px",fontSize:".7rem",marginLeft:6}}>{f.brand}</span>}{f.note&&<span style={{color:C.sec,marginLeft:6,fontStyle:"italic"}}>{f.note}</span>}</div>
                   <button onClick={function(){delFeed(f.id);}} style={{background:"none",border:"none",color:"#ccc",cursor:"pointer"}}>&#10005;</button>
                 </div>
-              );}):<div style={{fontSize:".82rem",color:"#bbb",fontStyle:"italic"}}>No feeds logged today</div>}
+              );}):<div style={{fontSize:".82rem",color:"#999",fontStyle:"italic"}}>No feeds logged today</div>}
               </div>
             </div>
 
@@ -760,7 +760,7 @@ export default function BabyTracker({ session }){
                   <span><span style={{fontWeight:500}}>{s.start}</span> &#8594; <span style={{fontWeight:500}}>{s.end}</span> <span style={{color:C.sec,marginLeft:6}}>({formatDurationExact(s.durMins||0)})</span></span>
                   <button onClick={function(){delNight(s.id);}} style={{background:"none",border:"none",color:"#ccc",cursor:"pointer"}}>&#10005;</button>
                 </div>
-              );}):<div style={{fontSize:".82rem",color:"#bbb",fontStyle:"italic"}}>No night sleep logged today</div>}
+              );}):<div style={{fontSize:".82rem",color:"#999",fontStyle:"italic"}}>No night sleep logged today</div>}
               </div>
             </div>
 
@@ -780,7 +780,7 @@ export default function BabyTracker({ session }){
                   <span><span style={{fontWeight:500}}>{s.start}</span> &#8594; <span style={{fontWeight:500}}>{s.end}</span> <span style={{color:C.sec,marginLeft:6}}>({formatDurationExact(s.durMins||0)})</span></span>
                   <button onClick={function(){delNap(s.id);}} style={{background:"none",border:"none",color:"#ccc",cursor:"pointer"}}>&#10005;</button>
                 </div>
-              );}):<div style={{fontSize:".82rem",color:"#bbb",fontStyle:"italic"}}>No naps logged today</div>}
+              );}):<div style={{fontSize:".82rem",color:"#999",fontStyle:"italic"}}>No naps logged today</div>}
               </div>
             </div>
             </div>
@@ -817,7 +817,7 @@ export default function BabyTracker({ session }){
                       </div>
                     </div>
                     <button onClick={function(){delGrowth(g.id);}} style={{background:"none",border:"none",color:"#ccc",cursor:"pointer",marginTop:2}}>{"\u2715"}</button>
-                  </div>);}):<div style={{fontSize:".82rem",color:"#bbb",fontStyle:"italic"}}>No entries yet. Record at each well-child visit.</div>}
+                  </div>);}):<div style={{fontSize:".82rem",color:"#999",fontStyle:"italic"}}>No entries yet. Record at each well-child visit.</div>}
                 </div>
               </div>
               {/* Right: growth insights */}
@@ -1018,10 +1018,10 @@ export default function BabyTracker({ session }){
             <div style={{display:"flex",alignItems:"center",justifyContent:"center",gap:6}}>
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" style={{width:16,height:16,flexShrink:0}}><circle cx="24" cy="24" r="24" fill="#CC5B80"/><g fill="none" stroke="#fff" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" transform="translate(12,13)"><path d="M9 12l-1.5 7H6.5a2 2 0 0 1 0-4h11a2 2 0 0 1 0 4h-1l-1.5-7"/><circle cx="12" cy="7" r="4.5"/></g></svg>
               <span style={{fontSize:".82rem"}}><span style={{fontWeight:550,color:"#CC5B80"}}>Baby</span><span style={{fontWeight:350,color:"#CC5B80"}}>Tracker</span></span>
-              <span style={{fontSize:".68rem",color:"#999"}}>&middot;</span>
-              <span style={{fontSize:".68rem",color:"#999"}}>Every Milestone Matters</span>
+              <span style={{fontSize:".68rem",color:"#777"}}>&middot;</span>
+              <span style={{fontSize:".68rem",color:"#777"}}>Every Milestone Matters</span>
             </div>
-            <div style={{fontSize:".68rem",color:"#999",marginTop:10}}>Powered by Grandma <span style={{color:"#e6a8be"}}>&hearts;</span></div>
+            <div style={{fontSize:".68rem",color:"#777",marginTop:10}}>Powered by Grandma <span style={{color:"#e6a8be"}}>&hearts;</span></div>
           </div>
         </div>
       </div>
