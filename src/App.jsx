@@ -1040,28 +1040,29 @@ export default function BabyTracker({ session }){
       {chatOpen&&(
         <>
         <div onClick={function(){setChatOpen(false);}} style={{position:"fixed",inset:0,background:"rgba(0,0,0,.35)",zIndex:499}}/>
-        <div style={{position:"fixed",top:"50%",left:"50%",transform:"translate(-50%,-50%)",width:"min(420px, 92vw)",height:"min(620px, 80vh)",background:"#fff",borderRadius:16,boxShadow:"0 12px 40px rgba(0,0,0,.2)",zIndex:500,display:"flex",flexDirection:"column",overflow:"hidden"}}>
+        <div style={{position:"fixed",top:100,right:24,width:"min(420px, 92vw)",maxHeight:"min(620px, 80vh)",height:chatMsgs.length>0?"min(620px, 80vh)":"auto",background:"#fff",borderRadius:16,boxShadow:"0 12px 40px rgba(0,0,0,.2)",zIndex:500,display:"flex",flexDirection:"column",overflow:"hidden"}}>
           <div style={{padding:"14px 18px",background:t.pri,display:"flex",justifyContent:"space-between",alignItems:"center",flexShrink:0}}>
             <div><div style={{fontWeight:500,fontSize:".92rem",color:"#fff"}}>Ask Expert</div><div style={{fontSize:".72rem",color:"rgba(255,255,255,.7)"}}>{profile.name} &middot; {age.label} old</div></div>
             <button onClick={function(){setChatOpen(false);}} style={{background:"none",border:"none",color:"#fff",width:28,height:28,borderRadius:6,cursor:"pointer",fontSize:".85rem",display:"flex",alignItems:"center",justifyContent:"center"}}>&#10005;</button>
           </div>
-          <div style={{flex:1,overflowY:"auto",padding:16}}>
+          <div style={{flex:chatMsgs.length>0?1:"none",overflowY:"auto",padding:16}}>
             {chatMsgs.length===0&&(
               <div>
-                <p style={{fontSize:".85rem",color:C.sec,marginBottom:6,lineHeight:1.5}}>Hi! I'm BabyAdvisor - personalized for {profile.name}. Ask me anything:</p>
-                <div style={{display:"flex",flexDirection:"column",gap:4}}>
-                  {["How many oz should a "+currentMonth+"-month-old drink per day?","Sleep tips for a "+currentMonth+"-month-old","When should "+pr.sub+" start solids?"].map(function(s,i){return <button key={i} onClick={function(){setChatInput(s);}} style={{background:t.lt,border:"none",borderRadius:8,padding:"8px 12px",fontSize:".82rem",color:"#555",cursor:"pointer",textAlign:"left",fontWeight:500}}>{s}</button>;})}
+                <p style={{fontSize:".85rem",color:C.sec,marginBottom:8,marginTop:4,lineHeight:1.5}}>Hi! I'm BabyAdvisor - personalized for {profile.name}. Ask me anything:</p>
+                <div style={{display:"flex",flexDirection:"column",gap:6}}>
+                  {["How many oz should a "+currentMonth+"-month-old drink per day?","Sleep tips for a "+currentMonth+"-month-old","When should "+pr.sub+" start solids?"].map(function(s,i){return <button key={i} onClick={function(){setChatInput(s);}} style={{background:t.lt,border:"none",borderRadius:8,padding:"8px 12px",fontSize:".82rem",color:"#555",cursor:"pointer",textAlign:"left",fontWeight:400}}>{s}</button>;})}
                 </div>
+                <div style={{height:12}}/>
               </div>
             )}
             {chatMsgs.map(function(m,i){return(
               <div key={i} data-chat-msg={m.role} style={{marginBottom:12,display:"flex",justifyContent:m.role==="user"?"flex-end":"flex-start"}}>
-                <div style={{maxWidth:"85%",padding:"10px 14px",borderRadius:m.role==="user"?"14px 14px 4px 14px":"14px 14px 14px 4px",background:m.role==="user"?"#E8E8EC":"#F5F5F7",color:"#666",fontSize:".84rem",lineHeight:1.7}}>
+                <div style={{maxWidth:"85%",padding:"10px 14px",borderRadius:m.role==="user"?"14px 14px 4px 14px":"14px 14px 14px 4px",background:m.role==="user"?t.hover:"#F7F7F8",color:m.role==="user"?"#444":"#555",fontSize:".84rem",lineHeight:1.7}}>
                   {m.text.split("\n").filter(Boolean).map(function(pt,j){return <p key={j} style={{marginBottom:4}}>{renderBold(pt)}</p>;})}
                 </div>
               </div>
             );})}
-            {chatLoading&&<div style={{display:"flex",justifyContent:"flex-start",marginBottom:12}}><div style={{padding:"10px 14px",borderRadius:"14px 14px 14px 4px",background:"#F5F5F7"}}><Spinner/></div></div>}
+            {chatLoading&&<div style={{display:"flex",justifyContent:"flex-start",marginBottom:12}}><div style={{padding:"10px 14px",borderRadius:"14px 14px 14px 4px",background:"#F7F7F8"}}><Spinner/></div></div>}
             <div ref={chatEndRef}/>
           </div>
           <div style={{padding:"10px 14px",borderTop:"1px solid #eee",display:"flex",gap:8,flexShrink:0}}>
