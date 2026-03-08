@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { supabase } from "./supabaseClient.js";
 
-const BRAND = "#d4899e";
+const BRAND = "#CC5B80";
 
 export default function Auth({ onLogin }) {
   const [mode, setMode] = useState("login");
@@ -44,7 +44,7 @@ export default function Auth({ onLogin }) {
   return (
       <div style={{ fontFamily: "'Segoe UI',system-ui,sans-serif", background: "#fff", borderRadius: 16, padding: "36px 32px", maxWidth: 400, width: "100%", boxShadow: "0 4px 20px rgba(0,0,0,.08)" }}>
         <div style={{ textAlign: "center", marginBottom: 32 }}>
-          <div style={{ width: 48, height: 48, borderRadius: "50%", background: "#e4a0b0", display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 12px" }}>
+          <div style={{ width: 48, height: 48, borderRadius: "50%", background: "#CC5B80", display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 12px" }}>
             <svg viewBox="0 0 24 24" style={{ width: 26, height: 26, fill: "none", stroke: "#fff", strokeWidth: 1.8, strokeLinecap: "round", strokeLinejoin: "round" }}>
               <g transform="translate(0,1.5)">
                 <path d="M9 12l-1.5 7H6.5a2 2 0 0 1 0-4h11a2 2 0 0 1 0 4h-1l-1.5-7" />
@@ -52,8 +52,8 @@ export default function Auth({ onLogin }) {
               </g>
             </svg>
           </div>
-          <div style={{ fontSize: "1.5rem", marginBottom: 2 }}><span style={{ fontWeight: 500, color: "#d4899e" }}>Baby</span><span style={{ fontWeight: 300, color: "#d4899e" }}>Tracker</span></div>
-          <div style={{ fontSize: ".82rem", color: "#aaa", marginBottom: 0, letterSpacing: ".02em" }}>Every Milestone Matters</div>
+          <div style={{ fontSize: "1.5rem", marginBottom: 2 }}><span style={{ fontWeight: 550, color: "#CC5B80" }}>Baby</span><span style={{ fontWeight: 350, color: "#CC5B80" }}>Tracker</span></div>
+          <div style={{ fontSize: ".82rem", color: "#999", marginBottom: 0, letterSpacing: ".02em" }}>Every Milestone Matters</div>
         </div>
 
         {error && <div style={{ background: "#fef2f2", color: "#dc2626", padding: "10px 14px", borderRadius: 8, fontSize: ".82rem", marginBottom: 16 }}>{error}</div>}
@@ -89,7 +89,7 @@ export default function Auth({ onLogin }) {
         <button
           type="submit"
           disabled={!canSubmit}
-          style={{ width: "100%", background: "#e4a0b0", color: "#fff", border: "none", padding: "12px", borderRadius: 8, fontSize: ".95rem", fontWeight: 700, cursor: canSubmit ? "pointer" : "not-allowed", opacity: canSubmit ? 1 : 0.65, transition: "opacity .15s" }}
+          style={{ width: "100%", background: "#CC5B80", color: "#fff", border: "none", padding: "12px", borderRadius: 8, fontSize: ".95rem", fontWeight: 700, cursor: canSubmit ? "pointer" : "not-allowed", opacity: canSubmit ? 1 : 0.65, transition: "opacity .15s" }}
         >
           {loading ? "Please wait..." : mode === "login" ? "Log In" : "Sign Up"}
         </button>

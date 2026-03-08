@@ -3,13 +3,13 @@ import Auth from "./Auth.jsx";
 import { supabase } from "./supabaseClient.js";
 import * as db from "./useSupabase.js";
 
-const BRAND = "#d4899e";
+const BRAND = "#CC5B80";
 const C={h:"#333",body:"#444",sec:"#666",help:"#777"};
 
 const themes = {
-  pink: { pri:"#d4899e",lt:"#fefafb",mid:"#f0cdd6",dk:"#b8707e",badge:"#fceef2",badgeTxt:"#b8707e",learn:"#d4899e",hover:"#fdf0f4",contBg:"#fefcfd" },
-  blue: { pri:"#6a9fd8",lt:"#f5f9fd",mid:"#bcd5ee",dk:"#4a7fb8",badge:"#e8f1fa",badgeTxt:"#4a7fb8",learn:"#6a9fd8",hover:"#eef5fc",contBg:"#f8fafc" },
-  sage: { pri:"#7fa87a",lt:"#f5f8f4",mid:"#c4d6c1",dk:"#5e8a58",badge:"#e8f0e6",badgeTxt:"#5e8a58",learn:"#7fa87a",hover:"#eef4ed",contBg:"#f8f9f7" }
+  pink: { pri:"#CC5B80",lt:"#fdf6f9",mid:"#e6a8be",dk:"#a84968",badge:"#faedf2",badgeTxt:"#a84968",learn:"#CC5B80",hover:"#fdf0f5",contBg:"#F9FAFB" },
+  blue: { pri:"#6a9fd8",lt:"#f5f9fd",mid:"#bcd5ee",dk:"#4a7fb8",badge:"#e8f1fa",badgeTxt:"#4a7fb8",learn:"#6a9fd8",hover:"#eef5fc",contBg:"#F9FAFB" },
+  sage: { pri:"#7fa87a",lt:"#f5f8f4",mid:"#c4d6c1",dk:"#5e8a58",badge:"#e8f0e6",badgeTxt:"#5e8a58",learn:"#7fa87a",hover:"#eef4ed",contBg:"#F9FAFB" }
 };
 const themeColors = ["pink","blue","sage"];
 
@@ -565,13 +565,13 @@ export default function BabyTracker({ session }){
       <div style={{fontFamily:"'Segoe UI',system-ui,sans-serif",background:"#fafafa",minHeight:"100vh",display:"flex",alignItems:"center",justifyContent:"center",padding:20}}>
         <style>{"@keyframes spin{to{transform:rotate(360deg)}}"}</style>
         <div style={{background:"#fff",borderRadius:16,padding:"36px 32px",maxWidth:400,width:"100%",boxShadow:"0 4px 20px rgba(0,0,0,.08)"}}>
-          <div style={{fontSize:"1.3rem",marginBottom:2}}><span style={{fontWeight:500,color:"#d4899e"}}>Baby</span><span style={{fontWeight:300,color:"#d4899e"}}>Tracker</span></div>
-          <div style={{fontSize:".82rem",color:"#aaa",marginBottom:28}}>Every Milestone Matters</div>
+          <div style={{fontSize:"1.3rem",marginBottom:2}}><span style={{fontWeight:550,color:"#CC5B80"}}>Baby</span><span style={{fontWeight:350,color:"#CC5B80"}}>Tracker</span></div>
+          <div style={{fontSize:".82rem",color:"#999",marginBottom:28}}>Every Milestone Matters</div>
           <div style={{fontSize:".78rem",fontWeight:600,color:C.sec,textTransform:"uppercase",letterSpacing:".06em",marginBottom:6}}>Name</div>
           <input value={profile.name} onChange={function(e){setProfile(function(pv){return Object.assign({},pv,{name:e.target.value});});}} style={{width:"100%",padding:"10px 14px",border:"1px solid #ddd",borderRadius:8,fontSize:".92rem",marginBottom:16,outline:"none",boxSizing:"border-box"}}/>
           <div style={{fontSize:".78rem",fontWeight:600,color:C.sec,textTransform:"uppercase",letterSpacing:".06em",marginBottom:6}}>Gender</div>
           <div style={{display:"flex",gap:10,marginBottom:16}}>
-            {["girl","boy"].map(function(g){var gc=g==="girl"?"#d4899e":"#6a9fd8";var glc=g==="girl"?"#fefafb":"#f5f9fd";var sel=(profile.gender||"girl")===g;return(
+            {["girl","boy"].map(function(g){var gc=g==="girl"?"#CC5B80":"#6a9fd8";var glc=g==="girl"?"#fdf6f9":"#f5f9fd";var sel=(profile.gender||"girl")===g;return(
               <button key={g} onClick={function(){setProfile(function(pv){return Object.assign({},pv,{gender:g});});}} style={{flex:1,padding:"10px 0",borderRadius:10,border:sel?"2px solid "+gc:"2px solid #e0e0e0",background:sel?glc:"#fff",color:sel?gc:"#999",fontWeight:600,fontSize:".92rem",cursor:"pointer",transition:"all .15s",textTransform:"capitalize"}}>{g}</button>
             );})}
           </div>
@@ -605,7 +605,7 @@ export default function BabyTracker({ session }){
           <input value={profile.name} onChange={function(e){var np=Object.assign({},profile,{name:e.target.value});setProfile(np);if(userId)db.saveProfile(userId,Object.assign({},np,{theme:theme}));}} style={{width:"100%",padding:"7px 10px",border:"1px solid #ddd",borderRadius:6,fontSize:".85rem",outline:"none",marginBottom:10,boxSizing:"border-box",background:"#fff"}}/>
           <div style={{fontSize:".72rem",fontWeight:600,color:C.sec,marginBottom:4}}>Gender</div>
           <div style={{display:"flex",gap:8,marginBottom:10}}>
-            {["girl","boy"].map(function(g){var gc=g==="girl"?"#d4899e":"#6a9fd8";var glc=g==="girl"?"#fefafb":"#f5f9fd";var sel=(profile.gender||"girl")===g;return(
+            {["girl","boy"].map(function(g){var gc=g==="girl"?"#CC5B80":"#6a9fd8";var glc=g==="girl"?"#fdf6f9":"#f5f9fd";var sel=(profile.gender||"girl")===g;return(
               <button key={g} onClick={function(){var np=Object.assign({},profile,{gender:g});setProfile(np);if(userId)db.saveProfile(userId,Object.assign({},np,{theme:theme}));}} style={{flex:1,padding:"7px 0",borderRadius:8,border:sel?"1px solid "+gc:"1px solid #e0e0e0",background:sel?glc:"#fff",color:sel?gc:"#999",fontWeight:600,fontSize:".82rem",cursor:"pointer",transition:"all .15s",textTransform:"capitalize"}}>{g}</button>
             );})}
           </div>
@@ -669,10 +669,10 @@ export default function BabyTracker({ session }){
         <div style={{display:"grid",gridTemplateColumns:"auto 1fr",gridTemplateRows:"auto auto",columnGap:16,rowGap:4}}>
           <div style={{gridRow:"1/3",display:"flex",alignItems:"flex-end"}}>
             <div style={{display:"flex",alignItems:"center",gap:7}}>
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" style={{width:26,height:26,flexShrink:0}}><circle cx="24" cy="24" r="24" fill="#d4899e"/><g fill="none" stroke="#fff" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" transform="translate(12,13)"><path d="M9 12l-1.5 7H6.5a2 2 0 0 1 0-4h11a2 2 0 0 1 0 4h-1l-1.5-7"/><circle cx="12" cy="7" r="4.5"/></g></svg>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" style={{width:26,height:26,flexShrink:0}}><circle cx="24" cy="24" r="24" fill="#CC5B80"/><g fill="none" stroke="#fff" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" transform="translate(12,13)"><path d="M9 12l-1.5 7H6.5a2 2 0 0 1 0-4h11a2 2 0 0 1 0 4h-1l-1.5-7"/><circle cx="12" cy="7" r="4.5"/></g></svg>
               <div>
-                <div style={{fontSize:"1.1rem"}}><span style={{fontWeight:500,color:"#d4899e"}}>Baby</span><span style={{fontWeight:300,color:"#d4899e"}}>Tracker</span></div>
-                <div style={{fontSize:".72rem",color:"#aaa",marginTop:1}}>Every Milestone Matters</div>
+                <div style={{fontSize:"1.1rem"}}><span style={{fontWeight:550,color:"#CC5B80"}}>Baby</span><span style={{fontWeight:350,color:"#CC5B80"}}>Tracker</span></div>
+                <div style={{fontSize:".72rem",color:"#999",marginTop:1}}>Every Milestone Matters</div>
               </div>
             </div>
           </div>
@@ -1016,12 +1016,12 @@ export default function BabyTracker({ session }){
           </div>
           <div style={{padding:"16px 0",marginTop:12,textAlign:"center"}}>
             <div style={{display:"flex",alignItems:"center",justifyContent:"center",gap:6}}>
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" style={{width:16,height:16,flexShrink:0}}><circle cx="24" cy="24" r="24" fill="#d4899e"/><g fill="none" stroke="#fff" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" transform="translate(12,13)"><path d="M9 12l-1.5 7H6.5a2 2 0 0 1 0-4h11a2 2 0 0 1 0 4h-1l-1.5-7"/><circle cx="12" cy="7" r="4.5"/></g></svg>
-              <span style={{fontSize:".82rem"}}><span style={{fontWeight:500,color:"#d4899e"}}>Baby</span><span style={{fontWeight:300,color:"#d4899e"}}>Tracker</span></span>
-              <span style={{fontSize:".68rem",color:"#aaa"}}>&middot;</span>
-              <span style={{fontSize:".68rem",color:"#aaa"}}>Every Milestone Matters</span>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" style={{width:16,height:16,flexShrink:0}}><circle cx="24" cy="24" r="24" fill="#CC5B80"/><g fill="none" stroke="#fff" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" transform="translate(12,13)"><path d="M9 12l-1.5 7H6.5a2 2 0 0 1 0-4h11a2 2 0 0 1 0 4h-1l-1.5-7"/><circle cx="12" cy="7" r="4.5"/></g></svg>
+              <span style={{fontSize:".82rem"}}><span style={{fontWeight:550,color:"#CC5B80"}}>Baby</span><span style={{fontWeight:350,color:"#CC5B80"}}>Tracker</span></span>
+              <span style={{fontSize:".68rem",color:"#999"}}>&middot;</span>
+              <span style={{fontSize:".68rem",color:"#999"}}>Every Milestone Matters</span>
             </div>
-            <div style={{fontSize:".68rem",color:"#aaa",marginTop:10}}>Powered by Grandma <span style={{color:"#e0aab8"}}>&hearts;</span></div>
+            <div style={{fontSize:".68rem",color:"#999",marginTop:10}}>Powered by Grandma <span style={{color:"#e6a8be"}}>&hearts;</span></div>
           </div>
         </div>
       </div>
@@ -1038,7 +1038,9 @@ export default function BabyTracker({ session }){
 
       {/* CHAT */}
       {chatOpen&&(
-        <div style={{position:"fixed",top:HEADER_H,right:0,width:390,maxWidth:"100vw",height:"min(480px,70vh)",background:"#fff",borderRadius:16,boxShadow:"-4px 4px 24px rgba(0,0,0,.12)",zIndex:500,display:"flex",flexDirection:"column",overflow:"hidden",border:"1px solid #ddd"}}>
+        <>
+        <div onClick={function(){setChatOpen(false);}} style={{position:"fixed",inset:0,background:"rgba(0,0,0,.35)",zIndex:499}}/>
+        <div style={{position:"fixed",top:"50%",left:"50%",transform:"translate(-50%,-50%)",width:"min(420px, 92vw)",height:"min(620px, 80vh)",background:"#fff",borderRadius:16,boxShadow:"0 12px 40px rgba(0,0,0,.2)",zIndex:500,display:"flex",flexDirection:"column",overflow:"hidden"}}>
           <div style={{padding:"14px 18px",background:t.pri,display:"flex",justifyContent:"space-between",alignItems:"center",flexShrink:0}}>
             <div><div style={{fontWeight:500,fontSize:".92rem",color:"#fff"}}>Ask Expert</div><div style={{fontSize:".72rem",color:"rgba(255,255,255,.7)"}}>{profile.name} &middot; {age.label} old</div></div>
             <button onClick={function(){setChatOpen(false);}} style={{background:"none",border:"none",color:"#fff",width:28,height:28,borderRadius:6,cursor:"pointer",fontSize:".85rem",display:"flex",alignItems:"center",justifyContent:"center"}}>&#10005;</button>
@@ -1067,6 +1069,7 @@ export default function BabyTracker({ session }){
             <button onClick={sendChat} disabled={!chatInput.trim()||chatLoading} style={{background:t.pri,color:"#fff",border:"none",borderRadius:10,padding:"0 18px",fontWeight:600,cursor:chatInput.trim()&&!chatLoading?"pointer":"not-allowed",opacity:chatInput.trim()&&!chatLoading?1:.5,fontSize:".86rem"}}>Send</button>
           </div>
         </div>
+        </>
       )}
     </div>
   );
