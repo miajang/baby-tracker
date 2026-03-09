@@ -328,7 +328,7 @@ function MonthlySummarySection({ feeds, nightSleep, naps, growthEntries, profile
   var gRows = mGrowth.slice().sort(function(a, b){ return new Date(a.date) - new Date(b.date); });
 
   var totalFeedCount = mFeeds.length;
-  var totalOzAll = mFeeds.reduce(function(s,f){ return s + f.oz; }, 0);
+  var totalOzAll = mFeeds.reduce(function(s,f){ return s + (parseFloat(f.oz)||0); }, 0);
   var totalNightMins = mNights.reduce(function(s,n){ return s + (n.durMins||0); }, 0);
   var totalNapMins = mNaps.reduce(function(s,n){ return s + (n.durMins||0); }, 0);
   var daysTracked = allDates.length;
@@ -544,7 +544,7 @@ export default function BabyTracker({ session }){
   var navClick=function(sec){setActiveNav(sec);window.scrollTo({top:0,behavior:"instant"});};
 
   var todayFeeds=feeds.filter(function(f){return f.date===new Date().toLocaleDateString();});
-  var todayOz=todayFeeds.reduce(function(s,f){return s+f.oz;},0);
+  var todayOz=todayFeeds.reduce(function(s,f){return s+(parseFloat(f.oz)||0);},0);
   var todayNights=nightSleep.filter(function(s){return s.date===new Date().toLocaleDateString();});
   var todayNaps=naps.filter(function(s){return s.date===new Date().toLocaleDateString();});
   var todayNightMins=todayNights.reduce(function(s,n){return s+(n.durMins||0);},0);
