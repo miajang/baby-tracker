@@ -163,7 +163,7 @@ const educationData=[
   ]},
   {id:"devplay",title:"Development & Play",icon:"\uD83E\uDDF8",preview:"Start tummy time from day one with short sessions. The best toy at any age is an engaged caregiver.",articles:[
     {t:"Tummy Time Guide",content:"Start from day one with short sessions (3-5 minutes, 2-3 times daily). Build to 15-30+ minutes daily by 3 months. Tummy time strengthens neck, shoulders, and core - essential for rolling, crawling, and sitting."},
-    {t:"Age-Appropriate Toys & Activities",content:"0-3 months: high-contrast images, soft rattles, gentle music. 3-6 months: soft books, teethers, play gym. 6-9 months: stacking cups, cause-and-effect toys, board books. 9-12 months: push toys, shape sorters, nesting containers. The best toy at any age is an engaged caregiver."},
+    {t:"Age-Appropriate Toys & Activities",content:"**0-3 months:**\n• High-contrast black and white images and cards\n• Soft rattles and wrist rattles for early grasping\n• Gentle music, lullabies, and soft sound toys\n• Unbreakable mirror for tummy time\n• Play mat or activity gym with dangling toys\n\n**3-6 months:**\n• Soft cloth and crinkle books to explore textures\n• Teething rings and textured chew toys\n• Play gym with reachable toys to practice batting and grasping\n• Brightly colored stacking rings\n• Soft balls that are easy to hold\n\n**6-9 months:**\n• Stacking cups and nesting containers for problem-solving\n• Simple cause-and-effect toys like pop-up buttons and spinners\n• Sturdy board books with flaps and textures\n• Shape sorters with large openings\n• Musical instruments like shakers and drums\n\n**9-12 months:**\n• Push and pull toys to encourage walking and cruising\n• Nesting and stacking blocks for fine motor skills\n• Activity cubes with knobs, doors, and gears\n• Simple puzzles with large knob pieces\n• Toy phones, play kitchens, and pretend-play items\n\nThe best toy at any age is an engaged caregiver - talking, singing, reading, and playing together."},
     {t:"Screen Time Guidelines",content:"AAP recommends no screen time before 18-24 months, except video calling with family. Babies learn through face-to-face interaction, not screens. Background TV reduces the quality of parent-child interaction."},
     {t:"Talking & Reading to Baby",content:"Narrate your day, read picture books, sing songs - even to newborns. Respond to coos and babbles as if having a conversation. By 6 months, babies recognize frequently heard words. Reading 15 minutes daily has measurable impact on vocabulary."}
   ]}
@@ -903,17 +903,18 @@ export default function BabyTracker({ session }){
                         <p style={{fontSize:".84rem",color:C.body,lineHeight:1.6,margin:"4px 0 12px"}}>{genderize(md.summary,gender)}</p>
                         {md.month<=currentMonth&&<div style={{padding:"12px 16px",background:t.lt,borderRadius:10,marginBottom:14,fontSize:".84rem",color:C.body,lineHeight:1.6}}>{evalText}</div>}
                         <p style={{fontSize:".76rem",color:C.help,margin:"0 0 10px",fontStyle:"italic"}}>Check all that apply:</p>
+                        <div style={{display:"grid",gridTemplateColumns:isMobile?"1fr":"1fr 1fr",gap:12}}>
                         {md.categories.map(function(cat){
                           var cc=getCatCount(md.month,cat.cat);
                           return(
-                            <div key={cat.cat} style={{marginTop:12}}>
+                            <div key={cat.cat} style={{background:"#f9fafb",borderRadius:10,padding:"14px 16px"}}>
                               <div style={{fontSize:".76rem",fontWeight:700,textTransform:"uppercase",letterSpacing:".06em",color:C.body,marginBottom:6,display:"flex",alignItems:"center"}}>{cat.cat}{cc>0&&<Badge count={cc}/>}</div>
                               {cat.items.map(function(item,idx){
                                 var k=md.month+"-"+cat.cat+"-"+idx;
                                 var checked=!!milestoneChecks[k];
                                 var ds=milestoneChecks[k];
                                 return(
-                                  <div key={idx} onClick={function(){toggleCheck(md.month,cat.cat,idx);}} style={{display:"flex",alignItems:"center",gap:10,padding:"7px 0",cursor:"pointer",borderBottom:"1px solid #f8f8f8"}}>
+                                  <div key={idx} onClick={function(){toggleCheck(md.month,cat.cat,idx);}} style={{display:"flex",alignItems:"center",gap:10,padding:"7px 0",cursor:"pointer",borderBottom:"1px solid #f0f0f0"}}>
                                     <div style={{width:20,height:20,borderRadius:4,border:checked?"2px solid "+(t.pri):"2px solid #ddd",background:checked?t.pri:"transparent",display:"flex",alignItems:"center",justifyContent:"center",flexShrink:0}}>
                                       {checked&&<span style={{color:"#fff",fontSize:".7rem",fontWeight:800}}>&#10003;</span>}
                                     </div>
@@ -925,6 +926,7 @@ export default function BabyTracker({ session }){
                             </div>
                           );
                         })}
+                        </div>
                         {!diveResults["ms-"+md.month]&&<div style={{marginTop:14}}>
                           <button onClick={function(){doDive("milestone","ms-"+md.month,"Month "+md.month+" milestones for "+profile.name+", "+age.label+" old. Checked: "+count+"/"+total+".");}} style={{background:t.badge,color:t.badgeTxt,border:"none",borderRadius:6,padding:"0 14px",height:34,fontSize:".78rem",fontWeight:600,cursor:"pointer",display:"flex",alignItems:"center",gap:5}}>
                             <svg viewBox="0 0 24 24" style={{width:14,height:14,stroke:t.badgeTxt,fill:"none",strokeWidth:2.2,strokeLinecap:"round",strokeLinejoin:"round"}}><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
@@ -983,7 +985,7 @@ export default function BabyTracker({ session }){
                           <div key={ai} style={{marginTop:ai===0?0:16}}>
                             <div style={{fontSize:".9rem",fontWeight:600,color:C.body,marginBottom:4}}>{art.t}</div>
                             {art.table&&<DataTable headers={art.table.headers} rows={art.table.rows}/>}
-                            <div style={{fontSize:".84rem",color:C.body,lineHeight:1.65}}>{art.content}</div>
+                            {(function(){var lines=art.content.split("\n").filter(Boolean);var hasCards=lines.some(function(l){return l.startsWith("**");})&&lines.some(function(l){return l.startsWith("• ");});if(!hasCards)return <div style={{fontSize:".84rem",color:C.body,lineHeight:1.65}}>{lines.map(function(line,li){return <p key={li} style={{marginBottom:li<lines.length-1?4:0}}>{renderBold(line)}</p>;})}</div>;var sections=[];var cur=null;lines.forEach(function(line){if(line.startsWith("**")){if(cur)sections.push(cur);cur={header:line,items:[]};}else if(line.startsWith("• ")&&cur){cur.items.push(line.slice(2));}else{if(cur)sections.push(cur);sections.push({text:line});cur=null;}});if(cur)sections.push(cur);var cards=sections.filter(function(s){return s.header;});var other=sections.filter(function(s){return s.text;});return <div><div style={{display:"grid",gridTemplateColumns:isMobile?"1fr":"1fr 1fr",gap:10,marginBottom:other.length?8:0}}>{cards.map(function(s,si){return <div key={si} style={{background:"#f9fafb",borderRadius:10,padding:"12px 14px"}}><div style={{fontSize:".82rem",fontWeight:600,color:C.body,marginBottom:6}}>{renderBold(s.header)}</div>{s.items.map(function(item,ii){return <div key={ii} style={{fontSize:".84rem",color:C.body,lineHeight:1.6,paddingLeft:14,textIndent:-10,marginBottom:2}}><span>•&nbsp;</span>{item}</div>;})}</div>;})}</div>{other.map(function(s,si){return <p key={"t"+si} style={{fontSize:".84rem",color:C.body,lineHeight:1.65}}>{renderBold(s.text)}</p>;})}</div>;})()}
                           </div>
                         );})}
                       </div>
