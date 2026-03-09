@@ -72,7 +72,7 @@ const KEYS = {
 
 ### Milestone Data (12 months)
 Each month: `{ month, label, summary, categories[] }`
-- Categories: Movement/Physical, Social/Emotional, Language/Communication, Cognitive
+- Categories: Social/Emotional, Language/Communication, Cognitive, Movement/Physical
 - Each category: `{ cat, items[] }` — items are checkbox strings
 - Summaries use female pronouns by default → genderized via `genderize()` helper
 

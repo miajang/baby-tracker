@@ -80,65 +80,65 @@ function genderize(text, gender) {
 
 const milestoneData=[
   {month:1,label:"1 Month",summary:"In the first month, your baby is adjusting to life outside the womb. She's beginning to focus on faces, respond to sounds, and develop the muscle strength to lift her head briefly.",categories:[
-    {cat:"Movement/Physical",items:["Moves arms and legs actively","Lifts head briefly when on tummy","Strong reflex grip when you place finger in palm"]},
     {cat:"Social/Emotional",items:["Calms when held or hears your voice","Stares at faces up close","Adjusts body when held in your arms"]},
     {cat:"Language/Communication",items:["Cries to signal needs","Reacts to loud sounds by startling","Makes small throaty sounds"]},
-    {cat:"Cognitive",items:["Focuses on objects 8-12 inches away","Prefers to look at faces and high-contrast patterns","Briefly tracks a moving object with eyes"]}]},
+    {cat:"Cognitive",items:["Focuses on objects 8-12 inches away","Prefers to look at faces and high-contrast patterns","Briefly tracks a moving object with eyes"]},
+    {cat:"Movement/Physical",items:["Moves arms and legs actively","Lifts head briefly when on tummy","Strong reflex grip when you place finger in palm"]}]},
   {month:2,label:"2 Months",summary:"By two months, your baby is becoming more social - smiling at you, cooing, and tracking your movements. Tummy time is helping build neck and shoulder strength.",categories:[
-    {cat:"Movement/Physical",items:["Holds head up when on tummy","Moves both arms and both legs","Opens hands briefly"]},
     {cat:"Social/Emotional",items:["Calms down when spoken to or picked up","Looks at your face","Smiles when you talk to or smile at her"]},
     {cat:"Language/Communication",items:["Makes sounds other than crying","Reacts to loud sounds","Coos with vowel-like sounds"]},
-    {cat:"Cognitive",items:["Watches you as you move","Looks at a toy for several seconds","Begins to follow moving objects with eyes"]}]},
+    {cat:"Cognitive",items:["Watches you as you move","Looks at a toy for several seconds","Begins to follow moving objects with eyes"]},
+    {cat:"Movement/Physical",items:["Holds head up when on tummy","Moves both arms and both legs","Opens hands briefly"]}]},
   {month:3,label:"3 Months",summary:"At three months, your baby is smiling more, starting to babble with vowel sounds, and gaining the strength to push up during tummy time.",categories:[
-    {cat:"Movement/Physical",items:["Pushes up on arms during tummy time","Opens and shuts hands","Brings hands together to midline"]},
     {cat:"Social/Emotional",items:["Smiles spontaneously at people","Enjoys playing with others","Imitates some facial expressions"]},
     {cat:"Language/Communication",items:["Coos and babbles with vowel sounds","Turns head toward direction of sounds","Makes sounds back when you talk"]},
-    {cat:"Cognitive",items:["Eyes track moving objects smoothly","Recognizes familiar people at a distance","Begins to coordinate hand and eye movements"]}]},
+    {cat:"Cognitive",items:["Eyes track moving objects smoothly","Recognizes familiar people at a distance","Begins to coordinate hand and eye movements"]},
+    {cat:"Movement/Physical",items:["Pushes up on arms during tummy time","Opens and shuts hands","Brings hands together to midline"]}]},
   {month:4,label:"4 Months",summary:"Four months brings a big leap - your baby chuckles, reaches for toys intentionally, and holds her head steady.",categories:[
-    {cat:"Movement/Physical",items:["Holds head steady without support","Holds a toy when you put it in her hand","Pushes up onto elbows when on tummy"]},
     {cat:"Social/Emotional",items:["Smiles on her own to get your attention","Chuckles when you try to make her laugh","Makes sounds to get or keep your attention"]},
     {cat:"Language/Communication",items:["Makes cooing sounds like 'oooo' and 'aahh'","Makes sounds back when you talk to her","Turns head towards the sound of your voice"]},
-    {cat:"Cognitive",items:["Opens mouth when she sees breast or bottle if hungry","Looks at her hands with interest","Uses arm to swing at toys"]}]},
+    {cat:"Cognitive",items:["Opens mouth when she sees breast or bottle if hungry","Looks at her hands with interest","Uses arm to swing at toys"]},
+    {cat:"Movement/Physical",items:["Holds head steady without support","Holds a toy when you put it in her hand","Pushes up onto elbows when on tummy"]}]},
   {month:5,label:"5 Months",summary:"At five months, your baby is likely rolling over, reaching for objects with purpose, and starting to bear weight on her legs when held upright.",categories:[
-    {cat:"Movement/Physical",items:["Rolls from tummy to back","Reaches for and grasps toys","Bears weight on legs when held upright"]},
     {cat:"Social/Emotional",items:["Shows excitement by waving arms and legs","Enjoys looking at self in mirror","Responds differently to familiar vs. unfamiliar people"]},
     {cat:"Language/Communication",items:["Babbles with consonant sounds emerging","Responds to own name by looking","Expresses displeasure with sounds, not just crying"]},
-    {cat:"Cognitive",items:["Explores objects by putting them in mouth","Reaches for objects that are partially hidden","Watches where a dropped object falls"]}]},
+    {cat:"Cognitive",items:["Explores objects by putting them in mouth","Reaches for objects that are partially hidden","Watches where a dropped object falls"]},
+    {cat:"Movement/Physical",items:["Rolls from tummy to back","Reaches for and grasps toys","Bears weight on legs when held upright"]}]},
   {month:6,label:"6 Months",summary:"Six months is a major milestone age - your baby laughs, rolls, sits with support, and begins exploring everything by mouth.",categories:[
-    {cat:"Movement/Physical",items:["Rolls from tummy to back","Pushes up with straight arms on tummy","Leans on hands to support herself when sitting"]},
     {cat:"Social/Emotional",items:["Knows familiar people","Likes to look at herself in a mirror","Laughs out loud"]},
     {cat:"Language/Communication",items:["Takes turns making sounds with you","Blows raspberries","Makes squealing noises"]},
-    {cat:"Cognitive",items:["Puts things in her mouth to explore them","Reaches to grab a toy she wants","Closes lips to show she doesn't want more food"]}]},
+    {cat:"Cognitive",items:["Puts things in her mouth to explore them","Reaches to grab a toy she wants","Closes lips to show she doesn't want more food"]},
+    {cat:"Movement/Physical",items:["Rolls from tummy to back","Pushes up with straight arms on tummy","Leans on hands to support herself when sitting"]}]},
   {month:7,label:"7 Months",summary:"By seven months, your baby sits without support for short periods, transfers objects between hands, and responds to emotions in your voice.",categories:[
-    {cat:"Movement/Physical",items:["Sits without support for short periods","Supports whole weight on legs when standing with help","Transfers objects from one hand to the other"]},
     {cat:"Social/Emotional",items:["Enjoys social play and interaction","Responds to other people's expressions of emotion","Distinguishes emotions by tone of voice"]},
     {cat:"Language/Communication",items:["Babbles chains of consonants like 'babababa'","Uses voice to express joy and displeasure","Responds to own name consistently"]},
-    {cat:"Cognitive",items:["Finds partially hidden objects","Explores objects with hands and mouth","Struggles to get objects that are out of reach"]}]},
+    {cat:"Cognitive",items:["Finds partially hidden objects","Explores objects with hands and mouth","Struggles to get objects that are out of reach"]},
+    {cat:"Movement/Physical",items:["Sits without support for short periods","Supports whole weight on legs when standing with help","Transfers objects from one hand to the other"]}]},
   {month:8,label:"8 Months",summary:"At eight months, separation anxiety may appear - a sign of healthy attachment. Your baby is likely crawling or scooting and playing peek-a-boo.",categories:[
-    {cat:"Movement/Physical",items:["Gets to sitting position independently","Crawls forward on belly or hands and knees","Picks up small objects with raking grasp"]},
     {cat:"Social/Emotional",items:["May be clingy with familiar adults","May show fear or anxiety around strangers","Plays interactive games like peek-a-boo"]},
     {cat:"Language/Communication",items:["Babbles with varied sounds like 'mamama' or 'bababa'","Gestures for 'up' by raising arms","Understands 'no' by pausing or stopping briefly"]},
-    {cat:"Cognitive",items:["Looks for dropped or hidden objects","Bangs two objects together","Watches the path of a falling object"]}]},
+    {cat:"Cognitive",items:["Looks for dropped or hidden objects","Bangs two objects together","Watches the path of a falling object"]},
+    {cat:"Movement/Physical",items:["Gets to sitting position independently","Crawls forward on belly or hands and knees","Picks up small objects with raking grasp"]}]},
   {month:9,label:"9 Months",summary:"Nine months is a recommended developmental screening age. Your baby shows clear emotions, understands object permanence, and may be pulling up to stand.",categories:[
-    {cat:"Movement/Physical",items:["Gets to sitting position by herself","Moves things from one hand to the other","Sits without support"]},
     {cat:"Social/Emotional",items:["Is shy, clingy, or fearful around strangers","Shows several facial expressions (happy, sad, angry)","Smiles or laughs when you play peek-a-boo"]},
     {cat:"Language/Communication",items:["Makes different sounds like 'mamamama' and 'babababa'","Lifts arms up to be picked up","Looks when you call her name"]},
-    {cat:"Cognitive",items:["Looks for objects when dropped out of sight","Bangs two things together","Uses fingers to rake food towards herself"]}]},
+    {cat:"Cognitive",items:["Looks for objects when dropped out of sight","Bangs two things together","Uses fingers to rake food towards herself"]},
+    {cat:"Movement/Physical",items:["Gets to sitting position by herself","Moves things from one hand to the other","Sits without support"]}]},
   {month:10,label:"10 Months",summary:"At ten months, your baby is cruising along furniture, developing a pincer grasp to pick up small items, and waving bye-bye.",categories:[
-    {cat:"Movement/Physical",items:["Pulls to standing using furniture","Cruises along furniture holding on","Uses pincer grasp (thumb and finger) emerging"]},
     {cat:"Social/Emotional",items:["Waves bye-bye with prompting","Shows preference for certain toys","Seeks comfort from familiar caregivers when upset"]},
     {cat:"Language/Communication",items:["Says 'mama' or 'dada' non-specifically","Imitates speech sounds and simple gestures","Responds to simple verbal requests"]},
-    {cat:"Cognitive",items:["Explores objects in varied ways (shaking, banging, throwing)","Begins to use objects correctly (drinks from cup, brushes hair)","Finds hidden objects easily"]}]},
+    {cat:"Cognitive",items:["Explores objects in varied ways (shaking, banging, throwing)","Begins to use objects correctly (drinks from cup, brushes hair)","Finds hidden objects easily"]},
+    {cat:"Movement/Physical",items:["Pulls to standing using furniture","Cruises along furniture holding on","Uses pincer grasp (thumb and finger) emerging"]}]},
   {month:11,label:"11 Months",summary:"Eleven months brings exciting firsts - your baby may stand alone briefly or take first steps. She says 'mama' or 'dada' with meaning.",categories:[
-    {cat:"Movement/Physical",items:["Stands alone for a few seconds","May take first steps independently","Places objects into containers"]},
     {cat:"Social/Emotional",items:["Shows attachment to specific caregivers","Tests parental responses to behavior","Enjoys imitating people during play"]},
     {cat:"Language/Communication",items:["Says 'mama' or 'dada' with meaning","Tries to imitate words you say","Uses simple gestures like shaking head 'no'"]},
-    {cat:"Cognitive",items:["Follows simple directions with gestures","Explores cause-and-effect with toys","Points to objects of interest"]}]},
+    {cat:"Cognitive",items:["Follows simple directions with gestures","Explores cause-and-effect with toys","Points to objects of interest"]},
+    {cat:"Movement/Physical",items:["Stands alone for a few seconds","May take first steps independently","Places objects into containers"]}]},
   {month:12,label:"12 Months",summary:"Happy first birthday! Your baby likely walks holding furniture, uses a pincer grasp with precision, understands simple words, and plays interactive games.",categories:[
-    {cat:"Movement/Physical",items:["Pulls up to stand","Walks holding on to furniture","Picks things up between thumb and pointer finger"]},
     {cat:"Social/Emotional",items:["Plays games with you like pat-a-cake","Waves bye-bye","Shows affection to familiar people"]},
     {cat:"Language/Communication",items:["Calls a parent 'mama' or 'dada' or special name","Understands 'no' (pauses or stops when you say it)","Responds to simple spoken requests"]},
-    {cat:"Cognitive",items:["Puts something in a container like a block in a cup","Looks for things she sees you hide","Drinks from a cup without a lid as you hold it"]}]}
+    {cat:"Cognitive",items:["Puts something in a container like a block in a cup","Looks for things she sees you hide","Drinks from a cup without a lid as you hold it"]},
+    {cat:"Movement/Physical",items:["Pulls up to stand","Walks holding on to furniture","Picks things up between thumb and pointer finger"]}]}
 ];
 
 const educationData=[
@@ -901,7 +901,7 @@ export default function BabyTracker({ session }){
                           <button onClick={function(e){e.stopPropagation();setOpenMonth(null);}} style={{width:28,height:28,background:"none",border:"none",cursor:"pointer",fontSize:".85rem",color:C.sec,display:"flex",alignItems:"center",justifyContent:"center"}}>&#10005;</button>
                         </div>
                         <p style={{fontSize:".84rem",color:C.body,lineHeight:1.6,margin:"4px 0 12px"}}>{genderize(md.summary,gender)}</p>
-                        <div style={{padding:"12px 16px",background:t.lt,borderRadius:10,marginBottom:14,fontSize:".84rem",color:C.body,lineHeight:1.6}}>{evalText}</div>
+                        {md.month<=currentMonth&&<div style={{padding:"12px 16px",background:t.lt,borderRadius:10,marginBottom:14,fontSize:".84rem",color:C.body,lineHeight:1.6}}>{evalText}</div>}
                         <p style={{fontSize:".76rem",color:C.help,margin:"0 0 10px",fontStyle:"italic"}}>Check all that apply:</p>
                         {md.categories.map(function(cat){
                           var cc=getCatCount(md.month,cat.cat);
@@ -934,7 +934,7 @@ export default function BabyTracker({ session }){
                         {diveLoading===("ms-"+md.month)&&<Spinner/>}
                         {diveResults["ms-"+md.month]&&!diveLoading&&(
                           <div style={{marginTop:10,padding:"8px 14px",background:t.lt,borderRadius:8,fontSize:".83rem",color:C.body,lineHeight:1.7,position:"relative"}}>
-                            <button onClick={function(){doDive("milestone","ms-"+md.month,"");}} style={{position:"absolute",top:4,right:0,background:"none",border:"none",color:C.help,cursor:"pointer",fontSize:".78rem",fontWeight:600}}>&#10005;</button>
+                            <button onClick={function(){doDive("milestone","ms-"+md.month,"");}} style={{position:"absolute",top:8,right:10,background:"none",border:"none",color:C.help,cursor:"pointer",fontSize:".78rem",fontWeight:600}}>&#10005;</button>
                             <div style={{fontSize:".66rem",fontWeight:700,textTransform:"uppercase",letterSpacing:".08em",color:t.pri,marginBottom:4}}>Personalized for {profile.name}</div>
                             {diveResults["ms-"+md.month].split("\n").filter(Boolean).map(function(pt,i){return <p key={i} style={{marginBottom:6}}>{renderBold(pt)}</p>;})}
                           </div>
