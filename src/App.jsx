@@ -456,7 +456,6 @@ export default function BabyTracker({ session }){
   const[loginOpen,setLoginOpen]=useState(false);
   const[loaded,setLoaded]=useState(false);
   const[feedOz,setFeedOz]=useState("");
-  const[feedBrand,setFeedBrand]=useState("");
   const[feedNote,setFeedNote]=useState("");
   const[feedH,setFeedH]=useState("");
   const[feedM,setFeedM]=useState("");
@@ -516,7 +515,7 @@ export default function BabyTracker({ session }){
   };
 
   var saveProf=function(p){var np=Object.assign({},p);setProfile(np);if(userId)db.saveProfile(userId,Object.assign({},np,{theme:np.theme||theme}));};
-  var addFeed=function(){if(!feedOz)return;var timeStr=feedH?formatTimeFields(feedH,feedM,feedAP):nowTimeStr();var entry={id:Date.now(),time:timeStr,date:new Date().toLocaleDateString(),oz:parseFloat(feedOz),brand:feedBrand,note:feedNote};setFeeds(function(pv){return[entry].concat(pv);});if(userId)db.addFeed(userId,entry);setFeedOz("");setFeedBrand("");setFeedNote("");setFeedH("");setFeedM("");};
+  var addFeed=function(){if(!feedOz)return;var timeStr=feedH?formatTimeFields(feedH,feedM,feedAP):nowTimeStr();var entry={id:Date.now(),time:timeStr,date:new Date().toLocaleDateString(),oz:parseFloat(feedOz),note:feedNote};setFeeds(function(pv){return[entry].concat(pv);});if(userId)db.addFeed(userId,entry);setFeedOz("");setFeedNote("");setFeedH("");setFeedM("");};
   var delFeed=function(id){setFeeds(function(pv){return pv.filter(function(f){return f.id!==id;});});if(userId)db.deleteFeed(userId,id);};
   var addNight=function(){if(!nsH1||!nsH2)return;var st=formatTimeFields(nsH1,nsM1,nsAP1),en=formatTimeFields(nsH2,nsM2,nsAP2);var dur=calcDurFromFields(nsH1,nsM1,nsAP1,nsH2,nsM2,nsAP2);var entry={id:Date.now(),date:new Date().toLocaleDateString(),start:st,end:en,durMins:dur};setNightSleep(function(pv){return[entry].concat(pv);});if(userId)db.addNightSleep(userId,entry);setNsH1("");setNsM1("");setNsH2("");setNsM2("");};
   var delNight=function(id){setNightSleep(function(pv){return pv.filter(function(s){return s.id!==id;});});if(userId)db.deleteNightSleep(userId,id);};
@@ -725,14 +724,13 @@ export default function BabyTracker({ session }){
                 </div>
               </div>
               <div style={{display:"flex",gap:8,flexWrap:"wrap",marginBottom:12}}>
-                <input placeholder="Brand" value={feedBrand} onChange={function(e){setFeedBrand(e.target.value);}} style={{width:80,padding:"8px 10px",border:"1px solid #ddd",borderRadius:8,fontSize:".85rem",outline:"none"}}/>
                 <input placeholder="Notes" value={feedNote} onChange={function(e){setFeedNote(e.target.value);}} style={{flex:1,minWidth:50,padding:"8px 10px",border:"1px solid #ddd",borderRadius:8,fontSize:".85rem",outline:"none"}}/>
                 <button onClick={addFeed} style={{background:t.btn,color:"#fff",border:"none",borderRadius:6,padding:"0 14px",height:34,fontSize:".78rem",fontWeight:600,cursor:"pointer"}}>Add</button>
               </div>
               <div style={{flex:1}}>
               {todayFeeds.length>0?todayFeeds.map(function(f){return(
                 <div key={f.id} style={{display:"flex",alignItems:"center",justifyContent:"space-between",padding:"7px 0",borderBottom:"1px solid #f0f0f0",fontSize:".84rem"}}>
-                  <div><span style={{fontWeight:500}}>{f.oz} oz</span> <span style={{color:C.sec}}>at {f.time}</span>{f.brand&&<span style={{background:t.badge,color:t.badgeTxt,borderRadius:10,padding:"1px 8px",fontSize:".7rem",marginLeft:6}}>{f.brand}</span>}{f.note&&<span style={{color:C.sec,marginLeft:6,fontStyle:"italic"}}>{f.note}</span>}</div>
+                  <div><span style={{fontWeight:500}}>{f.oz} oz</span> <span style={{color:C.sec}}>at {f.time}</span>{f.note&&<span style={{color:C.sec,marginLeft:6,fontStyle:"italic"}}>{f.note}</span>}</div>
                   <button onClick={function(){delFeed(f.id);}} style={{background:"none",border:"none",color:"#ccc",cursor:"pointer"}}>&#10005;</button>
                 </div>
               );}):<div style={{fontSize:".82rem",color:"#999",fontStyle:"italic"}}>No feeds logged today</div>}

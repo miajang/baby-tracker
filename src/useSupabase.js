@@ -19,7 +19,7 @@ export async function loadAllData(userId) {
       setupDone: profileRes.data.setup_done
     } : null,
     feeds: (feedsRes.data || []).map(function(f) {
-      return { id: f.id, time: f.time, date: f.date, oz: f.oz, brand: f.brand, note: f.note };
+      return { id: f.id, time: f.time, date: f.date, oz: f.oz, note: f.note };
     }),
     nightSleep: (nightRes.data || []).map(function(n) {
       return { id: n.id, date: n.date, start: n.start, end: n.end, durMins: n.dur_mins };
@@ -49,7 +49,7 @@ export async function saveProfile(userId, profile) {
 export async function addFeed(userId, feed) {
   await supabase.from('feeds').insert({
     id: feed.id, user_id: userId, time: feed.time, date: feed.date,
-    oz: feed.oz, brand: feed.brand, note: feed.note
+    oz: feed.oz, note: feed.note
   });
 }
 
