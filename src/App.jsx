@@ -312,13 +312,13 @@ function MonthlySummarySection({ feeds, nightSleep, naps, growthEntries, profile
     var dayFeeds = mFeeds.filter(function(f){ return f.date === date; });
     var dayNights = mNights.filter(function(s){ return s.date === date; });
     var dayNaps = mNaps.filter(function(n){ return n.date === date; });
-    var totalOz = dayFeeds.reduce(function(s, f){ return s + f.oz; }, 0);
+    var totalOz = dayFeeds.reduce(function(s, f){ return s + (parseFloat(f.oz) || 0); }, 0);
     var nightMins = dayNights.reduce(function(s, n){ return s + (n.durMins || 0); }, 0);
     var napMins = dayNaps.reduce(function(s, n){ return s + (n.durMins || 0); }, 0);
     var totalSleepMins = nightMins + napMins;
     return {
       date: date,
-      feeding: dayFeeds.length > 0 ? dayFeeds.length + " feed" + (dayFeeds.length !== 1 ? "s" : "") + " / " + totalOz + " oz" : null,
+      feeding: dayFeeds.length > 0 ? (totalOz % 1 === 0 ? totalOz : totalOz.toFixed(1)) + " oz / " + dayFeeds.length + " feed" + (dayFeeds.length !== 1 ? "s" : "") : null,
       night: nightMins > 0 ? formatDurationExact(nightMins) : null,
       naps: dayNaps.length > 0 ? formatDurationExact(napMins) + " (" + dayNaps.length + ")" : null,
       totalSleep: totalSleepMins > 0 ? formatDurationExact(totalSleepMins) : null,
@@ -339,7 +339,7 @@ function MonthlySummarySection({ feeds, nightSleep, naps, growthEntries, profile
   var canNext = selIdx < months.length - 1;
 
   var cs = {padding:"10px 14px",fontSize:".82rem",color:C.body,borderBottom:"1px solid #f0f0f0"};
-  var ths = {padding:"10px 14px",fontSize:".72rem",fontWeight:700,color:C.sec,textTransform:"uppercase",letterSpacing:".05em",borderBottom:"1px solid #ddd",textAlign:"left",whiteSpace:"nowrap"};
+  var ths = {padding:"10px 14px",fontSize:".72rem",fontWeight:600,color:C.sec,textTransform:"uppercase",letterSpacing:".06em",borderBottom:"1px solid #ddd",textAlign:"left",whiteSpace:"nowrap"};
   var dash = <span style={{color:"#ccc"}}>&mdash;</span>;
 
   var arrowStyle = function(enabled){ return {width:34,height:34,borderRadius:8,border:"none",background:"transparent",cursor:enabled?"pointer":"default",display:"flex",alignItems:"center",justifyContent:"center",padding:0}; };
@@ -397,7 +397,7 @@ function MonthlySummarySection({ feeds, nightSleep, naps, growthEntries, profile
                       <td style={cs}>{r.feeding || dash}</td>
                       <td style={cs}>{r.night || dash}</td>
                       <td style={cs}>{r.naps || dash}</td>
-                      <td style={Object.assign({},cs,{fontWeight:r.totalSleep ? 600 : 400,color:r.totalSleep ? t.pri : "#ccc"})}>{r.totalSleep || dash}</td>
+                      <td style={Object.assign({},cs,{fontWeight:r.totalSleep ? 600 : 400,color:r.totalSleep ? C.body : "#ccc"})}>{r.totalSleep || dash}</td>
                     </tr>
                   );
                 })}
@@ -828,12 +828,12 @@ export default function BabyTracker({ session }){
                   <div style={{fontSize:".9rem",fontWeight:600,color:C.body,marginBottom:4,display:"flex",alignItems:"center",gap:6}}><svg viewBox="0 0 24 24" style={{width:16,height:16,stroke:t.pri,fill:"none",strokeWidth:2,strokeLinecap:"round",strokeLinejoin:"round"}}><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg> Growth Insights</div>
                   <div style={{fontSize:".78rem",color:C.sec,marginBottom:16}}>At {mo} month{mo!==1?"s":""} ({isGirl?"girls":"boys"})</div>
                   <div style={{display:"flex",gap:12}}>
-                    <div style={{flex:1,background:"#F8F9FB",borderRadius:10,padding:"16px 14px",textAlign:"center"}}>
+                    <div style={{flex:1,background:"#f9fafb",borderRadius:10,padding:"16px 14px",textAlign:"center"}}>
                       <div style={{fontSize:".72rem",color:C.sec,textTransform:"uppercase",letterSpacing:".05em",marginBottom:6}}>Weight Range</div>
                       <div style={{fontSize:".95rem",fontWeight:500,color:C.body}}>{wLoLbs} {"\u2013"} {wHiLbs}</div>
                       <div style={{fontSize:".76rem",color:C.sec,marginTop:2}}>lbs</div>
                     </div>
-                    <div style={{flex:1,background:"#F8F9FB",borderRadius:10,padding:"16px 14px",textAlign:"center"}}>
+                    <div style={{flex:1,background:"#f9fafb",borderRadius:10,padding:"16px 14px",textAlign:"center"}}>
                       <div style={{fontSize:".72rem",color:C.sec,textTransform:"uppercase",letterSpacing:".05em",marginBottom:6}}>Height Range</div>
                       <div style={{fontSize:".95rem",fontWeight:500,color:C.body}}>{lLoIn} {"\u2013"} {lHiIn}</div>
                       <div style={{fontSize:".76rem",color:C.sec,marginTop:2}}>inches</div>
