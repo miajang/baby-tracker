@@ -166,11 +166,6 @@ const educationData=[
     {t:"Age-Appropriate Toys & Activities",content:"0-3 months: high-contrast images, soft rattles, gentle music. 3-6 months: soft books, teethers, play gym. 6-9 months: stacking cups, cause-and-effect toys, board books. 9-12 months: push toys, shape sorters, nesting containers. The best toy at any age is an engaged caregiver."},
     {t:"Screen Time Guidelines",content:"AAP recommends no screen time before 18-24 months, except video calling with family. Babies learn through face-to-face interaction, not screens. Background TV reduces the quality of parent-child interaction."},
     {t:"Talking & Reading to Baby",content:"Narrate your day, read picture books, sing songs - even to newborns. Respond to coos and babbles as if having a conversation. By 6 months, babies recognize frequently heard words. Reading 15 minutes daily has measurable impact on vocabulary."}
-  ]},
-  {id:"grandparent",title:"Grandparent Corner",icon:"\uD83D\uDC9D",preview:"Parenting guidance has changed significantly. Back to sleep (not tummy). No cereal in bottles. No honey before age 1.",articles:[
-    {t:"What's Changed Since You Raised Kids",content:"Back to sleep (not tummy). No cereal in bottles. No honey before age 1 (botulism risk). Rear-facing car seats much longer (at least age 2). Solids delayed to around 6 months. No walkers. No bumper pads in cribs. Room-sharing recommended. Early allergen introduction is now encouraged."},
-    {t:"Supporting New Parents",content:"Ask before giving advice - parenting guidance has changed significantly. Follow the parents' routines, rules, and feeding preferences. Offer practical help: cook a meal, do laundry, hold the baby while they nap. Respect that the parents are the decision-makers."},
-    {t:"Bonding Activities for Grandparents",content:"Skin-to-skin holding strengthens bonding at any age. Read aloud - babies love the rhythm of a familiar voice. Sing songs, even if you think you can't sing. Gentle rocking and floor play during tummy time. Consistency builds secure attachment."}
   ]}
 ];
 

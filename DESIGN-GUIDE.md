@@ -76,8 +76,8 @@ Each month: `{ month, label, summary, categories[] }`
 - Each category: `{ cat, items[] }` — items are checkbox strings
 - Summaries use female pronouns by default → genderized via `genderize()` helper
 
-### Education Data (5 topics)
-Topics: Feeding & Nutrition, Sleep, Growth & Body, Development & Play, Grandparent Corner
+### Education Data (4 topics)
+Topics: Feeding & Nutrition, Sleep, Growth & Body, Development & Play
 Each: `{ id, title, icon, preview, articles[] }`
 Articles: `{ t (title), content, table? }` — tables have headers + rows
 
