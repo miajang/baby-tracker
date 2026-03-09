@@ -342,7 +342,7 @@ function MonthlySummarySection({ feeds, nightSleep, naps, growthEntries, profile
   var ths = {padding:"10px 14px",fontSize:".72rem",fontWeight:700,color:C.sec,textTransform:"uppercase",letterSpacing:".05em",borderBottom:"1px solid #ddd",textAlign:"left",whiteSpace:"nowrap"};
   var dash = <span style={{color:"#ccc"}}>&mdash;</span>;
 
-  var arrowStyle = function(enabled){ return {width:34,height:34,borderRadius:8,border:"1px solid "+(enabled?"#ccc":"#ddd"),background:"#fff",cursor:enabled?"pointer":"not-allowed",display:"flex",alignItems:"center",justifyContent:"center",opacity:enabled?1:0.5}; };
+  var arrowStyle = function(enabled){ return {width:34,height:34,borderRadius:8,border:"none",background:"transparent",cursor:enabled?"pointer":"default",display:"flex",alignItems:"center",justifyContent:"center",padding:0}; };
 
   return (
     <div ref={sectionRef} data-sec="summary" style={{marginBottom:20}}>
@@ -350,11 +350,11 @@ function MonthlySummarySection({ feeds, nightSleep, naps, growthEntries, profile
 
       <div style={{display:"flex",alignItems:"center",gap:14,paddingBottom:14,marginBottom:18,borderBottom:"1px solid #f0f0f0"}}>
         <button onClick={function(){if(canPrev)setSelIdx(selIdx-1);}} disabled={!canPrev} style={arrowStyle(canPrev)}>
-          <svg viewBox="0 0 24 24" style={{width:16,height:16,stroke:canPrev?t.pri:"#ccc",fill:"none",strokeWidth:2.5,strokeLinecap:"round",strokeLinejoin:"round"}}><polyline points="15 18 9 12 15 6"/></svg>
+          <svg viewBox="0 0 24 24" style={{width:22,height:22,stroke:canPrev?t.pri:"#bbb",fill:"none",strokeWidth:3,strokeLinecap:"round",strokeLinejoin:"round"}}><polyline points="15 18 9 12 15 6"/></svg>
         </button>
         <div style={{fontSize:"1rem",fontWeight:600,color:C.body,minWidth:180,textAlign:"center"}}>{selLabel}</div>
         <button onClick={function(){if(canNext)setSelIdx(selIdx+1);}} disabled={!canNext} style={arrowStyle(canNext)}>
-          <svg viewBox="0 0 24 24" style={{width:16,height:16,stroke:canNext?t.pri:"#ccc",fill:"none",strokeWidth:2.5,strokeLinecap:"round",strokeLinejoin:"round"}}><polyline points="9 18 15 12 9 6"/></svg>
+          <svg viewBox="0 0 24 24" style={{width:22,height:22,stroke:canNext?t.pri:"#bbb",fill:"none",strokeWidth:3,strokeLinecap:"round",strokeLinejoin:"round"}}><polyline points="9 18 15 12 9 6"/></svg>
         </button>
       </div>
 
@@ -367,7 +367,7 @@ function MonthlySummarySection({ feeds, nightSleep, naps, growthEntries, profile
           return(
             <div key={i} style={{flex:"1 1 150px",background:"#fff",borderRadius:12,padding:"14px 16px",boxShadow:"0 2px 8px rgba(0,0,0,.05)",minWidth:130}}>
               <div style={{fontSize:".72rem",fontWeight:600,color:C.sec,textTransform:"uppercase",letterSpacing:".06em",marginBottom:6}}>{st.icon} {st.label}</div>
-              <div style={{fontSize:"1.15rem",fontWeight:700,color:t.pri}}>{st.value}</div>
+              <div style={{fontSize:"1.05rem",fontWeight:500,color:t.pri}}>{st.value}</div>
             </div>
           );
         })}
@@ -392,8 +392,8 @@ function MonthlySummarySection({ feeds, nightSleep, naps, growthEntries, profile
               <tbody>
                 {fsRows.map(function(r, i){
                   return(
-                    <tr key={r.date} style={{background: i % 2 === 0 ? "#fff" : t.lt}}>
-                      <td style={Object.assign({},cs,{fontWeight:600,whiteSpace:"nowrap",color:C.h})}>{r.date}</td>
+                    <tr key={r.date} style={{background: i % 2 === 0 ? "#fff" : "#f9fafb"}}>
+                      <td style={Object.assign({},cs,{whiteSpace:"nowrap",color:C.h})}>{r.date}</td>
                       <td style={cs}>{r.feeding || dash}</td>
                       <td style={cs}>{r.night || dash}</td>
                       <td style={cs}>{r.naps || dash}</td>
@@ -424,8 +424,8 @@ function MonthlySummarySection({ feeds, nightSleep, naps, growthEntries, profile
               <tbody>
                 {gRows.map(function(g, i){
                   return(
-                    <tr key={g.id} style={{background: i % 2 === 0 ? "#fff" : t.lt}}>
-                      <td style={Object.assign({},cs,{fontWeight:600,whiteSpace:"nowrap",color:C.h})}>{g.date}</td>
+                    <tr key={g.id} style={{background: i % 2 === 0 ? "#fff" : "#f9fafb"}}>
+                      <td style={Object.assign({},cs,{whiteSpace:"nowrap",color:C.h})}>{g.date}</td>
                       <td style={cs}>{g.weight != null ? <span style={{fontWeight:600}}>{g.weight}</span> : dash}</td>
                       <td style={cs}>{g.length != null ? <span style={{fontWeight:600}}>{g.length}</span> : dash}</td>
                     </tr>
@@ -913,8 +913,8 @@ export default function BabyTracker({ session }){
                                 var ds=milestoneChecks[k];
                                 return(
                                   <div key={idx} onClick={function(){toggleCheck(md.month,cat.cat,idx);}} style={{display:"flex",alignItems:"center",gap:10,padding:"7px 0",cursor:"pointer",borderBottom:"1px solid #f0f0f0"}}>
-                                    <div style={{width:20,height:20,borderRadius:4,border:checked?"2px solid "+(t.pri):"2px solid #ddd",background:checked?t.pri:"transparent",display:"flex",alignItems:"center",justifyContent:"center",flexShrink:0}}>
-                                      {checked&&<span style={{color:"#fff",fontSize:".7rem",fontWeight:800}}>&#10003;</span>}
+                                    <div style={{width:20,height:20,borderRadius:4,border:checked?"2px solid "+t.mid:"2px solid #ddd",background:checked?t.lt:"transparent",display:"flex",alignItems:"center",justifyContent:"center",flexShrink:0}}>
+                                      {checked&&<span style={{color:t.pri,fontSize:".7rem",fontWeight:800}}>&#10003;</span>}
                                     </div>
                                     <span style={{fontSize:".84rem",color:C.body,flex:1}}>{genderize(item,gender)}</span>
                                     {ds&&<span style={{fontSize:".66rem",color:C.help}}>{ds}</span>}
@@ -925,7 +925,7 @@ export default function BabyTracker({ session }){
                           );
                         })}
                         </div>
-                        {!diveResults["ms-"+md.month]&&<div style={{marginTop:14}}>
+                        {!diveResults["ms-"+md.month]&&<div style={{marginTop:14,display:"flex",justifyContent:"flex-end"}}>
                           <button onClick={function(){doDive("milestone","ms-"+md.month,"Month "+md.month+" milestones for "+profile.name+", "+age.label+" old. Checked: "+count+"/"+total+".");}} style={{background:t.badge,color:t.badgeTxt,border:"none",borderRadius:6,padding:"0 14px",height:34,fontSize:".78rem",fontWeight:600,cursor:"pointer",display:"flex",alignItems:"center",gap:5}}>
                             <svg viewBox="0 0 24 24" style={{width:14,height:14,stroke:t.badgeTxt,fill:"none",strokeWidth:2.2,strokeLinecap:"round",strokeLinejoin:"round"}}><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
                             Learn More
