@@ -276,9 +276,12 @@ function DayDetailModal({ date, feeds, nightSleep, naps, t, onClose }){
   var totalOz = dayFeeds.reduce(function(s,f){ return s + (parseFloat(f.oz)||0); }, 0);
   var nightMins = dayNights.reduce(function(s,n){ return s + (n.durMins||0); }, 0);
   var napMins = dayNaps.reduce(function(s,n){ return s + (n.durMins||0); }, 0);
+  var sortedFeeds = dayFeeds.slice().reverse();
   var entryRow = {display:"flex",alignItems:"center",justifyContent:"space-between",padding:"8px 0",borderBottom:"1px solid #f0f0f0",fontSize:".84rem"};
-  var secTitle = {fontSize:".88rem",fontWeight:600,color:C.body,marginBottom:8};
-  var emptyMsg = {fontSize:".82rem",color:"#999",fontStyle:"italic",padding:"4px 0"};
+  var secTitle = {fontSize:".88rem",fontWeight:600,color:C.body,marginBottom:10};
+  var subTitle = {fontSize:".76rem",fontWeight:600,color:C.sec,textTransform:"uppercase",letterSpacing:".05em",marginBottom:6};
+  var emptyMsg = {fontSize:".84rem",color:"#999",fontStyle:"italic",padding:"4px 0"};
+  var cardWrap = {background:"#f9fafb",borderRadius:10,padding:"14px 16px",marginBottom:14};
   return (
     <div>
       <div onClick={onClose} style={{position:"fixed",inset:0,background:"rgba(0,0,0,.35)",zIndex:899}}/>
@@ -288,21 +291,21 @@ function DayDetailModal({ date, feeds, nightSleep, naps, t, onClose }){
           <button onClick={onClose} style={{width:30,height:30,borderRadius:8,background:"#fff",border:"1px solid #ddd",cursor:"pointer",fontSize:".8rem",fontWeight:700,color:"#666",display:"flex",alignItems:"center",justifyContent:"center"}}>{"\u2715"}</button>
         </div>
         <div style={{padding:"16px 20px",overflowY:"auto",flex:1}}>
-          <div style={{marginBottom:16}}>
+          <div style={cardWrap}>
             <div style={secTitle}>{"\uD83C\uDF7C"} Formula Log {dayFeeds.length > 0 && <span style={{fontWeight:400,fontSize:".78rem",color:C.sec}}>({totalOz}{totalOz % 1 !== 0 ? "" : ""} oz / {dayFeeds.length} feed{dayFeeds.length !== 1 ? "s" : ""})</span>}</div>
-            {dayFeeds.length > 0 ? dayFeeds.map(function(f){
-              return <div key={f.id} style={entryRow}><div><span style={{fontWeight:500}}>{f.oz} oz</span> <span style={{color:C.sec}}>at {f.time}</span>{f.note && <span style={{color:C.sec,marginLeft:6,fontStyle:"italic"}}>{f.note}</span>}</div></div>;
+            {sortedFeeds.length > 0 ? sortedFeeds.map(function(f){
+              return <div key={f.id} style={entryRow}><div style={{fontSize:".84rem"}}><span style={{fontWeight:500}}>{f.oz} oz</span> <span style={{color:C.sec}}>at {f.time}</span>{f.note && <span style={{color:C.sec,marginLeft:6,fontStyle:"italic"}}>{f.note}</span>}</div></div>;
             }) : <div style={emptyMsg}>No feeds logged</div>}
           </div>
-          <div style={{marginBottom:16}}>
+          <div style={cardWrap}>
             <div style={secTitle}>{"\uD83D\uDCA4"} Sleep Log {(nightMins + napMins) > 0 && <span style={{fontWeight:400,fontSize:".78rem",color:C.sec}}>({formatDurationExact(nightMins + napMins)} total)</span>}</div>
-            <div style={{fontSize:".76rem",fontWeight:600,color:C.sec,textTransform:"uppercase",letterSpacing:".05em",marginBottom:6,marginTop:4}}>{"\uD83C\uDF19"} Night Sleep {nightMins > 0 && <span style={{fontWeight:400,textTransform:"none",letterSpacing:0}}>({formatDurationExact(nightMins)})</span>}</div>
+            <div style={Object.assign({},subTitle,{marginTop:4})}>{"\uD83C\uDF19"} Night Sleep {nightMins > 0 && <span style={{fontWeight:400,textTransform:"none",letterSpacing:0}}>({formatDurationExact(nightMins)})</span>}</div>
             {dayNights.length > 0 ? dayNights.map(function(s){
-              return <div key={s.id} style={entryRow}><span><span style={{fontWeight:500}}>{s.start}</span> {"\u2192"} <span style={{fontWeight:500}}>{s.end}</span> <span style={{color:C.sec,marginLeft:6}}>({formatDurationExact(s.durMins||0)})</span></span></div>;
+              return <div key={s.id} style={entryRow}><span style={{fontSize:".84rem"}}><span style={{fontWeight:500}}>{s.start}</span> {"\u2192"} <span style={{fontWeight:500}}>{s.end}</span> <span style={{color:C.sec,marginLeft:6}}>({formatDurationExact(s.durMins||0)})</span></span></div>;
             }) : <div style={emptyMsg}>No night sleep logged</div>}
-            <div style={{fontSize:".76rem",fontWeight:600,color:C.sec,textTransform:"uppercase",letterSpacing:".05em",marginBottom:6,marginTop:14}}>{"\uD83D\uDE34"} Naps {dayNaps.length > 0 && <span style={{fontWeight:400,textTransform:"none",letterSpacing:0}}>({formatDurationExact(napMins)} / {dayNaps.length} nap{dayNaps.length !== 1 ? "s" : ""})</span>}</div>
+            <div style={Object.assign({},subTitle,{marginTop:14})}>{"\uD83D\uDE34"} Naps {dayNaps.length > 0 && <span style={{fontWeight:400,textTransform:"none",letterSpacing:0}}>({formatDurationExact(napMins)} / {dayNaps.length} nap{dayNaps.length !== 1 ? "s" : ""})</span>}</div>
             {dayNaps.length > 0 ? dayNaps.map(function(s){
-              return <div key={s.id} style={entryRow}><span><span style={{fontWeight:500}}>{s.start}</span> {"\u2192"} <span style={{fontWeight:500}}>{s.end}</span> <span style={{color:C.sec,marginLeft:6}}>({formatDurationExact(s.durMins||0)})</span></span></div>;
+              return <div key={s.id} style={entryRow}><span style={{fontSize:".84rem"}}><span style={{fontWeight:500}}>{s.start}</span> {"\u2192"} <span style={{fontWeight:500}}>{s.end}</span> <span style={{color:C.sec,marginLeft:6}}>({formatDurationExact(s.durMins||0)})</span></span></div>;
             }) : <div style={emptyMsg}>No naps logged</div>}
           </div>
         </div>
