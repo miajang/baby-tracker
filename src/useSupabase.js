@@ -79,6 +79,30 @@ export async function deleteNap(userId, entryId) {
   await supabase.from('naps').delete().eq('id', entryId).eq('user_id', userId);
 }
 
+export async function updateFeed(userId, feedId, fields) {
+  var row = {};
+  if (fields.oz != null) row.oz = fields.oz;
+  if (fields.time != null) row.time = fields.time;
+  if (fields.note != null) row.note = fields.note;
+  await supabase.from('feeds').update(row).eq('id', feedId).eq('user_id', userId);
+}
+
+export async function updateNightSleep(userId, entryId, fields) {
+  var row = {};
+  if (fields.start != null) row.start = fields.start;
+  if (fields.end != null) row.end = fields.end;
+  if (fields.durMins != null) row.dur_mins = fields.durMins;
+  await supabase.from('night_sleep').update(row).eq('id', entryId).eq('user_id', userId);
+}
+
+export async function updateNap(userId, entryId, fields) {
+  var row = {};
+  if (fields.start != null) row.start = fields.start;
+  if (fields.end != null) row.end = fields.end;
+  if (fields.durMins != null) row.dur_mins = fields.durMins;
+  await supabase.from('naps').update(row).eq('id', entryId).eq('user_id', userId);
+}
+
 export async function addGrowthEntry(userId, entry) {
   await supabase.from('growth_entries').insert({
     id: entry.id, user_id: userId, date: entry.date,

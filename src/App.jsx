@@ -269,7 +269,7 @@ function getMilestoneEval(name,count,total,pr){
   return name+" has achieved "+count+" of "+total+" milestones ("+pct+"%). Every baby develops on "+pr.pos+" own timeline. Keep providing loving interaction, tummy time, and conversation. If you have concerns, your pediatrician is always a great resource.";
 }
 
-function DayDetailModal({ date, feeds, nightSleep, naps, t, onClose }){
+function DayDetailModal({ date, feeds, nightSleep, naps, t, onClose, onEditFeed, onEditNight, onEditNap }){
   var dayFeeds = feeds.filter(function(f){ return f.date === date; });
   var dayNights = nightSleep.filter(function(s){ return s.date === date; });
   var dayNaps = naps.filter(function(n){ return n.date === date; });
@@ -277,11 +277,38 @@ function DayDetailModal({ date, feeds, nightSleep, naps, t, onClose }){
   var nightMins = dayNights.reduce(function(s,n){ return s + (n.durMins||0); }, 0);
   var napMins = dayNaps.reduce(function(s,n){ return s + (n.durMins||0); }, 0);
   var sortedFeeds = dayFeeds.slice().reverse();
+  var [editId, setEditId] = useState(null);
+  var [editFields, setEditFields] = useState({});
   var entryRow = {display:"flex",alignItems:"center",justifyContent:"space-between",padding:"8px 0",borderBottom:"1px solid #f0f0f0",fontSize:".84rem"};
   var secTitle = {fontSize:".88rem",fontWeight:600,color:C.body,marginBottom:10};
   var subTitle = {fontSize:".76rem",fontWeight:600,color:C.sec,textTransform:"uppercase",letterSpacing:".05em",marginBottom:6};
   var emptyMsg = {fontSize:".84rem",color:"#999",fontStyle:"italic",padding:"4px 0"};
   var cardWrap = {background:"#f9fafb",borderRadius:10,padding:"14px 16px",marginBottom:14};
+  var pencilBtn = {background:"none",border:"none",cursor:"pointer",padding:4,display:"flex",alignItems:"center",flexShrink:0};
+  var inp = {padding:"5px 8px",border:"1px solid #ddd",borderRadius:6,fontSize:".82rem",outline:"none"};
+  var smallBtn = function(bg,col){return{background:bg,color:col,border:"none",borderRadius:6,padding:"4px 10px",fontSize:".76rem",fontWeight:600,cursor:"pointer"};};
+  var pencil = <svg viewBox="0 0 24 24" style={{width:14,height:14,stroke:"#bbb",fill:"none",strokeWidth:2,strokeLinecap:"round",strokeLinejoin:"round"}}><path d="M17 3a2.85 2.85 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/><path d="m15 5 4 4"/></svg>;
+
+  function startEdit(id, fields){ setEditId(id); setEditFields(Object.assign({}, fields)); }
+  function cancelEdit(){ setEditId(null); setEditFields({}); }
+
+  function saveFeed(id){
+    var oz = parseFloat(editFields.oz);
+    if(!oz || oz <= 0) return;
+    onEditFeed(id, {oz: oz, time: editFields.time || "", note: editFields.note || ""});
+    cancelEdit();
+  }
+  function saveSleep(id, type){
+    var s = editFields.start, e = editFields.end;
+    if(!s || !e) return;
+    var sp = s.match(/(\d+):(\d+)\s*(AM|PM)/i), ep = e.match(/(\d+):(\d+)\s*(AM|PM)/i);
+    if(!sp || !ep) return;
+    var dur = calcDurFromFields(sp[1],sp[2],sp[3],ep[1],ep[2],ep[3]);
+    var handler = type === "night" ? onEditNight : onEditNap;
+    handler(id, {start: s, end: e, durMins: dur});
+    cancelEdit();
+  }
+
   return (
     <div>
       <div onClick={onClose} style={{position:"fixed",inset:0,background:"rgba(0,0,0,.35)",zIndex:899}}/>
@@ -294,18 +321,54 @@ function DayDetailModal({ date, feeds, nightSleep, naps, t, onClose }){
           <div style={cardWrap}>
             <div style={secTitle}>{"\uD83C\uDF7C"} Formula Log {dayFeeds.length > 0 && <span style={{fontWeight:400,fontSize:".78rem",color:C.sec}}>({totalOz}{totalOz % 1 !== 0 ? "" : ""} oz / {dayFeeds.length} feed{dayFeeds.length !== 1 ? "s" : ""})</span>}</div>
             {sortedFeeds.length > 0 ? sortedFeeds.map(function(f){
-              return <div key={f.id} style={entryRow}><div style={{fontSize:".84rem"}}><span style={{fontWeight:500}}>{f.oz} oz</span> <span style={{color:C.sec}}>at {f.time}</span>{f.note && <span style={{color:C.sec,marginLeft:6,fontStyle:"italic"}}>{f.note}</span>}</div></div>;
+              if(editId === f.id) return (
+                <div key={f.id} style={{padding:"8px 0",borderBottom:"1px solid #f0f0f0"}}>
+                  <div style={{display:"flex",gap:8,flexWrap:"wrap",alignItems:"center",marginBottom:6}}>
+                    <input type="text" inputMode="decimal" value={editFields.oz||""} onChange={function(e){setEditFields(Object.assign({},editFields,{oz:e.target.value}));}} style={Object.assign({},inp,{width:50,textAlign:"center"})} placeholder="oz"/>
+                    <span style={{fontSize:".82rem",color:C.sec}}>oz at</span>
+                    <input type="text" value={editFields.time||""} onChange={function(e){setEditFields(Object.assign({},editFields,{time:e.target.value}));}} style={Object.assign({},inp,{width:100})} placeholder="12:00 PM"/>
+                  </div>
+                  <div style={{display:"flex",gap:8,alignItems:"center"}}>
+                    <input type="text" value={editFields.note||""} onChange={function(e){setEditFields(Object.assign({},editFields,{note:e.target.value}));}} style={Object.assign({},inp,{flex:1})} placeholder="Note"/>
+                    <button onClick={function(){saveFeed(f.id);}} style={smallBtn(t.btn,"#fff")}>{"\u2713"}</button>
+                    <button onClick={cancelEdit} style={smallBtn("#eee",C.sec)}>{"\u2715"}</button>
+                  </div>
+                </div>
+              );
+              return <div key={f.id} style={entryRow}><div style={{fontSize:".84rem"}}><span style={{fontWeight:500}}>{f.oz} oz</span> <span style={{color:C.sec}}>at {f.time}</span>{f.note && <span style={{color:C.sec,marginLeft:6,fontStyle:"italic"}}>{f.note}</span>}</div><button onClick={function(){startEdit(f.id,{oz:String(f.oz),time:f.time,note:f.note||""});}} style={pencilBtn}>{pencil}</button></div>;
             }) : <div style={emptyMsg}>No feeds logged</div>}
           </div>
           <div style={cardWrap}>
             <div style={secTitle}>{"\uD83D\uDCA4"} Sleep Log {(nightMins + napMins) > 0 && <span style={{fontWeight:400,fontSize:".78rem",color:C.sec}}>({formatDurationExact(nightMins + napMins)} total)</span>}</div>
             <div style={Object.assign({},subTitle,{marginTop:4})}>{"\uD83C\uDF19"} Night Sleep {nightMins > 0 && <span style={{fontWeight:400,textTransform:"none",letterSpacing:0}}>({formatDurationExact(nightMins)})</span>}</div>
             {dayNights.length > 0 ? dayNights.map(function(s){
-              return <div key={s.id} style={entryRow}><span style={{fontSize:".84rem"}}><span style={{fontWeight:500}}>{s.start}</span> {"\u2192"} <span style={{fontWeight:500}}>{s.end}</span> <span style={{color:C.sec,marginLeft:6}}>({formatDurationExact(s.durMins||0)})</span></span></div>;
+              if(editId === s.id) return (
+                <div key={s.id} style={{padding:"8px 0",borderBottom:"1px solid #f0f0f0"}}>
+                  <div style={{display:"flex",gap:8,alignItems:"center"}}>
+                    <input type="text" value={editFields.start||""} onChange={function(e){setEditFields(Object.assign({},editFields,{start:e.target.value}));}} style={Object.assign({},inp,{width:100})} placeholder="7:30 PM"/>
+                    <span style={{fontSize:".82rem",color:C.sec}}>{"\u2192"}</span>
+                    <input type="text" value={editFields.end||""} onChange={function(e){setEditFields(Object.assign({},editFields,{end:e.target.value}));}} style={Object.assign({},inp,{width:100})} placeholder="7:00 AM"/>
+                    <button onClick={function(){saveSleep(s.id,"night");}} style={smallBtn(t.btn,"#fff")}>{"\u2713"}</button>
+                    <button onClick={cancelEdit} style={smallBtn("#eee",C.sec)}>{"\u2715"}</button>
+                  </div>
+                </div>
+              );
+              return <div key={s.id} style={entryRow}><div style={{fontSize:".84rem"}}><span style={{fontWeight:500}}>{s.start}</span> <span style={{color:C.sec}}>{"\u2192"}</span> <span style={{fontWeight:500}}>{s.end}</span> <span style={{color:C.sec,marginLeft:6}}>({formatDurationExact(s.durMins||0)})</span></div><button onClick={function(){startEdit(s.id,{start:s.start,end:s.end});}} style={pencilBtn}>{pencil}</button></div>;
             }) : <div style={emptyMsg}>No night sleep logged</div>}
             <div style={Object.assign({},subTitle,{marginTop:14})}>{"\uD83D\uDE34"} Naps {dayNaps.length > 0 && <span style={{fontWeight:400,textTransform:"none",letterSpacing:0}}>({formatDurationExact(napMins)} / {dayNaps.length} nap{dayNaps.length !== 1 ? "s" : ""})</span>}</div>
             {dayNaps.length > 0 ? dayNaps.map(function(s){
-              return <div key={s.id} style={entryRow}><span style={{fontSize:".84rem"}}><span style={{fontWeight:500}}>{s.start}</span> {"\u2192"} <span style={{fontWeight:500}}>{s.end}</span> <span style={{color:C.sec,marginLeft:6}}>({formatDurationExact(s.durMins||0)})</span></span></div>;
+              if(editId === s.id) return (
+                <div key={s.id} style={{padding:"8px 0",borderBottom:"1px solid #f0f0f0"}}>
+                  <div style={{display:"flex",gap:8,alignItems:"center"}}>
+                    <input type="text" value={editFields.start||""} onChange={function(e){setEditFields(Object.assign({},editFields,{start:e.target.value}));}} style={Object.assign({},inp,{width:100})} placeholder="2:30 PM"/>
+                    <span style={{fontSize:".82rem",color:C.sec}}>{"\u2192"}</span>
+                    <input type="text" value={editFields.end||""} onChange={function(e){setEditFields(Object.assign({},editFields,{end:e.target.value}));}} style={Object.assign({},inp,{width:100})} placeholder="3:00 PM"/>
+                    <button onClick={function(){saveSleep(s.id,"nap");}} style={smallBtn(t.btn,"#fff")}>{"\u2713"}</button>
+                    <button onClick={cancelEdit} style={smallBtn("#eee",C.sec)}>{"\u2715"}</button>
+                  </div>
+                </div>
+              );
+              return <div key={s.id} style={entryRow}><div style={{fontSize:".84rem"}}><span style={{fontWeight:500}}>{s.start}</span> <span style={{color:C.sec}}>{"\u2192"}</span> <span style={{fontWeight:500}}>{s.end}</span> <span style={{color:C.sec,marginLeft:6}}>({formatDurationExact(s.durMins||0)})</span></div><button onClick={function(){startEdit(s.id,{start:s.start,end:s.end});}} style={pencilBtn}>{pencil}</button></div>;
             }) : <div style={emptyMsg}>No naps logged</div>}
           </div>
         </div>
@@ -314,7 +377,7 @@ function DayDetailModal({ date, feeds, nightSleep, naps, t, onClose }){
   );
 }
 
-function MonthlySummarySection({ feeds, nightSleep, naps, growthEntries, profile, age, t, sectionRef }){
+function MonthlySummarySection({ feeds, nightSleep, naps, growthEntries, profile, age, t, sectionRef, onEditFeed, onEditNight, onEditNap }){
   var monthNames = ["January","February","March","April","May","June","July","August","September","October","November","December"];
 
   var birthDate = profile.birthDate ? new Date(profile.birthDate+"T00:00:00") : new Date();
@@ -482,7 +545,7 @@ function MonthlySummarySection({ feeds, nightSleep, naps, growthEntries, profile
           </div>
         )}
       </div>
-      {detailDate && <DayDetailModal date={detailDate} feeds={feeds} nightSleep={nightSleep} naps={naps} t={t} onClose={function(){ setDetailDate(null); }}/>}
+      {detailDate && <DayDetailModal date={detailDate} feeds={feeds} nightSleep={nightSleep} naps={naps} t={t} onClose={function(){ setDetailDate(null); }} onEditFeed={onEditFeed} onEditNight={onEditNight} onEditNap={onEditNap}/>}
     </div>
   );
 }
@@ -568,6 +631,9 @@ export default function BabyTracker({ session }){
   var delNight=function(id){setNightSleep(function(pv){return pv.filter(function(s){return s.id!==id;});});if(userId)db.deleteNightSleep(userId,id);};
   var addNap=function(){if(!napH1||!napH2)return;var st=formatTimeFields(napH1,napM1,napAP1),en=formatTimeFields(napH2,napM2,napAP2);var dur=calcDurFromFields(napH1,napM1,napAP1,napH2,napM2,napAP2);var entry={id:Date.now(),date:new Date().toLocaleDateString(),start:st,end:en,durMins:dur};setNaps(function(pv){return[entry].concat(pv);});if(userId)db.addNap(userId,entry);setNapH1("");setNapM1("");setNapH2("");setNapM2("");};
   var delNap=function(id){setNaps(function(pv){return pv.filter(function(s){return s.id!==id;});});if(userId)db.deleteNap(userId,id);};
+  var editFeed=function(id,fields){setFeeds(function(pv){return pv.map(function(f){return f.id===id?Object.assign({},f,fields):f;});});if(userId)db.updateFeed(userId,id,fields);};
+  var editNight=function(id,fields){setNightSleep(function(pv){return pv.map(function(s){return s.id===id?Object.assign({},s,fields):s;});});if(userId)db.updateNightSleep(userId,id,fields);};
+  var editNap=function(id,fields){setNaps(function(pv){return pv.map(function(s){return s.id===id?Object.assign({},s,fields):s;});});if(userId)db.updateNap(userId,id,fields);};
   var addGrowth=function(){if(!gW&&!gL)return;var entry={id:Date.now(),date:new Date().toLocaleDateString(),weight:gW?parseFloat(gW):null,length:gL?parseFloat(gL):null,ageMonths:age.months};setGrowthEntries(function(pv){return[entry].concat(pv);});if(userId)db.addGrowthEntry(userId,entry);setGW("");setGL("");};
   var delGrowth=function(id){setGrowthEntries(function(pv){return pv.filter(function(g){return g.id!==id;});});if(userId)db.deleteGrowthEntry(userId,id);};
 
@@ -998,7 +1064,7 @@ export default function BabyTracker({ session }){
 
           {activeNav==="summary"&&<div>
           {/* SUMMARY */}
-          <MonthlySummarySection feeds={feeds} nightSleep={nightSleep} naps={naps} growthEntries={growthEntries} profile={profile} age={age} t={t} sectionRef={function(el){sectionRefs.current.summary=el;}} />
+          <MonthlySummarySection feeds={feeds} nightSleep={nightSleep} naps={naps} growthEntries={growthEntries} profile={profile} age={age} t={t} sectionRef={function(el){sectionRefs.current.summary=el;}} onEditFeed={editFeed} onEditNight={editNight} onEditNap={editNap} />
           </div>}
 
           {activeNav==="resources"&&<div>
