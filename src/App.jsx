@@ -295,15 +295,13 @@ function DayDetailModal({ date, feeds, nightSleep, naps, t, onClose }){
             }) : <div style={emptyMsg}>No feeds logged</div>}
           </div>
           <div style={{height:1,background:"#f0f0f0",margin:"12px 0"}}/>
-          <div style={{marginBottom:16}}>
-            <div style={secTitle}>{"\uD83C\uDF19"} Night Sleep {nightMins > 0 && <span style={{fontWeight:400,fontSize:".78rem",color:C.sec}}>({formatDurationExact(nightMins)})</span>}</div>
+          <div>
+            <div style={secTitle}>{"\uD83D\uDCA4"} Sleep Log {(nightMins + napMins) > 0 && <span style={{fontWeight:400,fontSize:".78rem",color:C.sec}}>({formatDurationExact(nightMins + napMins)} total)</span>}</div>
+            <div style={{fontSize:".76rem",fontWeight:600,color:C.sec,textTransform:"uppercase",letterSpacing:".05em",marginBottom:6,marginTop:4}}>{"\uD83C\uDF19"} Night Sleep {nightMins > 0 && <span style={{fontWeight:400,textTransform:"none",letterSpacing:0}}>({formatDurationExact(nightMins)})</span>}</div>
             {dayNights.length > 0 ? dayNights.map(function(s){
               return <div key={s.id} style={entryRow}><span><span style={{fontWeight:500}}>{s.start}</span> {"\u2192"} <span style={{fontWeight:500}}>{s.end}</span> <span style={{color:C.sec,marginLeft:6}}>({formatDurationExact(s.durMins||0)})</span></span></div>;
             }) : <div style={emptyMsg}>No night sleep logged</div>}
-          </div>
-          <div style={{height:1,background:"#f0f0f0",margin:"12px 0"}}/>
-          <div>
-            <div style={secTitle}>{"\uD83D\uDE34"} Naps {napMins > 0 && <span style={{fontWeight:400,fontSize:".78rem",color:C.sec}}>({formatDurationExact(napMins)} / {dayNaps.length} nap{dayNaps.length !== 1 ? "s" : ""})</span>}</div>
+            <div style={{fontSize:".76rem",fontWeight:600,color:C.sec,textTransform:"uppercase",letterSpacing:".05em",marginBottom:6,marginTop:14}}>{"\uD83D\uDE34"} Naps {dayNaps.length > 0 && <span style={{fontWeight:400,textTransform:"none",letterSpacing:0}}>({formatDurationExact(napMins)} / {dayNaps.length} nap{dayNaps.length !== 1 ? "s" : ""})</span>}</div>
             {dayNaps.length > 0 ? dayNaps.map(function(s){
               return <div key={s.id} style={entryRow}><span><span style={{fontWeight:500}}>{s.start}</span> {"\u2192"} <span style={{fontWeight:500}}>{s.end}</span> <span style={{color:C.sec,marginLeft:6}}>({formatDurationExact(s.durMins||0)})</span></span></div>;
             }) : <div style={emptyMsg}>No naps logged</div>}
