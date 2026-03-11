@@ -269,6 +269,51 @@ function getMilestoneEval(name,count,total,pr){
   return name+" has achieved "+count+" of "+total+" milestones ("+pct+"%). Every baby develops on "+pr.pos+" own timeline. Keep providing loving interaction, tummy time, and conversation. If you have concerns, your pediatrician is always a great resource.";
 }
 
+function DayDetailModal({ date, feeds, nightSleep, naps, t, onClose }){
+  var dayFeeds = feeds.filter(function(f){ return f.date === date; });
+  var dayNights = nightSleep.filter(function(s){ return s.date === date; });
+  var dayNaps = naps.filter(function(n){ return n.date === date; });
+  var totalOz = dayFeeds.reduce(function(s,f){ return s + (parseFloat(f.oz)||0); }, 0);
+  var nightMins = dayNights.reduce(function(s,n){ return s + (n.durMins||0); }, 0);
+  var napMins = dayNaps.reduce(function(s,n){ return s + (n.durMins||0); }, 0);
+  var entryRow = {display:"flex",alignItems:"center",justifyContent:"space-between",padding:"8px 0",borderBottom:"1px solid #f0f0f0",fontSize:".84rem"};
+  var secTitle = {fontSize:".88rem",fontWeight:600,color:C.body,marginBottom:8};
+  var emptyMsg = {fontSize:".82rem",color:"#999",fontStyle:"italic",padding:"4px 0"};
+  return (
+    <div>
+      <div onClick={onClose} style={{position:"fixed",inset:0,background:"rgba(0,0,0,.35)",zIndex:899}}/>
+      <div style={{position:"fixed",top:"50%",left:"50%",transform:"translate(-50%,-50%)",width:"min(480px, 92vw)",maxHeight:"80vh",background:"#fff",borderRadius:16,boxShadow:"0 12px 40px rgba(0,0,0,.18)",zIndex:900,display:"flex",flexDirection:"column",overflow:"hidden"}}>
+        <div style={{padding:"16px 20px",background:t.lt,display:"flex",alignItems:"center",justifyContent:"space-between"}}>
+          <div style={{fontSize:"1rem",fontWeight:600,color:t.pri}}>{date}</div>
+          <button onClick={onClose} style={{width:30,height:30,borderRadius:8,background:"#fff",border:"1px solid #ddd",cursor:"pointer",fontSize:".8rem",fontWeight:700,color:"#666",display:"flex",alignItems:"center",justifyContent:"center"}}>{"\u2715"}</button>
+        </div>
+        <div style={{padding:"16px 20px",overflowY:"auto",flex:1}}>
+          <div style={{marginBottom:16}}>
+            <div style={secTitle}>{"\uD83C\uDF7C"} Formula Log {dayFeeds.length > 0 && <span style={{fontWeight:400,fontSize:".78rem",color:C.sec}}>({totalOz}{totalOz % 1 !== 0 ? "" : ""} oz / {dayFeeds.length} feed{dayFeeds.length !== 1 ? "s" : ""})</span>}</div>
+            {dayFeeds.length > 0 ? dayFeeds.map(function(f){
+              return <div key={f.id} style={entryRow}><div><span style={{fontWeight:500}}>{f.oz} oz</span> <span style={{color:C.sec}}>at {f.time}</span>{f.note && <span style={{color:C.sec,marginLeft:6,fontStyle:"italic"}}>{f.note}</span>}</div></div>;
+            }) : <div style={emptyMsg}>No feeds logged</div>}
+          </div>
+          <div style={{height:1,background:"#f0f0f0",margin:"12px 0"}}/>
+          <div style={{marginBottom:16}}>
+            <div style={secTitle}>{"\uD83C\uDF19"} Night Sleep {nightMins > 0 && <span style={{fontWeight:400,fontSize:".78rem",color:C.sec}}>({formatDurationExact(nightMins)})</span>}</div>
+            {dayNights.length > 0 ? dayNights.map(function(s){
+              return <div key={s.id} style={entryRow}><span><span style={{fontWeight:500}}>{s.start}</span> {"\u2192"} <span style={{fontWeight:500}}>{s.end}</span> <span style={{color:C.sec,marginLeft:6}}>({formatDurationExact(s.durMins||0)})</span></span></div>;
+            }) : <div style={emptyMsg}>No night sleep logged</div>}
+          </div>
+          <div style={{height:1,background:"#f0f0f0",margin:"12px 0"}}/>
+          <div>
+            <div style={secTitle}>{"\uD83D\uDE34"} Naps {napMins > 0 && <span style={{fontWeight:400,fontSize:".78rem",color:C.sec}}>({formatDurationExact(napMins)} / {dayNaps.length} nap{dayNaps.length !== 1 ? "s" : ""})</span>}</div>
+            {dayNaps.length > 0 ? dayNaps.map(function(s){
+              return <div key={s.id} style={entryRow}><span><span style={{fontWeight:500}}>{s.start}</span> {"\u2192"} <span style={{fontWeight:500}}>{s.end}</span> <span style={{color:C.sec,marginLeft:6}}>({formatDurationExact(s.durMins||0)})</span></span></div>;
+            }) : <div style={emptyMsg}>No naps logged</div>}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 function MonthlySummarySection({ feeds, nightSleep, naps, growthEntries, profile, age, t, sectionRef }){
   var monthNames = ["January","February","March","April","May","June","July","August","September","October","November","December"];
 
@@ -289,6 +334,7 @@ function MonthlySummarySection({ feeds, nightSleep, naps, growthEntries, profile
 
   var initIdx = months.length - 1;
   var [selIdx, setSelIdx] = useState(initIdx);
+  var [detailDate, setDetailDate] = useState(null);
   var sel = months[selIdx] || months[months.length-1];
   var selLabel = monthNames[sel.month] + " " + sel.year;
 
@@ -392,8 +438,8 @@ function MonthlySummarySection({ feeds, nightSleep, naps, growthEntries, profile
               <tbody>
                 {fsRows.map(function(r, i){
                   return(
-                    <tr key={r.date} style={{background: i % 2 === 0 ? "#fff" : "#f9fafb"}}>
-                      <td style={Object.assign({},cs,{whiteSpace:"nowrap",color:C.h})}>{r.date}</td>
+                    <tr key={r.date} onClick={function(){ setDetailDate(r.date); }} style={{background: i % 2 === 0 ? "#fff" : "#f9fafb", cursor:"pointer", transition:"background .15s"}} onMouseEnter={function(e){e.currentTarget.style.background=t.lt;}} onMouseLeave={function(e){e.currentTarget.style.background=i%2===0?"#fff":"#f9fafb";}}>
+                      <td style={Object.assign({},cs,{whiteSpace:"nowrap",color:t.pri,fontWeight:500})}>{r.date}</td>
                       <td style={cs}>{r.feeding || dash}</td>
                       <td style={cs}>{r.night || dash}</td>
                       <td style={cs}>{r.naps || dash}</td>
@@ -436,6 +482,7 @@ function MonthlySummarySection({ feeds, nightSleep, naps, growthEntries, profile
           </div>
         )}
       </div>
+      {detailDate && <DayDetailModal date={detailDate} feeds={feeds} nightSleep={nightSleep} naps={naps} t={t} onClose={function(){ setDetailDate(null); }}/>}
     </div>
   );
 }
