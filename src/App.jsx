@@ -294,8 +294,7 @@ function DayDetailModal({ date, feeds, nightSleep, naps, t, onClose }){
               return <div key={f.id} style={entryRow}><div><span style={{fontWeight:500}}>{f.oz} oz</span> <span style={{color:C.sec}}>at {f.time}</span>{f.note && <span style={{color:C.sec,marginLeft:6,fontStyle:"italic"}}>{f.note}</span>}</div></div>;
             }) : <div style={emptyMsg}>No feeds logged</div>}
           </div>
-          <div style={{height:1,background:"#f0f0f0",margin:"12px 0"}}/>
-          <div>
+          <div style={{marginBottom:16}}>
             <div style={secTitle}>{"\uD83D\uDCA4"} Sleep Log {(nightMins + napMins) > 0 && <span style={{fontWeight:400,fontSize:".78rem",color:C.sec}}>({formatDurationExact(nightMins + napMins)} total)</span>}</div>
             <div style={{fontSize:".76rem",fontWeight:600,color:C.sec,textTransform:"uppercase",letterSpacing:".05em",marginBottom:6,marginTop:4}}>{"\uD83C\uDF19"} Night Sleep {nightMins > 0 && <span style={{fontWeight:400,textTransform:"none",letterSpacing:0}}>({formatDurationExact(nightMins)})</span>}</div>
             {dayNights.length > 0 ? dayNights.map(function(s){
