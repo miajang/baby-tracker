@@ -327,9 +327,6 @@ function DayDetailModal({ date, feeds, nightSleep, naps, t, onClose, onEditFeed,
                     <input type="text" inputMode="decimal" value={editFields.oz||""} onChange={function(e){setEditFields(Object.assign({},editFields,{oz:e.target.value}));}} style={Object.assign({},inp,{width:50,textAlign:"center"})} placeholder="oz"/>
                     <span style={{fontSize:".82rem",color:C.sec}}>oz at</span>
                     <input type="text" value={editFields.time||""} onChange={function(e){setEditFields(Object.assign({},editFields,{time:e.target.value}));}} style={Object.assign({},inp,{width:100})} placeholder="12:00 PM"/>
-                  </div>
-                  <div style={{display:"flex",gap:8,alignItems:"center"}}>
-                    <input type="text" value={editFields.note||""} onChange={function(e){setEditFields(Object.assign({},editFields,{note:e.target.value}));}} style={Object.assign({},inp,{flex:1})} placeholder="Note"/>
                     <button onClick={function(){saveFeed(f.id);}} style={smallBtn(t.btn,"#fff")}>{"\u2713"}</button>
                     <button onClick={cancelEdit} style={smallBtn("#eee",C.sec)}>{"\u2715"}</button>
                   </div>
